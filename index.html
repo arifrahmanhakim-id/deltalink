@@ -849,6 +849,18 @@
       box-shadow: var(--neu-out-xs);
     }
 
+    /* Ikon SVG di atas ubin logo: warna marun tetap, di tema mana pun & saat hover */
+    .link-card .link-icon-wrap.has-logo,
+    .link-card:hover .link-icon-wrap.has-logo,
+    [data-theme="dark"] .link-card .link-icon-wrap.has-logo {
+      color: #8C151B;
+    }
+
+    .link-icon-wrap.has-logo > svg {
+      width: 26px;
+      height: 26px;
+    }
+
     .link-card.coming-soon .link-icon-wrap {
       color: var(--telu-grey);
     }
@@ -1992,7 +2004,7 @@
              data-title="${esc(item.title)}"
              data-eta="${esc(tr(item.eta))}"
              style="--i:${index}">
-            <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" ? "has-logo" : ""}">
+            <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" || isGame ? "has-logo" : ""}">
               ${item.logoFile
                 ? `<img class="link-logo-img" src="${esc(item.logoFile)}" alt="" />`
                 : (ICONS[item.icon] || ICONS.globe)}
