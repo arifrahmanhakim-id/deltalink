@@ -997,6 +997,116 @@
       color: #F3F4F6;
     }
 
+    /* Maskot footer: logo bermata yang meloncat */
+    .mascot {
+      position: relative;
+      width: 44px;
+      height: 96px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mascot:focus-visible {
+      outline: 2px solid var(--telu-maroon);
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
+
+    .mascot-body {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 6px;
+      display: block;
+      transform-origin: 50% 100%;
+      animation: mascotHop 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    .mascot-body svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .mascot-shadow {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 34px;
+      height: 7px;
+      margin-left: -17px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.16);
+      animation: mascotShadow 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+    [data-theme="dark"] .mascot-shadow {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .mascot-eye {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: mascotBlink 4.2s infinite;
+    }
+
+    .mascot-pupil {
+      transition: transform 0.15s ease-out;
+    }
+
+    .mascot.is-flip .mascot-body {
+      animation: mascotFlip 0.9s cubic-bezier(0.34, 1.2, 0.64, 1);
+    }
+
+    .mascot.is-flip .mascot-shadow {
+      animation: mascotShadowFlip 0.9s ease;
+    }
+
+    @keyframes mascotHop {
+      0%   { transform: translateY(0) scale(1.1, 0.9); }
+      12%  { transform: translateY(0) scale(0.94, 1.06); }
+      40%  { transform: translateY(-20px) scale(1, 1) rotate(-4deg); }
+      55%  { transform: translateY(-20px) scale(1, 1) rotate(3deg); }
+      80%  { transform: translateY(0) scale(1.1, 0.9); }
+      90%  { transform: translateY(0) scale(0.98, 1.02); }
+      100% { transform: translateY(0) scale(1.1, 0.9); }
+    }
+
+    @keyframes mascotShadow {
+      0%, 80%, 100% { transform: scaleX(1); opacity: 1; }
+      40%, 55% { transform: scaleX(0.6); opacity: 0.5; }
+    }
+
+    @keyframes mascotBlink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.1); }
+    }
+
+    @keyframes mascotFlip {
+      0%   { transform: translateY(0) scale(1.15, 0.85); }
+      45%  { transform: translateY(-40px) rotate(-200deg); }
+      80%  { transform: translateY(0) rotate(-360deg) scale(1.12, 0.88); }
+      100% { transform: translateY(0) rotate(-360deg) scale(1); }
+    }
+
+    @keyframes mascotShadowFlip {
+      0%, 100% { transform: scaleX(1); }
+      45% { transform: scaleX(0.4); opacity: 0.4; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mascot-body,
+      .mascot-shadow,
+      .mascot-eye,
+      .mascot.is-flip .mascot-body,
+      .mascot.is-flip .mascot-shadow {
+        animation: none;
+      }
+    }
+
     /* ==========================================================================
        QR CODE MODAL
        ========================================================================== */
@@ -1368,6 +1478,40 @@
     [data-theme="dark"] .g-cand.is-answer .g-cdot,
     [data-theme="dark"] .g-cand.is-answer .g-ltr { fill: #8BE3B3; }
     .g-cand.is-wrong { opacity: 0.6; }
+
+    /* Tic Tac Toe */
+    .game-play.no-chart .game-chart { display: none; }
+    .game-play.no-chart .game-feedback { margin-top: 12px; }
+    .ttt-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: min(100%, 264px);
+      margin: 0 auto;
+    }
+    .ttt-cell {
+      aspect-ratio: 1;
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-md);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--text-primary);
+      font: 800 38px/1 "Plus Jakarta Sans", sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .ttt-cell:hover:not(:disabled) { box-shadow: var(--neu-in-sm); }
+    .ttt-cell:disabled { cursor: default; }
+    .ttt-cell.is-x { color: var(--telu-maroon); box-shadow: var(--neu-in-sm); animation: tttPop 0.25s ease; }
+    .ttt-cell.is-o { color: var(--telu-grey-dark); box-shadow: var(--neu-in-sm); animation: tttPop 0.25s ease; }
+    [data-theme="dark"] .ttt-cell.is-x { color: #FFB3B7; }
+    [data-theme="dark"] .ttt-cell.is-o { color: #FFFFFF; }
+    .ttt-cell.is-win { background: #1F8A55; color: #FFFFFF; box-shadow: none; }
+    .ttt-cell.is-lose { background: var(--telu-maroon); color: #FFFFFF; box-shadow: none; }
+    [data-theme="dark"] .ttt-cell.is-win,
+    [data-theme="dark"] .ttt-cell.is-lose { color: #FFFFFF; }
+    @keyframes tttPop { from { transform: scale(0.85); } to { transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .ttt-cell { animation: none !important; } }
 
     /* Kontrol Tebak Korelasi */
     .corr-ctrl { display: grid; gap: 8px; }
@@ -1757,6 +1901,24 @@
 
     <!-- Footer & Official Copyright -->
     <footer class="footer">
+      <!-- Maskot: logo DELTA Lab bermata yang meloncat-loncat (pemanis) -->
+      <button class="mascot" id="mascot" type="button" data-i18n-aria="mascotAria" aria-label="Maskot DELTA Lab, ketuk aku!">
+        <span class="mascot-body">
+          <svg viewBox="-10 -20 240 410" aria-hidden="true">
+            <path d="M167 22C132 -1 76 4 46 39C18 72 22 121 57 154C82 177 118 197 147 222C182 252 194 297 175 339C164 361 146 373 126 377C159 376 191 356 206 322C225 278 211 224 172 190C143 165 107 146 83 122C57 96 56 58 80 34C103 12 139 10 167 22Z" fill="#8C151B"/>
+            <path d="M196 86C167 127 123 156 76 184C27 213 2 263 14 313C25 357 69 382 117 377C143 374 166 359 179 336C163 347 143 352 122 349C83 343 56 310 60 271C64 234 92 208 125 186C161 162 186 127 196 86Z" fill="#6D6E71"/>
+            <g class="mascot-eye">
+              <circle cx="62" cy="58" r="27" fill="#FFFFFF" stroke="#2B2B2E" stroke-width="6"/>
+              <g class="mascot-pupil"><circle cx="62" cy="58" r="12" fill="#2B2B2E"/><circle cx="66" cy="53" r="4" fill="#FFFFFF"/></g>
+            </g>
+            <g class="mascot-eye">
+              <circle cx="122" cy="30" r="27" fill="#FFFFFF" stroke="#2B2B2E" stroke-width="6"/>
+              <g class="mascot-pupil"><circle cx="122" cy="30" r="12" fill="#2B2B2E"/><circle cx="126" cy="25" r="4" fill="#FFFFFF"/></g>
+            </g>
+          </svg>
+        </span>
+        <span class="mascot-shadow" aria-hidden="true"></span>
+      </button>
       <p class="copyright-text">
         &copy; <span id="copyYear">2026</span> <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
         <span class="footer-uni">Telkom University</span> · All Rights Reserved.
@@ -1825,7 +1987,7 @@
       </div>
 
       <div class="game-end" id="gameEnd" hidden>
-        <p class="game-end-label" data-i18n="gameAccuracy">Akurasi tebakanmu</p>
+        <p class="game-end-label" id="gameEndLabel">Akurasi tebakanmu</p>
         <p class="game-end-score" id="gameEndScore">0%</p>
         <p class="game-end-tier" id="gameEndTier"></p>
         <p class="game-end-best" id="gameEndBest"></p>
@@ -1932,8 +2094,8 @@
         {
           title: "Arena Data",
           description: {
-            id: "Mini game data: tren, korelasi, outlier & distribusi",
-            en: "Data mini games: trends, correlation, outliers & distributions"
+            id: "Mini game: tren, korelasi, outlier, distribusi & tic tac toe",
+            en: "Mini games: trends, correlation, outliers, distributions & tic-tac-toe"
           },
           type: "game",
           category: "Mini Game",
@@ -2055,6 +2217,18 @@
         distSkew: "Miring",
         distBimodal: "Bimodal",
         distUniform: "Seragam",
+        tttName: "Tic Tac Toe",
+        tttDesc: "Kalahkan AI DELTA, 3 berjajar menang",
+        tttQ: "Buat 3 X berjajar sebelum AI!",
+        tttTip: "Tip: tekan 1–9 · kamu X, AI O",
+        tttYourTurn: "Giliranmu — kamu X",
+        tttThinking: "AI sedang berpikir… 🤖",
+        tttWin: "Kamu menang! 🎉",
+        tttDraw: "Seri 🤝",
+        tttLose: "AI menang 🤖",
+        tttEndLabel: "Skor kemenanganmu",
+        mascotAria: "Maskot DELTA Lab, ketuk aku!",
+        mascotLines: ["Halo! Selamat datang di DELTA Link 👋", "Hore, aku bisa salto! 🤸", "Sudah coba Arena Data? 🎮", "Data itu seru, lho! 📊", "Hehe, geli! 😆"],
         gameTiers: ["Masih Overfitting 😅", "Sedang Belajar 📈", "Analis Andal 📊", "Data Scientist 🧠"],
         switchTo: "Switch to English",
         switchLabel: "EN"
@@ -2118,6 +2292,18 @@
         distSkew: "Skewed",
         distBimodal: "Bimodal",
         distUniform: "Uniform",
+        tttName: "Tic-Tac-Toe",
+        tttDesc: "Beat the DELTA AI, three in a row wins",
+        tttQ: "Get three X's in a row before the AI!",
+        tttTip: "Tip: press 1–9 · you're X, AI is O",
+        tttYourTurn: "Your turn — you're X",
+        tttThinking: "AI is thinking… 🤖",
+        tttWin: "You win! 🎉",
+        tttDraw: "Draw 🤝",
+        tttLose: "AI wins 🤖",
+        tttEndLabel: "Your win score",
+        mascotAria: "DELTA Lab mascot, tap me!",
+        mascotLines: ["Hi! Welcome to DELTA Link 👋", "Wheee, a backflip! 🤸", "Tried the Data Arena yet? 🎮", "Data is fun, you know! 📊", "Hehe, that tickles! 😆"],
         dirUp: "Up",
         dirFlat: "Flat",
         dirDown: "Down",
@@ -2941,7 +3127,131 @@
       }
     };
 
-    const ARENA_GAMES = [trendGame, corrGame, outlierGame, distGame];
+    /* --------------------------------------------------------------------------
+       GAME 5 — TIC TAC TOE
+       Pemain X melawan AI O dalam 5 babak, giliran pertama bergantian.
+       AI memakai minimax tapi sesekali "lengah" agar bisa dikalahkan.
+       Menang = 1 poin, seri = ½ poin.
+       -------------------------------------------------------------------------- */
+    const TTT_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+    const TTT_MISTAKE = 0.3;
+
+    function tttWinner(b) {
+      for (const l of TTT_LINES) {
+        if (b[l[0]] && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { who: b[l[0]], line: l };
+      }
+      return b.every(Boolean) ? { who: "draw", line: [] } : null;
+    }
+
+    /* Nilai papan dari sudut pandang AI (O) */
+    function tttMinimax(b, turn) {
+      const w = tttWinner(b);
+      if (w) return w.who === "O" ? 1 : w.who === "X" ? -1 : 0;
+      let best = turn === "O" ? -2 : 2;
+      for (let i = 0; i < 9; i++) {
+        if (b[i]) continue;
+        b[i] = turn;
+        const v = tttMinimax(b, turn === "O" ? "X" : "O");
+        b[i] = null;
+        best = turn === "O" ? Math.max(best, v) : Math.min(best, v);
+      }
+      return best;
+    }
+
+    function tttAiMove(b) {
+      const empty = [...b.keys()].filter(i => !b[i]);
+      for (const i of empty) {            // selalu ambil kemenangan langsung
+        b[i] = "O";
+        const w = tttWinner(b);
+        b[i] = null;
+        if (w && w.who === "O") return i;
+      }
+      if (Math.random() < TTT_MISTAKE) return pick(empty);
+      let bestV = -2, bests = [];
+      for (const i of empty) {
+        b[i] = "O";
+        const v = tttMinimax(b, "X");
+        b[i] = null;
+        if (v > bestV) { bestV = v; bests = [i]; } else if (v === bestV) bests.push(i);
+      }
+      return pick(bests);
+    }
+
+    const tttGame = {
+      id: "ttt",
+      rounds: 5,
+      name: "tttName",
+      desc: "tttDesc",
+      question: "tttQ",
+      tip: "tttTip",
+      endLabel: "tttEndLabel",
+      noChart: true,
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="4.5" y1="4.5" x2="7.5" y2="7.5"/><line x1="7.5" y1="4.5" x2="4.5" y2="7.5"/><circle cx="18" cy="18" r="1.7"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-1";
+        gameActions.innerHTML = `<div class="ttt-board">${[...Array(9).keys()]
+          .map(i => `<button class="ttt-cell" type="button" data-cell="${i}" aria-label="${i + 1}"></button>`).join("")}</div>`;
+        gameActions.querySelectorAll(".ttt-cell").forEach(el => {
+          el.addEventListener("click", () => this.play(Number(el.dataset.cell)));
+        });
+      },
+      newRound() {
+        const c = { board: Array(9).fill(null), busy: false, result: null };
+        if (arena.round % 2 === 0) this.aiTurn(c);   // babak genap: AI jalan duluan
+        return c;
+      },
+      aiTurn(c) {
+        c.busy = true;
+        const session = arena.session;
+        setTimeout(() => {
+          if (!arena.open || session !== arena.session || arena.current !== c) return;
+          c.board[tttAiMove(c.board)] = "O";
+          c.busy = false;
+          if (!this.finish()) this.draw(false);
+        }, 500);
+      },
+      play(i) {
+        const c = arena.current;
+        if (!canAnswer() || c.busy || c.board[i]) return;
+        c.board[i] = "X";
+        if (this.finish()) return;
+        this.aiTurn(c);
+        this.draw(false);
+      },
+      finish() {
+        const c = arena.current;
+        const w = tttWinner(c.board);
+        if (!w) return false;
+        c.result = w;
+        const points = w.who === "X" ? 1 : w.who === "draw" ? 0.5 : 0;
+        settle(points, ui(w.who === "X" ? "tttWin" : w.who === "draw" ? "tttDraw" : "tttLose"));
+        return true;
+      },
+      draw(reveal) {
+        const c = arena.current;
+        const line = new Set(c.result ? c.result.line : []);
+        gameActions.querySelectorAll(".ttt-cell").forEach((el, i) => {
+          const v = c.board[i];
+          el.textContent = v || "";
+          el.className = `ttt-cell${v ? ` is-${v.toLowerCase()}` : ""}${line.has(i) ? (c.result.who === "X" ? " is-win" : " is-lose") : ""}`;
+          el.disabled = reveal || c.busy || Boolean(v);
+          el.setAttribute("aria-label", v ? `${i + 1}: ${v}` : String(i + 1));
+        });
+        if (!reveal) {
+          const fb = $("gameFeedback");
+          fb.textContent = ui(c.busy ? "tttThinking" : "tttYourTurn");
+          fb.className = "game-feedback";
+        }
+      },
+      onKey(e) {
+        const n = Number(e.key);
+        if (!(n >= 1 && n <= 9)) return false;
+        this.play(n - 1);
+        return true;
+      }
+    };
+
+    const ARENA_GAMES = [trendGame, corrGame, outlierGame, distGame, tttGame];
     arenaReady = true;
 
     /* --------------------------------------------------------------------------
@@ -3029,6 +3339,7 @@
       arena.session += 1;
       Object.assign(arena, { game: g, round: 0, score: 0, streak: 0, end: null });
       g.mount();
+      $("gamePlay").classList.toggle("no-chart", Boolean(g.noChart));
       applyGameText();
       setView("play");
       nextRound();
@@ -3081,6 +3392,7 @@
     function renderEnd() {
       const { pct, isRecord, best } = arena.end;
       const tiers = ui("gameTiers");
+      $("gameEndLabel").textContent = ui(arena.game.endLabel || "gameAccuracy");
       $("gameEndScore").textContent = `${pct}%`;
       $("gameEndTier").textContent = pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0];
       $("gameEndBest").textContent = isRecord ? ui("gameNewBest") : ui("gameBest")(best);
@@ -3140,6 +3452,43 @@
       }
     });
     refreshCardHint();
+
+    /* ==========================================================================
+       MASKOT FOOTER: mata mengikuti kursor, ketuk untuk salto
+       ========================================================================== */
+    (function initMascot() {
+      const mascot = document.getElementById("mascot");
+      if (!mascot) return;
+      const pupils = [...mascot.querySelectorAll(".mascot-pupil")];
+      let frame = 0, px = 0, py = 0, lineIdx = 0;
+
+      function look() {
+        frame = 0;
+        const r = mascot.getBoundingClientRect();
+        const dx = px - (r.left + r.width / 2);
+        const dy = py - (r.top + r.height * 0.2);
+        const len = Math.hypot(dx, dy) || 1;
+        const k = Math.min(1, len / 160) * 9;     // geser maks. 9 unit di dalam bola mata
+        const t = `translate(${((dx / len) * k).toFixed(1)} ${((dy / len) * k).toFixed(1)})`;
+        pupils.forEach(p => p.setAttribute("transform", t));
+      }
+
+      window.addEventListener("pointermove", (e) => {
+        px = e.clientX; py = e.clientY;
+        if (!frame) frame = requestAnimationFrame(look);
+      }, { passive: true });
+
+      mascot.addEventListener("click", () => {
+        mascot.classList.remove("is-flip");
+        void mascot.offsetWidth;
+        mascot.classList.add("is-flip");
+        const lines = ui("mascotLines");
+        showToast(lines[lineIdx++ % lines.length]);
+      });
+      mascot.addEventListener("animationend", (e) => {
+        if (e.animationName === "mascotFlip") mascot.classList.remove("is-flip");
+      });
+    })();
 
     /* Ganti bahasa */
     document.getElementById("langToggle").addEventListener("click", () => {
