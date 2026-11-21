@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DELTA Link — Official App Directory | DELTA Lab</title>
+  <meta name="description" content="Direktori resmi aplikasi dan produk digital DELTA Lab — Data Exploration, Learning & Translational Analytics." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       DOMINANT TEL-U MAROON & COOL GREY + NEUMORPHISM + FLAT DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      /* Kanvas Abu-Abu Lembut (Cool Grey Neumorphism) */
+      --bg-base: #F1F2F4;
+      --surface-grey: #E6E8EB;
+      --text-primary: #222428;
+      --text-secondary: #52555B;
+      --text-muted: #6D6E71;
+
+      /* Palet Dominan Tel-U: Deep Maroon & Corporate Grey (Flat Solid) */
+      --telu-maroon: #8C151B;
+      --telu-maroon-dark: #6B0F14;
+      --telu-maroon-soft: rgba(140, 21, 27, 0.11);
+      --telu-grey: #6D6E71;
+      --telu-grey-dark: #414244;
+      --telu-grey-soft: rgba(109, 110, 113, 0.15);
+
+      /* Banner Flat Dominan Maroon & Abu-Abu */
+      --banner-bg: #8C151B;
+      --banner-strip-grey: #414244;
+      --banner-stage-bg: #6B0F14;
+      --banner-cta-bg: #6B0F14;
+      --banner-cta-hover: #414244;
+      --banner-text: #FFFFFF;
+      --banner-subtext: #F2D7D9;
+
+      /* Neumorphism Shadows (Light Grey Base) */
+      /* Bayangan berlapis & transparan: lapisan lebar untuk kedalaman,
+         lapisan rapat untuk tepi yang tegas namun halus */
+      --neu-out:
+        10px 10px 24px rgba(156, 164, 178, 0.42),
+        -10px -10px 24px rgba(255, 255, 255, 0.95),
+        2px 2px 5px rgba(156, 164, 178, 0.18);
+      --neu-out-sm:
+        6px 6px 14px rgba(156, 164, 178, 0.38),
+        -6px -6px 14px rgba(255, 255, 255, 0.95),
+        1px 1px 3px rgba(156, 164, 178, 0.16);
+      --neu-out-lg:
+        18px 18px 40px rgba(156, 164, 178, 0.48),
+        -14px -14px 34px rgba(255, 255, 255, 1),
+        3px 3px 8px rgba(156, 164, 178, 0.18);
+      --neu-out-xs: 3px 3px 7px rgba(156, 164, 178, 0.4), -3px -3px 7px rgba(255, 255, 255, 0.95);
+      --neu-in: inset 6px 6px 14px rgba(156, 164, 178, 0.38), inset -6px -6px 14px rgba(255, 255, 255, 0.9);
+      --neu-in-sm: inset 3px 3px 8px rgba(156, 164, 178, 0.34), inset -3px -3px 8px rgba(255, 255, 255, 0.9);
+      --neu-border: rgba(255, 255, 255, 0.9);
+
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+      --transition: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      /* Dark Mode: Abu-abu sedang (bukan hitam) & Tel-U Maroon */
+      --bg-base: #656970;
+      --surface-grey: #6F737A;
+      --text-primary: #FFFFFF;
+      --text-secondary: #EEF0F3;
+      --text-muted: #D6D8DC;
+
+      --telu-maroon: #BE252D;
+      --telu-maroon-dark: #7D1218;
+      --telu-maroon-soft: rgba(168, 28, 36, 0.18);
+      --telu-grey: #8A8E94;
+      --telu-grey-dark: #7E8288;
+      --telu-grey-soft: rgba(128, 130, 133, 0.18);
+
+      --banner-bg: #8C151B;
+      --banner-strip-grey: #7A7E85;
+      --banner-stage-bg: #6B0F14;
+      --banner-cta-bg: #6B0F14;
+      --banner-cta-hover: #7A7E85;
+      --banner-text: #FFFFFF;
+      --banner-subtext: #EBD0D2;
+
+      /* Dark mode: bayangan gelap transparan (menyatu dengan abu-abu),
+         highlight putih tipis & lebih pendek agar arah cahaya terasa alami */
+      --neu-out:
+        10px 10px 26px rgba(28, 30, 34, 0.42),
+        -7px -7px 20px rgba(255, 255, 255, 0.08),
+        2px 2px 5px rgba(28, 30, 34, 0.18);
+      --neu-out-sm:
+        6px 6px 15px rgba(28, 30, 34, 0.38),
+        -4px -4px 12px rgba(255, 255, 255, 0.07),
+        1px 1px 3px rgba(28, 30, 34, 0.16);
+      --neu-out-lg:
+        18px 18px 42px rgba(28, 30, 34, 0.5),
+        -10px -10px 28px rgba(255, 255, 255, 0.09),
+        3px 3px 8px rgba(28, 30, 34, 0.18);
+      --neu-out-xs: 3px 3px 7px rgba(28, 30, 34, 0.36), -2px -2px 6px rgba(255, 255, 255, 0.07);
+      --neu-in: inset 6px 6px 14px rgba(28, 30, 34, 0.42), inset -5px -5px 12px rgba(255, 255, 255, 0.07);
+      --neu-in-sm: inset 3px 3px 9px rgba(28, 30, 34, 0.38), inset -3px -3px 8px rgba(255, 255, 255, 0.06);
+      --neu-border: rgba(255, 255, 255, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px 48px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 560px;
+      padding-top: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* ==========================================================================
+       TOP UTILITY BAR
+       ========================================================================== */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--telu-grey-dark);
+      background: var(--bg-base);
+      box-shadow: var(--neu-in-sm);
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    [data-theme="dark"] .brand-tag {
+      color: var(--text-secondary);
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--telu-maroon);
+      display: inline-block;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .neu-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--neu-border);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--telu-grey-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .neu-icon-btn {
+      color: var(--text-primary);
+    }
+
+    .neu-icon-btn:hover {
+      color: var(--telu-maroon);
+    }
+
+    .neu-icon-btn:active {
+      box-shadow: var(--neu-in-sm);
+      transform: scale(0.96);
+    }
+
+    /* ==========================================================================
+       PROFILE HEADER (MAROON & GREY RING)
+       ========================================================================== */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 11px;
+      padding: 4px 8px;
+    }
+
+    .avatar-ring {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--bg-base);
+      box-shadow: var(--neu-out);
+      border: 3px solid var(--telu-maroon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 8px;
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid var(--telu-grey);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .avatar-inner img,
+    .avatar-inner svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background-color: var(--telu-maroon);
+      color: #FFFFFF;
+      border: 3px solid var(--bg-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-title {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--telu-maroon);
+    }
+
+    [data-theme="dark"] .profile-title {
+      color: #F3F4F6;
+    }
+
+    .profile-subtitle {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      max-width: 440px;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       BANNER UTAMA + VISUALISASI DATA DELTA LAB (TANPA PANEL / KOTAK)
+       Animasi menyatu di latar banner, satu siklus 9 detik:
+       1. Exploration  : sebaran titik data (redup)
+       2. Learning     : garis model tergambar, titik menyala saat dilewati
+       3. Translational: titik insight + label di ujung garis
+       Ditambah dua gelombang tipis yang mengalir pelan sebagai "aliran data".
+       ========================================================================== */
+    @keyframes bannerEntrance {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes softBlink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.45; }
+    }
+
+    @keyframes vizFlow {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-160px); }
+    }
+
+    .flat-banner {
+      display: block;
+      text-decoration: none;
+      background-color: var(--banner-bg);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+      /* Bingkai neumorphism: tepi sewarna latar halaman yang timbul,
+         panel maroon di dalamnya tampak sedikit tertanam */
+      border: 7px solid var(--bg-base);
+      box-shadow:
+        var(--neu-out),
+        inset 4px 4px 10px rgba(0, 0, 0, 0.28),
+        inset -3px -3px 8px rgba(255, 255, 255, 0.12);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+      animation: bannerEntrance 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .flat-banner:hover {
+      box-shadow:
+        var(--neu-out),
+        inset 5px 5px 14px rgba(0, 0, 0, 0.34),
+        inset -3px -3px 10px rgba(255, 255, 255, 0.16);
+    }
+
+    .flat-banner:active {
+      transform: scale(0.99);
+    }
+
+
+    /* Kanvas visualisasi: menempel di kanan, memudar ke arah teks */
+    .banner-viz {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 64%;
+      pointer-events: none;
+      z-index: 1;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 38%);
+    }
+
+    .banner-viz svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .viz-flow { animation: vizFlow 22s linear infinite; }
+    .viz-flow + .viz-flow { animation-duration: 34s; }
+
+    .viz-wave {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 1;
+      opacity: 0.1;
+    }
+    .viz-wave.w2 { opacity: 0.07; }
+
+    .viz-dot     { fill: #FFFFFF; }
+    .viz-area    { fill: #FFFFFF; }
+    .viz-line {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .viz-head    { fill: #FFFFFF; }
+    .viz-halo    { fill: none; stroke: #FFFFFF; stroke-width: 1.2; }
+    .viz-insight { fill: #FFFFFF; stroke: var(--banner-bg); stroke-width: 2; }
+
+    .viz-chip rect { fill: rgba(255, 255, 255, 0.14); stroke: rgba(255, 255, 255, 0.35); stroke-width: 0.8; }
+    .viz-chip text {
+      fill: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+
+    .flat-banner-body {
+      position: relative;
+      z-index: 2;
+      padding: 22px 22px 22px;
+      min-height: 176px;
+      display: flex;
+      align-items: center;
+    }
+
+    .flat-banner-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      max-width: 60%;
+    }
+
+    .flat-banner-content > * {
+      animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .flat-banner-content > :nth-child(2) { animation-delay: 0.06s; }
+    .flat-banner-content > :nth-child(3) { animation-delay: 0.12s; }
+    .flat-banner-content > :nth-child(4) { animation-delay: 0.18s; }
+
+    .flat-banner-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background-color: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .live-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+      display: inline-block;
+      animation: softBlink 2.8s ease-in-out infinite;
+    }
+
+    .flat-banner-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--banner-text);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+
+    .flat-banner-desc {
+      font-size: 12.5px;
+      color: var(--banner-subtext);
+      line-height: 1.5;
+    }
+
+    .flat-banner-cta {
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--telu-maroon-dark);
+      background-color: #FFFFFF;
+      padding: 8px 15px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.22s ease, color 0.22s ease;
+    }
+
+    .flat-banner-cta svg {
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .flat-banner:hover .flat-banner-cta {
+      background-color: var(--banner-strip-grey);
+      color: #FFFFFF;
+    }
+
+
+    /* Hormati pengguna yang mematikan animasi */
+    @media (prefers-reduced-motion: reduce) {
+      .flat-banner,
+      .flat-banner-content > *,
+      .live-pulse-dot,
+      .viz-flow,
+      .link-card.shake {
+        animation: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       CATEGORY FILTER PILLS (MAROON ACTIVE + GREY NEUMORPHISM)
+       ========================================================================== */
+    /* Area scroll diberi ruang lega (padding) lalu dinetralkan dengan margin negatif,
+       supaya bayangan neumorphism pil tidak terpotong oleh overflow */
+    .category-bar {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 14px 16px 22px;
+      margin: -14px -16px -22px;
+      scroll-padding-inline: 16px;
+      scrollbar-width: none;
+    }
+
+    .category-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-pill {
+      border: 1px solid var(--neu-border);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--telu-grey-dark);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 8px 15px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .cat-pill {
+      color: var(--text-secondary);
+    }
+
+    .cat-pill:hover {
+      color: var(--telu-maroon);
+    }
+
+    .cat-pill.active {
+      background-color: var(--telu-maroon);
+      color: #FFFFFF;
+      border-color: var(--telu-maroon);
+      box-shadow: var(--neu-out-sm);
+    }
+
+    /* ==========================================================================
+       APP LINK CARDS (NEUMORPHISM + DOMINANT MAROON & GREY ACCENTS)
+       ========================================================================== */
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .link-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 16px 15px 18px;
+      background: var(--bg-base);
+      border: 1px solid var(--neu-border);
+      border-left: 5px solid var(--telu-maroon);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neu-out);
+      text-decoration: none;
+      color: var(--text-primary);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    /* Hover: kartu terangkat (bayangan neumorphism membesar), aksen maroon menguat.
+       Hanya untuk perangkat ber-mouse agar tidak "nyangkut" setelah tap di HP. */
+    @media (hover: hover) {
+      .link-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--neu-out-lg);
+        border-color: rgba(140, 21, 27, 0.4);
+        border-left-color: var(--telu-maroon);
+        border-left-width: 8px;
+        padding-left: 15px;
+      }
+
+      .link-card:hover .link-title {
+        color: var(--telu-maroon);
+      }
+
+      [data-theme="dark"] .link-card:hover .link-title {
+        color: #FFFFFF;
+      }
+
+      .link-card:hover .link-arrow svg {
+        transform: rotate(45deg);
+      }
+
+      .link-card.coming-soon:hover {
+        transform: translateY(-2px);
+        border-color: var(--telu-grey-soft);
+        border-left-color: var(--telu-grey);
+      }
+
+      .link-card.coming-soon:hover .link-title {
+        color: var(--text-primary);
+      }
+
+      .link-card.coming-soon:hover .link-arrow svg {
+        transform: none;
+      }
+    }
+
+    /* Navigasi keyboard mendapat tampilan yang sama */
+    .link-card:focus-visible {
+      outline: 2px solid var(--telu-maroon);
+      outline-offset: 3px;
+      box-shadow: var(--neu-out-lg);
+    }
+
+    .link-card:active,
+    .link-card.pressed {
+      box-shadow: var(--neu-in);
+      transform: scale(0.985);
+    }
+
+    .link-card.coming-soon {
+      border-left-color: var(--telu-grey);
+      opacity: 0.86;
+    }
+
+    /* Ripple Flat Maroon */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(140, 21, 27, 0.14);
+      transform: scale(0);
+      animation: rippleAnim 0.55s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(3.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes shakeCard {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+
+    .link-card.shake {
+      animation: shakeCard 0.35s ease;
+    }
+
+    .link-icon-wrap {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-md);
+      background: var(--bg-base);
+      box-shadow: var(--neu-in-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--telu-maroon);
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .link-icon-wrap {
+      color: #FFFFFF;
+    }
+
+    .link-card:hover .link-icon-wrap {
+      background-color: var(--telu-maroon);
+      color: #FFFFFF;
+      box-shadow: none;
+    }
+
+    .link-logo-img {
+      height: 30px;
+      width: auto;
+      max-width: 36px;
+      object-fit: contain;
+    }
+
+    .link-card:hover .link-icon-wrap.has-logo {
+      background-color: #FFFFFF;
+      box-shadow: inset 0 0 0 2px var(--telu-maroon);
+    }
+
+    .link-card.coming-soon .link-icon-wrap {
+      color: var(--telu-grey);
+    }
+
+    .link-card.coming-soon:hover .link-icon-wrap {
+      background-color: var(--telu-grey);
+      color: #FFFFFF;
+    }
+
+    .link-card.coming-soon:hover .link-icon-wrap.has-logo {
+      background-color: #FFFFFF;
+      box-shadow: inset 0 0 0 2px var(--telu-grey);
+    }
+
+    .link-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .link-header-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .link-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      transition: color 0.22s ease;
+    }
+
+    .status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-live {
+      background-color: var(--telu-maroon);
+      color: #FFFFFF;
+    }
+
+    .badge-soon {
+      background-color: var(--telu-grey);
+      color: #FFFFFF;
+    }
+
+    .link-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link-url-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .link-arrow {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--telu-grey-dark);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .link-arrow svg {
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-theme="dark"] .link-arrow {
+      color: var(--text-secondary);
+    }
+
+    .link-card:hover .link-arrow {
+      background-color: var(--telu-maroon);
+      color: #FFFFFF;
+    }
+
+    .link-card.coming-soon:hover .link-arrow {
+      background-color: var(--telu-grey);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       FOOTER & COPYRIGHT DELTA LAB
+       ========================================================================== */
+    .footer {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .copyright-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .copyright-text strong {
+      color: var(--telu-maroon);
+      font-weight: 800;
+    }
+
+    [data-theme="dark"] .copyright-text strong {
+      color: #F3F4F6;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATION
+       ========================================================================== */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background-color: var(--telu-grey-dark);
+      color: #FFFFFF;
+      border-left: 5px solid var(--telu-maroon);
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s ease;
+      z-index: 300;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 440px) {
+      .flat-banner-body {
+        padding: 18px 16px 120px;
+        min-height: 0;
+      }
+      .flat-banner-content {
+        max-width: 100%;
+      }
+      .flat-banner-title {
+        font-size: 17px;
+      }
+      /* Di HP chart pindah ke bawah, di belakang area kosong di bawah tombol */
+      .banner-viz {
+        top: auto;
+        height: 190px;
+        width: 100%;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <!-- Top Utility Bar -->
+    <header class="top-bar">
+      <div class="brand-tag">
+        <span class="brand-dot"></span>
+        <span>deltalab.link</span>
+      </div>
+      <div class="top-actions">
+        <button class="neu-icon-btn" id="themeToggle" title="Ganti Tema Terang / Gelap" aria-label="Ganti Tema">
+          <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button class="neu-icon-btn" id="shareBtn" title="Salin Tautan Halaman" aria-label="Bagikan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Profile Header -->
+    <section class="profile-section">
+      <div class="avatar-ring">
+        <div class="avatar-inner" id="profileLogoContainer"></div>
+        <span class="verified-badge" title="Verified DELTA Lab Official">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+      </div>
+      <h1 class="profile-title" id="siteTitle">DELTA Link</h1>
+      <p class="profile-subtitle" id="siteSubtitle">
+        DELTA Lab — Data Exploration, Learning &amp; Translational Analytics
+      </p>
+    </section>
+
+    <!-- BANNER UTAMA + VISUALISASI DATA (Explore → Learn → Translate) -->
+    <a class="flat-banner" id="featuredBanner" href="https://deltalab.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div class="banner-viz" aria-hidden="true">
+          <svg id="bannerViz" viewBox="0 0 320 190" preserveAspectRatio="xMaxYMax slice">
+            <!-- Aliran data latar: dua gelombang tipis yang bergeser pelan -->
+            <g class="viz-flow"><path class="viz-wave w1" d="M0,124.9 L4,127.3 L8,129.4 L12,130.9 L16,131.9 L20,132.3 L24,132.2 L28,131.5 L32,130.5 L36,129.1 L40,127.6 L44,126.0 L48,124.5 L52,123.2 L56,122.1 L60,121.2 L64,120.5 L68,120.0 L72,119.7 L76,119.4 L80,119.0 L84,118.5 L88,117.9 L92,117.0 L96,115.9 L100,114.6 L104,113.3 L108,111.8 L112,110.5 L116,109.3 L120,108.5 L124,108.1 L128,108.2 L132,108.9 L136,110.1 L140,111.8 L144,114.1 L148,116.6 L152,119.4 L156,122.2 L160,124.9 L164,127.3 L168,129.4 L172,130.9 L176,131.9 L180,132.3 L184,132.2 L188,131.5 L192,130.5 L196,129.1 L200,127.6 L204,126.0 L208,124.5 L212,123.2 L216,122.1 L220,121.2 L224,120.5 L228,120.0 L232,119.7 L236,119.4 L240,119.0 L244,118.5 L248,117.9 L252,117.0 L256,115.9 L260,114.6 L264,113.3 L268,111.8 L272,110.5 L276,109.3 L280,108.5 L284,108.1 L288,108.2 L292,108.9 L296,110.1 L300,111.8 L304,114.1 L308,116.6 L312,119.4 L316,122.2 L320,124.9 L324,127.3 L328,129.4 L332,130.9 L336,131.9 L340,132.3 L344,132.2 L348,131.5 L352,130.5 L356,129.1 L360,127.6 L364,126.0 L368,124.5 L372,123.2 L376,122.1 L380,121.2 L384,120.5 L388,120.0 L392,119.7 L396,119.4 L400,119.0 L404,118.5 L408,117.9 L412,117.0 L416,115.9 L420,114.6 L424,113.3 L428,111.8 L432,110.5 L436,109.3 L440,108.5 L444,108.1 L448,108.2 L452,108.9 L456,110.1 L460,111.8 L464,114.1 L468,116.6 L472,119.4 L476,122.2 L480,124.9" /></g>
+            <g class="viz-flow"><path class="viz-wave w2" d="M0,146.4 L4,145.0 L8,143.6 L12,142.3 L16,141.1 L20,140.1 L24,139.3 L28,138.7 L32,138.4 L36,138.1 L40,138.0 L44,137.9 L48,137.8 L52,137.5 L56,137.2 L60,136.7 L64,136.1 L68,135.3 L72,134.5 L76,133.8 L80,133.1 L84,132.6 L88,132.4 L92,132.6 L96,133.0 L100,133.9 L104,135.2 L108,136.7 L112,138.6 L116,140.5 L120,142.5 L124,144.4 L128,146.2 L132,147.6 L136,148.6 L140,149.3 L144,149.4 L148,149.2 L152,148.5 L156,147.6 L160,146.4 L164,145.0 L168,143.6 L172,142.3 L176,141.1 L180,140.1 L184,139.3 L188,138.7 L192,138.4 L196,138.1 L200,138.0 L204,137.9 L208,137.8 L212,137.5 L216,137.2 L220,136.7 L224,136.1 L228,135.3 L232,134.5 L236,133.8 L240,133.1 L244,132.6 L248,132.4 L252,132.6 L256,133.0 L260,133.9 L264,135.2 L268,136.7 L272,138.6 L276,140.5 L280,142.5 L284,144.4 L288,146.2 L292,147.6 L296,148.6 L300,149.3 L304,149.4 L308,149.2 L312,148.5 L316,147.6 L320,146.4 L324,145.0 L328,143.6 L332,142.3 L336,141.1 L340,140.1 L344,139.3 L348,138.7 L352,138.4 L356,138.1 L360,138.0 L364,137.9 L368,137.8 L372,137.5 L376,137.2 L380,136.7 L384,136.1 L388,135.3 L392,134.5 L396,133.8 L400,133.1 L404,132.6 L408,132.4 L412,132.6 L416,133.0 L420,133.9 L424,135.2 L428,136.7 L432,138.6 L436,140.5 L440,142.5 L444,144.4 L448,146.2 L452,147.6 L456,148.6 L460,149.3 L464,149.4 L468,149.2 L472,148.5 L476,147.6 L480,146.4" /></g>
+
+            <!-- Exploration: sebaran data, menyala saat model melewatinya -->
+            <circle cx="14" cy="147" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.024;0.054;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.024;0.054;0.094;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="30" cy="160" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.05;0.08;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.05;0.08;0.12;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="52" cy="146" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.087;0.117;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.087;0.117;0.157;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="66" cy="163" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.11;0.14;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.11;0.14;0.18;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="92" cy="136" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.16;0.19;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.16;0.19;0.23;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="104" cy="146" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.185;0.215;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.185;0.215;0.255;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="128" cy="124" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.226;0.256;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.226;0.256;0.296;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="140" cy="141" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.246;0.276;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.246;0.276;0.316;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="166" cy="112" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.297;0.327;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.297;0.327;0.367;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="178" cy="121" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.325;0.355;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.325;0.355;0.395;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="202" cy="98" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.366;0.396;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.366;0.396;0.436;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="214" cy="118" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.386;0.416;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.386;0.416;0.456;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="238" cy="90" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.433;0.463;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.433;0.463;0.503;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="250" cy="97" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.461;0.491;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.461;0.491;0.531;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="274" cy="66" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.509;0.539;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.509;0.539;0.579;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+            <circle cx="284" cy="79" r="2.2" class="viz-dot" opacity="0.22"><animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.527;0.557;0.86;0.96;1" values="0.22;0.22;0.95;0.6;0.22;0.22" /><animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.527;0.557;0.597;1" values="2.2;2.2;3.4;2.4;2.2" /></circle>
+
+            <!-- Learning: area & garis model yang tergambar -->
+            <path class="viz-area" d="M0,158 C6.3,156.7 25.7,150.7 38,150 C50.3,149.3 62.0,157.7 74,154 C86.0,150.3 97.7,131.5 110,128 C122.3,124.5 135.7,137.0 148,133 C160.3,129.0 172.0,108.0 184,104 C196.0,100.0 208.0,113.3 220,109 C232.0,104.7 243.3,87.2 256,78 C268.7,68.8 289.3,58.0 296,54 L320,40 L320,190 L0,190 Z" opacity="0">
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.2;0.55;0.86;0.96;1" values="0;0;0.1;0.1;0;0" />
+            </path>
+            <path id="vizLine" class="viz-line" d="M0,158 C6.3,156.7 25.7,150.7 38,150 C50.3,149.3 62.0,157.7 74,154 C86.0,150.3 97.7,131.5 110,128 C122.3,124.5 135.7,137.0 148,133 C160.3,129.0 172.0,108.0 184,104 C196.0,100.0 208.0,113.3 220,109 C232.0,104.7 243.3,87.2 256,78 C268.7,68.8 289.3,58.0 296,54" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">
+              <animate attributeName="stroke-dashoffset" dur="9s" repeatCount="indefinite" keyTimes="0;0.55;1" values="1;0;0" />
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.86;0.96;1" values="1;1;0;0" />
+            </path>
+            <circle class="viz-head" r="3.6">
+              <animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.55;1" calcMode="linear"><mpath href="#vizLine" /></animateMotion>
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.02;0.55;0.5700000000000001;1" values="0;1;1;0;0" />
+            </circle>
+
+            <!-- Translational: insight di ujung model -->
+            <circle class="viz-halo" cx="296" cy="54" r="5" opacity="0">
+              <animate attributeName="r" dur="9s" repeatCount="indefinite" keyTimes="0;0.55;0.8;1" values="5;5;18;18" />
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.55;0.8;1" values="0;0.6;0;0" />
+            </circle>
+            <circle class="viz-insight" cx="296" cy="54" r="5" opacity="0">
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.55;0.5900000000000001;0.86;0.96;1" values="0;0;1;1;0;0" />
+            </circle>
+            <g class="viz-chip" opacity="0">
+              <rect x="234" y="24" width="54" height="17" rx="8.5" />
+              <text x="261" y="35.5" text-anchor="middle">INSIGHT</text>
+              <animate attributeName="opacity" dur="9s" repeatCount="indefinite" keyTimes="0;0.5800000000000001;0.64;0.86;0.96;1" values="0;0;1;1;0;0" />
+            </g>
+          </svg>
+        </div>
+
+      <div class="flat-banner-body">
+        <div class="flat-banner-content">
+          <span class="flat-banner-pill">
+            <span class="live-pulse-dot" aria-hidden="true"></span>
+            <span id="bannerBadge">LIVE PORTAL</span>
+          </span>
+          <h2 class="flat-banner-title" id="bannerTitle">DELTA Lab Official Website</h2>
+          <p class="flat-banner-desc" id="bannerDesc">
+            Pusat riset eksplorasi data, pembelajaran mesin, dan analitik translasional.
+          </p>
+          <span class="flat-banner-cta">
+            <span id="bannerCtaText">Buka Portal Utama</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Category Filter Pills -->
+    <nav class="category-bar" id="categoryBar" aria-label="Kategori Aplikasi"></nav>
+
+    <!-- Application Links Directory -->
+    <section class="links-list" id="linksList" aria-label="Daftar Aplikasi DELTA Lab"></section>
+
+    <!-- Footer & Official Copyright -->
+    <footer class="footer">
+      <p class="copyright-text">
+        &copy; 2026 <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
+        All Rights Reserved.
+      </p>
+    </footer>
+  </main>
+
+  <!-- Toast Feedback -->
+  <div class="toast" id="toast">Tautan berhasil disalin!</div>
+
+  <script>
+    /* ==========================================================================
+       KONFIGURASI UTAMA DELTA LINK — EDIT DI SINI UNTUK MENAMBAH / MENGUBAH PRODUK
+       --------------------------------------------------------------------------
+       Cara update: ubah data di bawah → commit & push ke GitHub → Vercel deploy otomatis.
+
+       Format satu produk:
+       {
+         title: "Nama Aplikasi",
+         description: "Deskripsi singkat (±50 karakter agar tidak terpotong)",
+         url: "https://...",            // isi "#" bila belum rilis
+         category: "Platform",          // nama kategori bebas, otomatis jadi tombol filter
+         status: "live",                // "live" atau "soon"
+         badgeText: "LIVE • WEB",       // teks label kecil di samping judul
+         icon: "logo",                  // logo | globe | chart | cpu | layers
+         logoFile: "logo-app.png"       // opsional: gambar logo sendiri (menggantikan icon)
+       }
+       ========================================================================== */
+    const SITE_CONFIG = {
+      title: "DELTA Link",
+      subtitle: "DELTA Lab — Data Exploration, Learning & Translational Analytics",
+      logoFile: "logo-delta-lab.png",
+      banner: {
+        badge: "LIVE PORTAL",
+        title: "DELTA Lab Official Website",
+        description: "Pusat riset eksplorasi data, pembelajaran mesin, dan analitik translasional.",
+        ctaText: "Buka Portal Utama",
+        url: "https://deltalab.vercel.app/"
+      },
+      links: [
+        {
+          title: "DELTA Lab Portal",
+          description: "Website utama profil laboratorium",
+          url: "https://deltalab.vercel.app/",
+          category: "Platform",
+          status: "live",
+          badgeText: "LIVE • WEB",
+          icon: "logo"
+        },
+        {
+          title: "SAGELTA",
+          description: "Sistem pendukung keputusan untuk rekomendasi lab",
+          url: "http://sagelta.streamlit.app/",
+          logoFile: "logo-sagelta.png",
+          category: "Aplikasi AI & Analitik",
+          status: "live",
+          badgeText: "STREAMLIT APP",
+          icon: "chart"
+        },
+        {
+          title: "SIGMA",
+          description: "Sistem Integrasi Generator Modul Akademik",
+          url: "#",
+          logoFile: "logo-sigma.png",
+          category: "Segera Hadir",
+          status: "soon",
+          badgeText: "COMING SOON",
+          icon: "cpu"
+        },
+        {
+          title: "SIPEDRO",
+          description: "Sistem Informasi Penilaian dan Evaluasi Proposal",
+          url: "#",
+          logoFile: "logo-sipedro.png",
+          category: "Segera Hadir",
+          status: "soon",
+          badgeText: "COMING SOON",
+          icon: "layers"
+        }
+      ]
+    };
+
+    /* ==========================================================================
+       SVG VEKTOR LOGO DELTA LAB UNTUK PROFIL UTAMA
+       ========================================================================== */
+    const DELTA_LOGO_SVG = `
+      <svg viewBox="0 0 220 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo DELTA Lab">
+        <path d="M167 22C132 -1 76 4 46 39C18 72 22 121 57 154C82 177 118 197 147 222C182 252 194 297 175 339C164 361 146 373 126 377C159 376 191 356 206 322C225 278 211 224 172 190C143 165 107 146 83 122C57 96 56 58 80 34C103 12 139 10 167 22Z" fill="#8C151B"/>
+        <path d="M196 86C167 127 123 156 76 184C27 213 2 263 14 313C25 357 69 382 117 377C143 374 166 359 179 336C163 347 143 352 122 349C83 343 56 310 60 271C64 234 92 208 125 186C161 162 186 127 196 86Z" fill="#6D6E71"/>
+      </svg>
+    `;
+
+    function renderBrandLogo(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (SITE_CONFIG.logoFile) {
+        const img = document.createElement("img");
+        img.src = SITE_CONFIG.logoFile;
+        img.alt = "Logo DELTA Lab";
+        img.onerror = () => {
+          container.innerHTML = DELTA_LOGO_SVG;
+        };
+        container.innerHTML = "";
+        container.appendChild(img);
+      } else {
+        container.innerHTML = DELTA_LOGO_SVG;
+      }
+    }
+
+    const ICONS = {
+      logo: `<img class="link-logo-img" src="logo-delta-lab.png" alt="" />`,
+      globe: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+      chart: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+      cpu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
+      layers: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
+    };
+
+    let activeCategory = "Semua";
+
+    /* Cegah XSS: semua teks dari data di-escape sebelum masuk innerHTML */
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    /* Hanya izinkan http/https, selain itu dianggap "#" */
+    function safeUrl(url) {
+      return /^https?:\/\//i.test(String(url || "").trim()) ? String(url).trim() : "#";
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    function renderCategories() {
+      const bar = document.getElementById("categoryBar");
+      const cats = ["Semua", ...new Set(SITE_CONFIG.links.map(item => item.category))];
+      bar.innerHTML = cats.map(cat => `
+        <button class="cat-pill ${cat === activeCategory ? "active" : ""}" data-cat="${esc(cat)}" type="button">
+          ${esc(cat)}
+        </button>
+      `).join("");
+
+      bar.querySelectorAll(".cat-pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeCategory = btn.dataset.cat;
+          renderCategories();
+          renderLinks();
+        });
+      });
+    }
+
+    function renderLinks() {
+      const list = document.getElementById("linksList");
+      const filtered = activeCategory === "Semua"
+        ? SITE_CONFIG.links
+        : SITE_CONFIG.links.filter(item => item.category === activeCategory);
+
+      list.innerHTML = filtered.map(item => {
+        const url = safeUrl(item.url);
+        const isSoon = item.status === "soon" || url === "#";
+        const cleanDomain = !isSoon
+          ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
+          : "Segera dirilis oleh DELTA Lab";
+
+        return `
+          <a class="link-card ${isSoon ? "coming-soon" : ""}"
+             href="${isSoon ? "#" : esc(url)}"
+             ${isSoon ? "" : 'target="_blank" rel="noopener noreferrer"'}
+             data-soon="${isSoon}"
+             data-title="${esc(item.title)}">
+            <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" ? "has-logo" : ""}">
+              ${item.logoFile
+                ? `<img class="link-logo-img" src="${esc(item.logoFile)}" alt="" />`
+                : (ICONS[item.icon] || ICONS.globe)}
+            </div>
+            <div class="link-info">
+              <div class="link-header-row">
+                <span class="link-title">${esc(item.title)}</span>
+                <span class="status-badge ${isSoon ? "badge-soon" : "badge-live"}">
+                  ${esc(item.badgeText || (isSoon ? "COMING SOON" : "LIVE"))}
+                </span>
+              </div>
+              <p class="link-desc">${esc(item.description)}</p>
+              <span class="link-url-hint">${esc(cleanDomain)}</span>
+            </div>
+            <div class="link-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                ${isSoon
+                  ? '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+                  : '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>'}
+              </svg>
+            </div>
+          </a>
+        `;
+      }).join("");
+
+      list.querySelectorAll(".link-card").forEach(card => {
+        card.addEventListener("click", (e) => {
+          const rect = card.getBoundingClientRect();
+          const ripple = document.createElement("span");
+          const size = Math.max(rect.width, rect.height);
+          ripple.className = "ripple";
+          ripple.style.width = ripple.style.height = `${size}px`;
+          ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+          ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+          card.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
+
+          if (card.dataset.soon === "true") {
+            e.preventDefault();
+            card.classList.remove("shake");
+            void card.offsetWidth;
+            card.classList.add("shake");
+            showToast(`${card.dataset.title} sedang dalam tahap pengembangan.`);
+          }
+        });
+      });
+    }
+
+    function renderAll() {
+      document.getElementById("siteTitle").textContent = SITE_CONFIG.title;
+      document.getElementById("siteSubtitle").textContent = SITE_CONFIG.subtitle;
+
+      document.getElementById("bannerBadge").textContent = SITE_CONFIG.banner.badge;
+      document.getElementById("bannerTitle").textContent = SITE_CONFIG.banner.title;
+      document.getElementById("bannerDesc").textContent = SITE_CONFIG.banner.description;
+      document.getElementById("bannerCtaText").textContent = SITE_CONFIG.banner.ctaText;
+      document.getElementById("featuredBanner").href = safeUrl(SITE_CONFIG.banner.url);
+
+      renderCategories();
+      renderLinks();
+    }
+
+    /* Bila pengguna memilih "kurangi animasi", bekukan chart di keadaan insight */
+    function initBannerViz() {
+      const viz = document.getElementById("bannerViz");
+      if (!viz || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      viz.pauseAnimations();
+      viz.setCurrentTime(6.5);
+    }
+
+    function initApp() {
+      renderAll();
+      initBannerViz();
+      renderBrandLogo("profileLogoContainer");
+    }
+
+    /* Theme Toggle (pilihan diingat di browser) */
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const SUN_ICON = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+    const MOON_ICON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      themeIcon.innerHTML = theme === "dark" ? SUN_ICON : MOON_ICON;
+    }
+
+    (function initTheme() {
+      let saved = null;
+      try { saved = localStorage.getItem("deltalink-theme"); } catch {}
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(saved || (prefersDark ? "dark" : "light"));
+    })();
+
+    themeToggle.addEventListener("click", () => {
+      const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+      applyTheme(next);
+      try { localStorage.setItem("deltalink-theme", next); } catch {}
+    });
+
+    /* Share Link */
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast("Tautan DELTA Link berhasil disalin!");
+      } catch {
+        showToast("Tautan siap dibagikan!");
+      }
+    });
+
+    initApp();
+  </script>
+</body>
+</html>
