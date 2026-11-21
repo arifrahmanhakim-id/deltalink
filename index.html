@@ -905,6 +905,17 @@
       color: #FFFFFF;
     }
 
+    .badge-game {
+      background-color: transparent;
+      color: var(--telu-maroon);
+      box-shadow: inset 0 0 0 1.5px var(--telu-maroon);
+    }
+
+    [data-theme="dark"] .badge-game {
+      color: #FFFFFF;
+      box-shadow: inset 0 0 0 1.5px #FFFFFF;
+    }
+
     .link-desc {
       font-size: 12.5px;
       color: var(--text-secondary);
@@ -1096,6 +1107,247 @@
       right: 12px;
       width: 32px;
       height: 32px;
+    }
+
+    /* ==========================================================================
+       MINI GAME: TEBAK TREN
+       ========================================================================== */
+    .game-dialog {
+      max-width: 400px;
+      padding: 22px 18px 18px;
+    }
+
+    .game-head {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .game-round {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--telu-grey-dark);
+      background: var(--bg-base);
+      box-shadow: var(--neu-in-sm);
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+    }
+
+    [data-theme="dark"] .game-round {
+      color: var(--text-primary);
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .game-stats b {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    .game-chart {
+      margin: 14px 0 8px;
+      padding: 6px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-base);
+      box-shadow: var(--neu-in-sm);
+    }
+
+    .game-chart svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .g-grid { stroke: var(--header-line); stroke-width: 1; }
+    .g-future { fill: var(--telu-grey-soft); }
+    .g-divider { stroke: var(--telu-grey); stroke-width: 1.2; stroke-dasharray: 4 4; }
+    .g-q { fill: var(--telu-grey); font: 800 30px "Plus Jakarta Sans", sans-serif; opacity: 0.55; }
+    .g-now { fill: var(--telu-grey); font: 700 9px "JetBrains Mono", monospace; letter-spacing: 0.06em; }
+    .g-area { fill: var(--telu-maroon-soft); }
+    .g-hist { fill: none; stroke: var(--telu-grey-dark); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+    [data-theme="dark"] .g-hist { stroke: #FFFFFF; }
+    .g-dot { fill: var(--telu-maroon); stroke: #FFFFFF; stroke-width: 2; }
+
+    .g-reveal {
+      fill: none;
+      stroke: var(--telu-maroon);
+      stroke-width: 2.6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: gDraw 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    [data-theme="dark"] .g-reveal { stroke: #FFB3B7; }
+
+    @keyframes gDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .game-feedback {
+      min-height: 22px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+
+    .game-feedback.ok { color: #1F8A55; }
+    .game-feedback.bad { color: var(--telu-maroon); }
+    [data-theme="dark"] .game-feedback.ok { color: #8BE3B3; }
+    [data-theme="dark"] .game-feedback.bad { color: #FFC2C5; }
+
+    .game-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .guess-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 11px 6px 10px;
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-md);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .guess-btn:hover:not(:disabled) {
+      color: var(--telu-maroon);
+      transform: translateY(-1px);
+    }
+
+    [data-theme="dark"] .guess-btn:hover:not(:disabled) {
+      color: #FFFFFF;
+      background: var(--surface-grey);
+    }
+
+    .guess-btn:active:not(:disabled) {
+      box-shadow: var(--neu-in-sm);
+      transform: none;
+    }
+
+    .guess-btn:disabled {
+      cursor: default;
+    }
+
+    .guess-btn.is-correct {
+      background: #1F8A55;
+      color: #FFFFFF;
+      box-shadow: none;
+    }
+
+    .guess-btn.is-wrong {
+      background: var(--telu-maroon);
+      color: #FFFFFF;
+      box-shadow: none;
+    }
+
+    .guess-btn.is-answer {
+      box-shadow: inset 0 0 0 2px #1F8A55;
+      color: #1F8A55;
+    }
+
+    [data-theme="dark"] .guess-btn.is-answer {
+      box-shadow: inset 0 0 0 2px #8BE3B3;
+      color: #8BE3B3;
+    }
+
+    .game-tip {
+      margin-top: 12px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    @media (hover: none) {
+      .game-tip { display: none; }
+    }
+
+    .game-end {
+      padding: 10px 0 2px;
+    }
+
+    .game-end[hidden],
+    .game-play[hidden] {
+      display: none;
+    }
+
+    .game-end-label {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    .game-end-score {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--telu-maroon);
+      letter-spacing: -0.02em;
+    }
+
+    [data-theme="dark"] .game-end-score {
+      color: #FFFFFF;
+    }
+
+    .game-end-tier {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .game-end-best {
+      margin-top: 4px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .game-end-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .game-end-actions .qr-download {
+      margin-top: 0;
+    }
+
+    .qr-download.secondary {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      border: 1px solid var(--neu-border);
+      box-shadow: var(--neu-out-sm);
+    }
+
+    .qr-download.secondary:hover {
+      background: var(--surface-grey);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .g-reveal {
+        animation: none;
+        stroke-dashoffset: 0;
+      }
     }
 
     /* ==========================================================================
@@ -1364,6 +1616,49 @@
     </div>
   </div>
 
+  <!-- Mini Game: Tebak Tren -->
+  <div class="qr-overlay" id="gameOverlay" aria-hidden="true">
+    <div class="qr-dialog game-dialog" role="dialog" aria-modal="true" aria-labelledby="gameTitle">
+      <button class="neu-icon-btn qr-close" id="gameClose" type="button" data-i18n-aria="close" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="game-head">
+        <h2 class="qr-title" id="gameTitle" data-i18n="gameName">Tebak Tren</h2>
+        <span class="game-round" id="gameRound">1/10</span>
+      </div>
+
+      <div class="game-play" id="gamePlay">
+        <p class="qr-sub" data-i18n="gameQuestion">Ke mana grafik bergerak berikutnya?</p>
+        <div class="game-stats">
+          <span><span data-i18n="gameScore">Skor</span> <b id="gameScore">0</b></span>
+          <span>Streak <b id="gameStreak">0</b> 🔥</span>
+        </div>
+        <div class="game-chart"><svg id="gameChart" viewBox="0 0 300 170" role="img" aria-label="Grafik"></svg></div>
+        <p class="game-feedback" id="gameFeedback" aria-live="polite"></p>
+        <div class="game-actions">
+          <button class="guess-btn" type="button" data-guess="up"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="15 7 21 7 21 13"></polyline></svg><span data-i18n="dirUp">Naik</span></button>
+          <button class="guess-btn" type="button" data-guess="flat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><polyline points="15 6 21 12 15 18"></polyline></svg><span data-i18n="dirFlat">Stabil</span></button>
+          <button class="guess-btn" type="button" data-guess="down"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 7 9 13 13 9 21 17"></polyline><polyline points="15 17 21 17 21 11"></polyline></svg><span data-i18n="dirDown">Turun</span></button>
+        </div>
+        <p class="game-tip" data-i18n="gameTip">Tip: pakai tombol panah ↑ → ↓</p>
+      </div>
+
+      <div class="game-end" id="gameEnd" hidden>
+        <p class="game-end-label" data-i18n="gameAccuracy">Akurasi tebakanmu</p>
+        <p class="game-end-score" id="gameEndScore">0%</p>
+        <p class="game-end-tier" id="gameEndTier"></p>
+        <p class="game-end-best" id="gameEndBest"></p>
+        <div class="game-end-actions">
+          <button class="qr-download secondary" id="gameShare" type="button" data-i18n="gameShareBtn">Bagikan skor</button>
+          <button class="qr-download" id="gameAgain" type="button" data-i18n="gamePlayAgain">Main lagi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Feedback -->
   <div class="toast" id="toast">Tautan berhasil disalin!</div>
 
@@ -1385,7 +1680,8 @@
          badgeText: "LIVE • WEB",       // teks label kecil di samping judul
          icon: "logo",                  // logo | globe | chart | cpu | layers
          logoFile: "logo-app.png",      // opsional: gambar logo sendiri (menggantikan icon)
-         eta: "Rilis Q1 2027"           // opsional, khusus "soon": perkiraan rilis
+         eta: "Rilis Q1 2027",          // opsional, khusus "soon": perkiraan rilis
+         type: "game"                   // khusus kartu mini game Tebak Tren
        }
        ========================================================================== */
     const SITE_CONFIG = {
@@ -1454,6 +1750,17 @@
           status: "soon",
           badgeText: "COMING SOON",
           icon: "layers"
+        },
+        {
+          title: "Tebak Tren",
+          description: {
+            id: "Mini game: tebak arah grafik berikutnya",
+            en: "Mini game: guess where the chart goes next"
+          },
+          type: "game",
+          category: "Mini Game",
+          badgeText: { id: "MAIN", en: "PLAY" },
+          icon: "trend"
         }
       ]
     };
@@ -1490,6 +1797,7 @@
       globe: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
       chart: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
       cpu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
+      trend: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>`,
       layers: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
     };
 
@@ -1519,6 +1827,25 @@
         copyFallback: "Tautan siap dibagikan!",
         installed: "DELTA Link terpasang di perangkat Anda!",
         backToTop: "Kembali ke atas",
+        gameName: "Tebak Tren",
+        gameQuestion: "Ke mana grafik bergerak berikutnya?",
+        gameScore: "Skor",
+        gameTip: "Tip: pakai tombol panah ↑ → ↓",
+        dirUp: "Naik",
+        dirFlat: "Stabil",
+        dirDown: "Turun",
+        gameNow: "SEKARANG",
+        gameRight: "Tepat! 🎯",
+        gameWrong: (dir) => `Meleset — grafiknya ${dir.toLowerCase()}`,
+        gameAccuracy: "Akurasi tebakanmu",
+        gameBest: (n) => `Skor terbaik: ${n}/10`,
+        gameNewBest: "🏆 Rekor baru!",
+        gameHint: "10 ronde · ± 30 detik",
+        gameShareBtn: "Bagikan skor",
+        gamePlayAgain: "Main lagi",
+        gameShareText: (pct) => `Akurasi tebakan trenku ${pct}% di Tebak Tren DELTA Lab 📈 Bisa kalahkan?`,
+        gameShared: "Skor siap dibagikan — tautan disalin!",
+        gameTiers: ["Masih Overfitting 😅", "Sedang Belajar 📈", "Analis Andal 📊", "Data Scientist 🧠"],
         switchTo: "Switch to English",
         switchLabel: "EN"
       },
@@ -1544,6 +1871,25 @@
         copyFallback: "Link ready to share!",
         installed: "DELTA Link is installed on your device!",
         backToTop: "Back to top",
+        gameName: "Guess the Trend",
+        gameQuestion: "Where does the chart go next?",
+        gameScore: "Score",
+        gameTip: "Tip: use the arrow keys ↑ → ↓",
+        dirUp: "Up",
+        dirFlat: "Flat",
+        dirDown: "Down",
+        gameNow: "NOW",
+        gameRight: "Spot on! 🎯",
+        gameWrong: (dir) => `Missed — it went ${dir.toLowerCase()}`,
+        gameAccuracy: "Your prediction accuracy",
+        gameBest: (n) => `Best score: ${n}/10`,
+        gameNewBest: "🏆 New record!",
+        gameHint: "10 rounds · ~30 seconds",
+        gameShareBtn: "Share score",
+        gamePlayAgain: "Play again",
+        gameShareText: (pct) => `I scored ${pct}% on DELTA Lab's Guess the Trend 📈 Can you beat it?`,
+        gameShared: "Score ready to share — link copied!",
+        gameTiers: ["Still Overfitting 😅", "Learning Fast 📈", "Sharp Analyst 📊", "Data Scientist 🧠"],
         switchTo: "Ganti ke Bahasa Indonesia",
         switchLabel: "ID"
       }
@@ -1628,16 +1974,21 @@
 
       list.innerHTML = filtered.map((item, index) => {
         const url = safeUrl(item.url);
-        const isSoon = item.status === "soon" || url === "#";
-        const cleanDomain = !isSoon
-          ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
-          : (item.eta ? `${ui("eta")}: ${tr(item.eta)}` : ui("inDev"));
+        const isGame = item.type === "game";
+        const isSoon = !isGame && (item.status === "soon" || url === "#");
+        const cleanDomain = isGame
+          ? gameHintText()
+          : !isSoon
+            ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
+            : (item.eta ? `${ui("eta")}: ${tr(item.eta)}` : ui("inDev"));
 
         return `
-          <a class="link-card ${isSoon ? "coming-soon" : ""}"
-             href="${isSoon ? "#" : esc(url)}"
-             ${isSoon ? "" : 'target="_blank" rel="noopener noreferrer"'}
+          <a class="link-card ${isSoon ? "coming-soon" : ""} ${isGame ? "game-card" : ""}"
+             href="${isSoon || isGame ? "#" : esc(url)}"
+             ${isSoon || isGame ? "" : 'target="_blank" rel="noopener noreferrer"'}
+             ${isGame ? 'role="button" aria-haspopup="dialog"' : ""}
              data-soon="${isSoon}"
+             data-game="${isGame}"
              data-title="${esc(item.title)}"
              data-eta="${esc(tr(item.eta))}"
              style="--i:${index}">
@@ -1649,7 +2000,7 @@
             <div class="link-info">
               <div class="link-header-row">
                 <span class="link-title">${esc(item.title)}</span>
-                <span class="status-badge ${isSoon ? "badge-soon" : "badge-live"}">
+                <span class="status-badge ${isGame ? "badge-game" : isSoon ? "badge-soon" : "badge-live"}">
                   ${esc(tr(item.badgeText) || (isSoon ? "COMING SOON" : "LIVE"))}
                 </span>
               </div>
@@ -1658,9 +2009,11 @@
             </div>
             <div class="link-arrow" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                ${isSoon
-                  ? '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
-                  : '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>'}
+                ${isGame
+                  ? '<polygon points="8 5 19 12 8 19 8 5"/>'
+                  : isSoon
+                    ? '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+                    : '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>'}
               </svg>
             </div>
           </a>
@@ -1678,6 +2031,12 @@
           ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
           card.appendChild(ripple);
           setTimeout(() => ripple.remove(), 600);
+
+          if (card.dataset.game === "true") {
+            e.preventDefault();
+            openGame();
+            return;
+          }
 
           if (card.dataset.soon === "true") {
             e.preventDefault();
@@ -1871,12 +2230,229 @@
       });
     })();
 
+    /* ==========================================================================
+       MINI GAME: TEBAK TREN
+       Grafik dibuat acak dari tren + musiman + noise. Pemain menebak arah
+       rata-rata 3 titik terakhir yang tersembunyi dibanding titik "sekarang".
+       ========================================================================== */
+    const GAME_ROUNDS = 10;
+    const G = { W: 300, H: 170, N: 26, SPLIT: 17 };
+    const gameOverlay = document.getElementById("gameOverlay");
+    const gameChart = document.getElementById("gameChart");
+    const guessBtns = [...document.querySelectorAll(".guess-btn")];
+    const game = { round: 0, score: 0, streak: 0, locked: false, current: null, open: false, lastFocus: null };
+
+    function readBest() {
+      try { return Number(localStorage.getItem("deltalink-trend-best")) || 0; } catch { return 0; }
+    }
+
+    function gameHintText() {
+      const best = readBest();
+      return best > 0 ? ui("gameBest")(best) : ui("gameHint");
+    }
+
+    function gauss() {
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    function labelOf(vals) {
+      const hist = vals.slice(0, G.SPLIT);
+      const span = Math.max(Math.max(...hist) - Math.min(...hist), 6);
+      const now = vals[G.SPLIT - 1];
+      const end = (vals[G.N - 1] + vals[G.N - 2] + vals[G.N - 3]) / 3;
+      const d = (end - now) / span;
+      return d > 0.35 ? "up" : d < -0.35 ? "down" : "flat";
+    }
+
+    function genSeries() {
+      const target = ["up", "flat", "down"][Math.floor(Math.random() * 3)];
+      let vals = [];
+      for (let attempt = 0; attempt < 120; attempt++) {
+        /* Disetel lewat simulasi: pemain yang membaca arah tren benar ±70%,
+           sisanya kejutan karena tren sesekali berbalik */
+        const trend = rand(-1.6, 1.6);
+        const shift = Math.random() < 0.12 ? rand(-1.5, 1.5) : 0;   // kadang tren berubah arah
+        const amp = rand(0, 3);
+        const period = rand(10, 20);
+        const phase = rand(0, Math.PI * 2);
+        const noise = rand(0.3, 0.8);
+        let level = 50;
+        vals = [];
+        for (let i = 0; i < G.N; i++) {
+          level += i < G.SPLIT ? trend : trend + shift;
+          vals.push(level + amp * Math.sin((2 * Math.PI * i) / period + phase) + gauss() * noise);
+        }
+        if (labelOf(vals) === target) break;
+      }
+      return { vals, label: labelOf(vals) };
+    }
+
+    function drawChart(reveal) {
+      const { vals } = game.current;
+      const hist = vals.slice(0, G.SPLIT);
+      const hMin = Math.min(...hist), hMax = Math.max(...hist);
+      const span = Math.max(hMax - hMin, 6);
+      const yMin = hMin - span * 0.75, yMax = hMax + span * 0.75;
+      const padX = 12, padY = 12;
+      const x = i => padX + (i * (G.W - padX * 2)) / (G.N - 1);
+      const y = v => {
+        const t = (v - yMin) / (yMax - yMin);
+        return Math.min(G.H - padY, Math.max(padY, G.H - padY - t * (G.H - padY * 2)));
+      };
+      const pts = (from, to) => vals.slice(from, to).map((v, k) => `${x(from + k).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+      const sx = x(G.SPLIT - 1);
+      const last = vals[G.SPLIT - 1];
+
+      let svg = "";
+      [0.25, 0.5, 0.75].forEach(f => {
+        const gy = (G.H * f).toFixed(1);
+        svg += `<line class="g-grid" x1="0" y1="${gy}" x2="${G.W}" y2="${gy}" />`;
+      });
+      svg += `<rect class="g-future" x="${sx}" y="0" width="${G.W - sx}" height="${G.H}" />`;
+      svg += `<line class="g-divider" x1="${sx}" y1="0" x2="${sx}" y2="${G.H}" />`;
+      svg += `<text class="g-now" x="${sx - 6}" y="14" text-anchor="end">${esc(ui("gameNow"))}</text>`;
+      svg += `<polygon class="g-area" points="${x(0)},${G.H} ${pts(0, G.SPLIT)} ${sx},${G.H}" />`;
+      svg += `<polyline class="g-hist" points="${pts(0, G.SPLIT)}" />`;
+      if (reveal) {
+        svg += `<polyline class="g-reveal" pathLength="1" points="${pts(G.SPLIT - 1, G.N)}" />`;
+      } else {
+        svg += `<text class="g-q" x="${(sx + G.W) / 2}" y="${G.H / 2 + 10}" text-anchor="middle">?</text>`;
+      }
+      svg += `<circle class="g-dot" cx="${sx}" cy="${y(last)}" r="4.5" />`;
+      gameChart.innerHTML = svg;
+    }
+
+    function updateHud() {
+      document.getElementById("gameRound").textContent = `${Math.min(game.round, GAME_ROUNDS)}/${GAME_ROUNDS}`;
+      document.getElementById("gameScore").textContent = game.score;
+      document.getElementById("gameStreak").textContent = game.streak;
+    }
+
+    function nextRound() {
+      game.round += 1;
+      game.current = genSeries();
+      game.locked = false;
+      guessBtns.forEach(b => { b.disabled = false; b.classList.remove("is-correct", "is-wrong", "is-answer"); });
+      const fb = document.getElementById("gameFeedback");
+      fb.textContent = "";
+      fb.className = "game-feedback";
+      drawChart(false);
+      updateHud();
+    }
+
+    function startGame() {
+      Object.assign(game, { round: 0, score: 0, streak: 0 });
+      document.getElementById("gamePlay").hidden = false;
+      document.getElementById("gameEnd").hidden = true;
+      nextRound();
+    }
+
+    const DIR_KEY = { up: "dirUp", flat: "dirFlat", down: "dirDown" };
+
+    function makeGuess(dir) {
+      if (game.locked || !game.open) return;
+      game.locked = true;
+      const answer = game.current.label;
+      const right = dir === answer;
+      if (right) { game.score += 1; game.streak += 1; } else { game.streak = 0; }
+
+      guessBtns.forEach(b => {
+        b.disabled = true;
+        if (b.dataset.guess === dir) b.classList.add(right ? "is-correct" : "is-wrong");
+        else if (b.dataset.guess === answer) b.classList.add("is-answer");
+      });
+      const fb = document.getElementById("gameFeedback");
+      fb.textContent = right ? ui("gameRight") : ui("gameWrong")(ui(DIR_KEY[answer]));
+      fb.className = `game-feedback ${right ? "ok" : "bad"}`;
+      drawChart(true);
+      updateHud();
+
+      setTimeout(() => {
+        if (!game.open) return;
+        game.round >= GAME_ROUNDS ? endGame() : nextRound();
+      }, 1400);
+    }
+
+    function endGame() {
+      const pct = Math.round((game.score / GAME_ROUNDS) * 100);
+      const prevBest = readBest();
+      const isRecord = game.score > prevBest;
+      if (isRecord) { try { localStorage.setItem("deltalink-trend-best", String(game.score)); } catch {} }
+
+      const tiers = ui("gameTiers");
+      const tier = pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0];
+      document.getElementById("gameEndScore").textContent = `${pct}%`;
+      document.getElementById("gameEndTier").textContent = tier;
+      document.getElementById("gameEndBest").textContent = isRecord
+        ? ui("gameNewBest")
+        : ui("gameBest")(Math.max(prevBest, game.score));
+      document.getElementById("gamePlay").hidden = true;
+      document.getElementById("gameEnd").hidden = false;
+      document.getElementById("gameAgain").focus();
+
+      document.querySelectorAll('.link-card[data-game="true"] .link-url-hint')
+        .forEach(el => { el.textContent = gameHintText(); });
+    }
+
+    function openGame() {
+      game.lastFocus = document.activeElement;
+      game.open = true;
+      startGame();
+      gameOverlay.classList.add("open");
+      gameOverlay.setAttribute("aria-hidden", "false");
+      guessBtns[0].focus();
+    }
+
+    function closeGame() {
+      game.open = false;
+      gameOverlay.classList.remove("open");
+      gameOverlay.setAttribute("aria-hidden", "true");
+      if (game.lastFocus) game.lastFocus.focus();
+    }
+
+    guessBtns.forEach(b => b.addEventListener("click", () => makeGuess(b.dataset.guess)));
+    document.getElementById("gameClose").addEventListener("click", closeGame);
+    document.getElementById("gameAgain").addEventListener("click", startGame);
+    gameOverlay.addEventListener("click", (e) => { if (e.target === gameOverlay) closeGame(); });
+    document.addEventListener("keydown", (e) => {
+      if (!game.open) return;
+      if (e.key === "Escape") { closeGame(); return; }
+      const map = { ArrowUp: "up", ArrowRight: "flat", ArrowDown: "down" };
+      if (map[e.key] && !document.getElementById("gamePlay").hidden) {
+        e.preventDefault();
+        makeGuess(map[e.key]);
+      }
+    });
+
+    document.getElementById("gameShare").addEventListener("click", async () => {
+      const pct = Math.round((game.score / GAME_ROUNDS) * 100);
+      const text = ui("gameShareText")(pct);
+      const url = "https://deltalink.vercel.app/";
+      if (navigator.share) {
+        try { await navigator.share({ title: ui("gameName"), text, url }); return; } catch (err) {
+          if (err && err.name === "AbortError") return;
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        showToast(ui("gameShared"));
+      } catch {
+        showToast(`${text} ${url}`);
+      }
+    });
+
     /* Ganti bahasa */
     document.getElementById("langToggle").addEventListener("click", () => {
       lang = lang === "id" ? "en" : "id";
       try { localStorage.setItem("deltalink-lang", lang); } catch {}
       activeCategory = ALL;
       renderAll();
+      if (game.open && game.current && !document.getElementById("gamePlay").hidden) drawChart(game.locked);
     });
 
     /* PWA: tombol "Pasang Aplikasi" muncul bila browser mendukung */
