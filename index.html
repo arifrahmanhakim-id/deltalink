@@ -7,6 +7,49 @@
   <meta name="description" content="Direktori resmi aplikasi dan produk digital DELTA Lab — Data Exploration, Learning & Translational Analytics." />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="DELTA Link" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <!-- Data terstruktur untuk mesin pencari -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ResearchOrganization",
+        "@id": "https://deltalab.vercel.app/#org",
+        "name": "DELTA Lab",
+        "alternateName": "Data Exploration, Learning & Translational Analytics Laboratory",
+        "url": "https://deltalab.vercel.app/",
+        "logo": "https://deltalink.vercel.app/logo-delta-lab.png",
+        "parentOrganization": {
+          "@type": "CollegeOrUniversity",
+          "name": "Telkom University",
+          "url": "https://telkomuniversity.ac.id/"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://deltalink.vercel.app/#website",
+        "name": "DELTA Link",
+        "url": "https://deltalink.vercel.app/",
+        "inLanguage": ["id", "en"],
+        "publisher": { "@id": "https://deltalab.vercel.app/#org" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "SAGELTA",
+        "description": "Sistem pendukung keputusan untuk rekomendasi lab",
+        "url": "https://sagelta.streamlit.app/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "creator": { "@id": "https://deltalab.vercel.app/#org" }
+      }
+    ]
+  }
+  </script>
   <meta name="theme-color" content="#8C151B" />
   <link rel="canonical" href="https://deltalink.vercel.app/" />
 
@@ -166,38 +209,23 @@
     .top-bar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--telu-grey-dark);
-      background: var(--bg-base);
-      box-shadow: var(--neu-in-sm);
-      padding: 7px 14px;
-      border-radius: var(--radius-pill);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    [data-theme="dark"] .brand-tag {
-      color: var(--text-secondary);
-    }
-
-    .brand-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--telu-maroon);
-      display: inline-block;
+      justify-content: flex-end;
     }
 
     .top-actions {
       display: flex;
       gap: 10px;
+    }
+
+    .lang-btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .neu-icon-btn[hidden] {
+      display: none;
     }
 
     .neu-icon-btn {
@@ -1041,17 +1069,22 @@
   <main class="container">
     <!-- Top Utility Bar -->
     <header class="top-bar">
-      <div class="brand-tag">
-        <span class="brand-dot"></span>
-        <span>deltalab.link</span>
-      </div>
       <div class="top-actions">
-        <button class="neu-icon-btn" id="themeToggle" title="Ganti Tema Terang / Gelap" aria-label="Ganti Tema">
+        <button class="neu-icon-btn" id="installBtn" hidden data-i18n-title="installTitle" data-i18n-aria="installTitle" title="Pasang Aplikasi" aria-label="Pasang Aplikasi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2.5"></rect>
+            <polyline points="9 11 12 14 15 11"></polyline>
+            <line x1="12" y1="6" x2="12" y2="14"></line>
+            <line x1="11" y1="18" x2="13" y2="18"></line>
+          </svg>
+        </button>
+        <button class="neu-icon-btn lang-btn" id="langToggle" type="button" title="Switch to English" aria-label="Switch to English">EN</button>
+        <button class="neu-icon-btn" id="themeToggle" data-i18n-title="themeTitle" data-i18n-aria="themeTitle" title="Ganti Tema Terang / Gelap" aria-label="Ganti Tema">
           <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
         </button>
-        <button class="neu-icon-btn" id="qrBtn" title="Tampilkan QR Code" aria-label="Tampilkan QR Code" aria-haspopup="dialog">
+        <button class="neu-icon-btn" id="qrBtn" data-i18n-title="qrTitleBtn" data-i18n-aria="qrTitleBtn" title="Tampilkan QR Code" aria-label="Tampilkan QR Code" aria-haspopup="dialog">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7" rx="1"></rect>
             <rect x="14" y="3" width="7" height="7" rx="1"></rect>
@@ -1062,7 +1095,7 @@
             <line x1="17.5" y1="17.5" x2="17.5" y2="14"></line>
           </svg>
         </button>
-        <button class="neu-icon-btn" id="shareBtn" title="Salin Tautan Halaman" aria-label="Bagikan">
+        <button class="neu-icon-btn" id="shareBtn" data-i18n-title="shareTitle" data-i18n-aria="shareTitle" title="Salin Tautan Halaman" aria-label="Salin Tautan Halaman">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"></circle>
             <circle cx="6" cy="12" r="3"></circle>
@@ -1078,7 +1111,7 @@
     <section class="profile-section">
       <div class="avatar-ring">
         <div class="avatar-inner" id="profileLogoContainer"></div>
-        <span class="verified-badge" title="Verified DELTA Lab Official">
+        <span class="verified-badge" data-i18n-title="verified" title="Akun resmi DELTA Lab">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
@@ -1167,10 +1200,46 @@
     </a>
 
     <!-- Category Filter Pills -->
-    <nav class="category-bar" id="categoryBar" aria-label="Kategori Aplikasi"></nav>
+    <nav class="category-bar" id="categoryBar" data-i18n-aria="catAria" aria-label="Kategori Aplikasi"></nav>
 
     <!-- Application Links Directory -->
-    <section class="links-list" id="linksList" aria-label="Daftar Aplikasi DELTA Lab"></section>
+    <section class="links-list" id="linksList" data-i18n-aria="listAria" aria-label="Daftar Aplikasi DELTA Lab">
+      <!-- Cadangan bila JavaScript tidak berjalan. Samakan isinya dengan SITE_CONFIG.links -->
+      <noscript>
+        <a class="link-card" href="https://deltalab.vercel.app/">
+          <div class="link-icon-wrap has-logo"><img class="link-logo-img" src="logo-delta-lab.png" alt="" /></div>
+          <div class="link-info">
+            <span class="link-title">DELTA Lab Portal</span>
+            <p class="link-desc">Website utama profil laboratorium</p>
+            <span class="link-url-hint">deltalab.vercel.app</span>
+          </div>
+        </a>
+        <a class="link-card" href="https://sagelta.streamlit.app/">
+          <div class="link-icon-wrap has-logo"><img class="link-logo-img" src="logo-sagelta.png" alt="" /></div>
+          <div class="link-info">
+            <span class="link-title">SAGELTA</span>
+            <p class="link-desc">Sistem pendukung keputusan untuk rekomendasi lab</p>
+            <span class="link-url-hint">sagelta.streamlit.app</span>
+          </div>
+        </a>
+        <div class="link-card coming-soon">
+          <div class="link-icon-wrap has-logo"><img class="link-logo-img" src="logo-sigma.png" alt="" /></div>
+          <div class="link-info">
+            <span class="link-title">SIGMA</span>
+            <p class="link-desc">Sistem Integrasi Generator Modul Akademik</p>
+            <span class="link-url-hint">Segera hadir</span>
+          </div>
+        </div>
+        <div class="link-card coming-soon">
+          <div class="link-icon-wrap has-logo"><img class="link-logo-img" src="logo-sipedro.png" alt="" /></div>
+          <div class="link-info">
+            <span class="link-title">SIPEDRO</span>
+            <p class="link-desc">Sistem Informasi Penilaian dan Evaluasi Proposal</p>
+            <span class="link-url-hint">Segera hadir</span>
+          </div>
+        </div>
+      </noscript>
+    </section>
 
     <!-- Footer & Official Copyright -->
     <footer class="footer">
@@ -1184,14 +1253,14 @@
   <!-- QR Code Modal -->
   <div class="qr-overlay" id="qrOverlay" aria-hidden="true">
     <div class="qr-dialog" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
-      <button class="neu-icon-btn qr-close" id="qrClose" type="button" aria-label="Tutup">
+      <button class="neu-icon-btn qr-close" id="qrClose" type="button" data-i18n-aria="close" aria-label="Tutup">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <h2 class="qr-title" id="qrTitle">Pindai DELTA Link</h2>
-      <p class="qr-sub">Untuk poster, banner acara, atau slide presentasi</p>
+      <h2 class="qr-title" id="qrTitle" data-i18n="qrHeading">Pindai DELTA Link</h2>
+      <p class="qr-sub" data-i18n="qrSub">Untuk poster, banner acara, atau slide presentasi</p>
       <div class="qr-frame"><img id="qrImage" alt="QR code DELTA Link" /></div>
       <p class="qr-url" id="qrUrl"></p>
       <button class="qr-download" id="qrDownload" type="button">
@@ -1200,7 +1269,7 @@
           <polyline points="7 10 12 15 17 10"></polyline>
           <line x1="12" y1="15" x2="12" y2="3"></line>
         </svg>
-        Unduh QR (PNG)
+        <span data-i18n="qrDownload">Unduh QR (PNG)</span>
       </button>
     </div>
   </div>
@@ -1219,6 +1288,7 @@
        {
          title: "Nama Aplikasi",
          description: "Deskripsi singkat (±50 karakter agar tidak terpotong)",
+                                        // dua bahasa: { id: "Deskripsi...", en: "Description..." }
          url: "https://...",            // isi "#" bila belum rilis
          category: "Platform",          // nama kategori bebas, otomatis jadi tombol filter
          status: "live",                // "live" atau "soon"
@@ -1231,18 +1301,25 @@
     const SITE_CONFIG = {
       title: "DELTA Link",
       subtitle: "DELTA Lab — Data Exploration, Learning & Translational Analytics",
+      pageTitle: {
+        id: "DELTA Link — Direktori Aplikasi Resmi | DELTA Lab",
+        en: "DELTA Link — Official App Directory | DELTA Lab"
+      },
       logoFile: "logo-delta-lab.png",
       banner: {
         badge: "LIVE PORTAL",
         title: "DELTA Lab Official Website",
-        description: "Pusat riset eksplorasi data, pembelajaran mesin, dan analitik translasional.",
-        ctaText: "Buka Portal Utama",
+        description: {
+          id: "Pusat riset eksplorasi data, pembelajaran mesin, dan analitik translasional.",
+          en: "A research hub for data exploration, machine learning, and translational analytics."
+        },
+        ctaText: { id: "Buka Portal Utama", en: "Open Main Portal" },
         url: "https://deltalab.vercel.app/"
       },
       links: [
         {
           title: "DELTA Lab Portal",
-          description: "Website utama profil laboratorium",
+          description: { id: "Website utama profil laboratorium", en: "The lab's main profile website" },
           url: "https://deltalab.vercel.app/",
           category: "Platform",
           status: "live",
@@ -1251,30 +1328,39 @@
         },
         {
           title: "SAGELTA",
-          description: "Sistem pendukung keputusan untuk rekomendasi lab",
+          description: {
+            id: "Sistem pendukung keputusan untuk rekomendasi lab",
+            en: "Decision support system for lab recommendations"
+          },
           url: "https://sagelta.streamlit.app/",
           logoFile: "logo-sagelta.png",
-          category: "Aplikasi AI & Analitik",
+          category: { id: "Aplikasi AI & Analitik", en: "AI & Analytics Apps" },
           status: "live",
           badgeText: "STREAMLIT APP",
           icon: "chart"
         },
         {
           title: "SIGMA",
-          description: "Sistem Integrasi Generator Modul Akademik",
+          description: {
+            id: "Sistem Integrasi Generator Modul Akademik",
+            en: "Integrated academic module generator system"
+          },
           url: "#",
           logoFile: "logo-sigma.png",
-          category: "Segera Hadir",
+          category: { id: "Segera Hadir", en: "Coming Soon" },
           status: "soon",
           badgeText: "COMING SOON",
           icon: "cpu"
         },
         {
           title: "SIPEDRO",
-          description: "Sistem Informasi Penilaian dan Evaluasi Proposal",
+          description: {
+            id: "Sistem Informasi Penilaian dan Evaluasi Proposal",
+            en: "Proposal assessment and evaluation information system"
+          },
           url: "#",
           logoFile: "logo-sipedro.png",
-          category: "Segera Hadir",
+          category: { id: "Segera Hadir", en: "Coming Soon" },
           status: "soon",
           badgeText: "COMING SOON",
           icon: "layers"
@@ -1317,7 +1403,92 @@
       layers: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
     };
 
-    let activeCategory = "Semua";
+    /* ==========================================================================
+       BAHASA (ID / EN)
+       ========================================================================== */
+    const UI_TEXT = {
+      id: {
+        all: "Semua",
+        inDev: "Sedang dalam pengembangan",
+        eta: "Perkiraan",
+        soonToast: (name, eta) => `${name} sedang dikembangkan DELTA Lab.${eta ? ` Perkiraan ${eta}.` : " Nantikan peluncurannya!"}`,
+        themeTitle: "Ganti Tema Terang / Gelap",
+        qrTitleBtn: "Tampilkan QR Code",
+        shareTitle: "Salin Tautan Halaman",
+        installTitle: "Pasang Aplikasi",
+        verified: "Akun resmi DELTA Lab",
+        catAria: "Kategori Aplikasi",
+        listAria: "Daftar Aplikasi DELTA Lab",
+        close: "Tutup",
+        qrHeading: "Pindai DELTA Link",
+        qrSub: "Untuk poster, banner acara, atau slide presentasi",
+        qrDownload: "Unduh QR (PNG)",
+        qrFail: "QR code gagal dimuat. Periksa koneksi internet.",
+        qrSaved: "QR code berhasil diunduh!",
+        copied: "Tautan DELTA Link berhasil disalin!",
+        copyFallback: "Tautan siap dibagikan!",
+        installed: "DELTA Link terpasang di perangkat Anda!",
+        switchTo: "Switch to English",
+        switchLabel: "EN"
+      },
+      en: {
+        all: "All",
+        inDev: "In development",
+        eta: "Expected",
+        soonToast: (name, eta) => `${name} is being developed by DELTA Lab.${eta ? ` Expected ${eta}.` : " Stay tuned!"}`,
+        themeTitle: "Toggle Light / Dark Theme",
+        qrTitleBtn: "Show QR Code",
+        shareTitle: "Copy Page Link",
+        installTitle: "Install App",
+        verified: "Official DELTA Lab account",
+        catAria: "App Categories",
+        listAria: "DELTA Lab App Directory",
+        close: "Close",
+        qrHeading: "Scan DELTA Link",
+        qrSub: "For posters, event banners, or presentation slides",
+        qrDownload: "Download QR (PNG)",
+        qrFail: "Couldn't load the QR code. Check your connection.",
+        qrSaved: "QR code downloaded!",
+        copied: "DELTA Link URL copied!",
+        copyFallback: "Link ready to share!",
+        installed: "DELTA Link is installed on your device!",
+        switchTo: "Ganti ke Bahasa Indonesia",
+        switchLabel: "ID"
+      }
+    };
+
+    let lang = "id";
+    try {
+      const savedLang = localStorage.getItem("deltalink-lang");
+      lang = savedLang === "en" || savedLang === "id"
+        ? savedLang
+        : (/^id\b|^ms\b/i.test(navigator.language || "id") ? "id" : "en");
+    } catch {}
+
+    /* Ambil teks sesuai bahasa: menerima string biasa atau { id, en } */
+    function tr(value) {
+      if (value && typeof value === "object") return value[lang] ?? value.id ?? "";
+      return value ?? "";
+    }
+
+    function ui(key) {
+      return UI_TEXT[lang][key] ?? UI_TEXT.id[key];
+    }
+
+    function applyStaticText() {
+      document.documentElement.lang = lang;
+      document.title = tr(SITE_CONFIG.pageTitle);
+      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = ui(el.dataset.i18n); });
+      document.querySelectorAll("[data-i18n-title]").forEach(el => { el.title = ui(el.dataset.i18nTitle); });
+      document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", ui(el.dataset.i18nAria)); });
+      const langBtn = document.getElementById("langToggle");
+      langBtn.textContent = ui("switchLabel");
+      langBtn.title = ui("switchTo");
+      langBtn.setAttribute("aria-label", ui("switchTo"));
+    }
+
+    const ALL = "__all__";
+    let activeCategory = ALL;
 
     /* Cegah XSS: semua teks dari data di-escape sebelum masuk innerHTML */
     function esc(value) {
@@ -1341,10 +1512,10 @@
 
     function renderCategories() {
       const bar = document.getElementById("categoryBar");
-      const cats = ["Semua", ...new Set(SITE_CONFIG.links.map(item => item.category))];
+      const cats = [ALL, ...new Set(SITE_CONFIG.links.map(item => tr(item.category)))];
       bar.innerHTML = cats.map(cat => `
         <button class="cat-pill ${cat === activeCategory ? "active" : ""}" data-cat="${esc(cat)}" type="button">
-          ${esc(cat)}
+          ${esc(cat === ALL ? ui("all") : cat)}
         </button>
       `).join("");
 
@@ -1359,16 +1530,16 @@
 
     function renderLinks() {
       const list = document.getElementById("linksList");
-      const filtered = activeCategory === "Semua"
+      const filtered = activeCategory === ALL
         ? SITE_CONFIG.links
-        : SITE_CONFIG.links.filter(item => item.category === activeCategory);
+        : SITE_CONFIG.links.filter(item => tr(item.category) === activeCategory);
 
       list.innerHTML = filtered.map((item, index) => {
         const url = safeUrl(item.url);
         const isSoon = item.status === "soon" || url === "#";
         const cleanDomain = !isSoon
           ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
-          : (item.eta ? `Perkiraan: ${item.eta}` : "Sedang dalam pengembangan");
+          : (item.eta ? `${ui("eta")}: ${tr(item.eta)}` : ui("inDev"));
 
         return `
           <a class="link-card ${isSoon ? "coming-soon" : ""}"
@@ -1376,7 +1547,7 @@
              ${isSoon ? "" : 'target="_blank" rel="noopener noreferrer"'}
              data-soon="${isSoon}"
              data-title="${esc(item.title)}"
-             data-eta="${esc(item.eta || "")}"
+             data-eta="${esc(tr(item.eta))}"
              style="--i:${index}">
             <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" ? "has-logo" : ""}">
               ${item.logoFile
@@ -1387,10 +1558,10 @@
               <div class="link-header-row">
                 <span class="link-title">${esc(item.title)}</span>
                 <span class="status-badge ${isSoon ? "badge-soon" : "badge-live"}">
-                  ${esc(item.badgeText || (isSoon ? "COMING SOON" : "LIVE"))}
+                  ${esc(tr(item.badgeText) || (isSoon ? "COMING SOON" : "LIVE"))}
                 </span>
               </div>
-              <p class="link-desc">${esc(item.description)}</p>
+              <p class="link-desc">${esc(tr(item.description))}</p>
               <span class="link-url-hint">${esc(cleanDomain)}</span>
             </div>
             <div class="link-arrow" aria-hidden="true">
@@ -1421,21 +1592,21 @@
             card.classList.remove("shake");
             void card.offsetWidth;
             card.classList.add("shake");
-            const eta = card.dataset.eta ? ` Perkiraan ${card.dataset.eta}.` : " Nantikan peluncurannya!";
-            showToast(`${card.dataset.title} sedang dikembangkan DELTA Lab.${eta}`);
+            showToast(ui("soonToast")(card.dataset.title, card.dataset.eta));
           }
         });
       });
     }
 
     function renderAll() {
-      document.getElementById("siteTitle").textContent = SITE_CONFIG.title;
-      document.getElementById("siteSubtitle").textContent = SITE_CONFIG.subtitle;
+      applyStaticText();
+      document.getElementById("siteTitle").textContent = tr(SITE_CONFIG.title);
+      document.getElementById("siteSubtitle").textContent = tr(SITE_CONFIG.subtitle);
 
-      document.getElementById("bannerBadge").textContent = SITE_CONFIG.banner.badge;
-      document.getElementById("bannerTitle").textContent = SITE_CONFIG.banner.title;
-      document.getElementById("bannerDesc").textContent = SITE_CONFIG.banner.description;
-      document.getElementById("bannerCtaText").textContent = SITE_CONFIG.banner.ctaText;
+      document.getElementById("bannerBadge").textContent = tr(SITE_CONFIG.banner.badge);
+      document.getElementById("bannerTitle").textContent = tr(SITE_CONFIG.banner.title);
+      document.getElementById("bannerDesc").textContent = tr(SITE_CONFIG.banner.description);
+      document.getElementById("bannerCtaText").textContent = tr(SITE_CONFIG.banner.ctaText);
       document.getElementById("featuredBanner").href = safeUrl(SITE_CONFIG.banner.url);
 
       renderCategories();
@@ -1484,9 +1655,9 @@
     document.getElementById("shareBtn").addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
-        showToast("Tautan DELTA Link berhasil disalin!");
+        showToast(ui("copied"));
       } catch {
-        showToast("Tautan siap dibagikan!");
+        showToast(ui("copyFallback"));
       }
     });
 
@@ -1557,7 +1728,7 @@
       try {
         qrImage.src = await buildQr();
       } catch {
-        showToast("QR code gagal dimuat. Periksa koneksi internet.");
+        showToast(ui("qrFail"));
         return;
       }
       document.getElementById("qrUrl").textContent = QR_URL.replace(/^https:\/\//, "").replace(/\/$/, "");
@@ -1587,8 +1758,42 @@
       document.body.appendChild(a);
       a.click();
       a.remove();
-      showToast("QR code berhasil diunduh!");
+      showToast(ui("qrSaved"));
     });
+
+    /* Ganti bahasa */
+    document.getElementById("langToggle").addEventListener("click", () => {
+      lang = lang === "id" ? "en" : "id";
+      try { localStorage.setItem("deltalink-lang", lang); } catch {}
+      activeCategory = ALL;
+      renderAll();
+    });
+
+    /* PWA: tombol "Pasang Aplikasi" muncul bila browser mendukung */
+    let deferredInstall = null;
+    const installBtn = document.getElementById("installBtn");
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstall = e;
+      installBtn.hidden = false;
+    });
+    installBtn.addEventListener("click", async () => {
+      if (!deferredInstall) return;
+      deferredInstall.prompt();
+      await deferredInstall.userChoice.catch(() => null);
+      deferredInstall = null;
+      installBtn.hidden = true;
+    });
+    window.addEventListener("appinstalled", () => {
+      installBtn.hidden = true;
+      showToast(ui("installed"));
+    });
+
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
 
     initApp();
   </script>
