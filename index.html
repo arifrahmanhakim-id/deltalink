@@ -6,7 +6,28 @@
   <title>DELTA Link — Official App Directory | DELTA Lab</title>
   <meta name="description" content="Direktori resmi aplikasi dan produk digital DELTA Lab — Data Exploration, Learning & Translational Analytics." />
   <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#8C151B" />
+  <link rel="canonical" href="https://deltalink.vercel.app/" />
+
+  <!-- Pratinjau saat dibagikan (WhatsApp, LinkedIn, Telegram, X, dll.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DELTA Link" />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:url" content="https://deltalink.vercel.app/" />
+  <meta property="og:title" content="DELTA Link — Direktori Aplikasi DELTA Lab" />
+  <meta property="og:description" content="Direktori resmi aplikasi dan produk digital DELTA Lab, Telkom University." />
+  <meta property="og:image" content="https://deltalink.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="DELTA Link — DELTA Lab, Telkom University" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DELTA Link — Direktori Aplikasi DELTA Lab" />
+  <meta name="twitter:description" content="Direktori resmi aplikasi dan produk digital DELTA Lab, Telkom University." />
+  <meta name="twitter:image" content="https://deltalink.vercel.app/og-image.png" />
+
+  <!-- Vercel Web Analytics (hanya aktif di domain Vercel) -->
+  <script defer src="/_vercel/insights/script.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -485,8 +506,23 @@
     }
 
 
+    /* Kartu muncul bertahap (hanya "from", agar opacity coming-soon tetap) */
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+    }
+
+    .link-card {
+      animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+      animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+    }
+
     /* Hormati pengguna yang mematikan animasi */
     @media (prefers-reduced-motion: reduce) {
+      .link-card,
+      .qr-dialog,
       .flat-banner,
       .flat-banner-content > *,
       .live-pulse-dot,
@@ -693,6 +729,12 @@
       box-shadow: inset 0 0 0 2px var(--telu-maroon);
     }
 
+    /* Tema gelap: logo tetap di atas ubin putih agar warna aslinya kontras */
+    [data-theme="dark"] .link-icon-wrap.has-logo {
+      background-color: #FFFFFF;
+      box-shadow: var(--neu-out-xs);
+    }
+
     .link-card.coming-soon .link-icon-wrap {
       color: var(--telu-grey);
     }
@@ -819,8 +861,127 @@
       font-weight: 800;
     }
 
+    .footer-uni {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
     [data-theme="dark"] .copyright-text strong {
       color: #F3F4F6;
+    }
+
+    /* ==========================================================================
+       QR CODE MODAL
+       ========================================================================== */
+    .qr-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 21, 24, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 250;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .qr-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .qr-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      background: var(--bg-base);
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--neu-out-lg);
+      padding: 26px 22px 22px;
+      text-align: center;
+      transform: translateY(12px) scale(0.97);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .qr-overlay.open .qr-dialog {
+      transform: none;
+    }
+
+    .qr-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .qr-sub {
+      margin-top: 4px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .qr-frame {
+      margin: 18px auto 16px;
+      width: 220px;
+      height: 220px;
+      padding: 12px;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border-top: 4px solid var(--telu-maroon);
+      box-shadow: var(--neu-in-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-frame img {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+
+    .qr-url {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      color: var(--telu-grey-dark);
+      word-break: break-all;
+    }
+
+    [data-theme="dark"] .qr-url {
+      color: var(--text-muted);
+    }
+
+    .qr-download {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      border-radius: var(--radius-pill);
+      background: var(--telu-maroon);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 11px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .qr-download:hover {
+      background: var(--telu-maroon-dark);
+    }
+
+    .qr-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
     }
 
     /* ==========================================================================
@@ -888,6 +1049,17 @@
         <button class="neu-icon-btn" id="themeToggle" title="Ganti Tema Terang / Gelap" aria-label="Ganti Tema">
           <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button class="neu-icon-btn" id="qrBtn" title="Tampilkan QR Code" aria-label="Tampilkan QR Code" aria-haspopup="dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <line x1="14" y1="14" x2="14" y2="14.01"></line>
+            <line x1="21" y1="14" x2="21" y2="21"></line>
+            <line x1="14" y1="21" x2="17.5" y2="21"></line>
+            <line x1="17.5" y1="17.5" x2="17.5" y2="14"></line>
           </svg>
         </button>
         <button class="neu-icon-btn" id="shareBtn" title="Salin Tautan Halaman" aria-label="Bagikan">
@@ -1004,14 +1176,39 @@
     <footer class="footer">
       <p class="copyright-text">
         &copy; 2026 <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
-        All Rights Reserved.
+        <span class="footer-uni">Telkom University</span> · All Rights Reserved.
       </p>
     </footer>
   </main>
 
+  <!-- QR Code Modal -->
+  <div class="qr-overlay" id="qrOverlay" aria-hidden="true">
+    <div class="qr-dialog" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+      <button class="neu-icon-btn qr-close" id="qrClose" type="button" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <h2 class="qr-title" id="qrTitle">Pindai DELTA Link</h2>
+      <p class="qr-sub">Untuk poster, banner acara, atau slide presentasi</p>
+      <div class="qr-frame"><img id="qrImage" alt="QR code DELTA Link" /></div>
+      <p class="qr-url" id="qrUrl"></p>
+      <button class="qr-download" id="qrDownload" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Unduh QR (PNG)
+      </button>
+    </div>
+  </div>
+
   <!-- Toast Feedback -->
   <div class="toast" id="toast">Tautan berhasil disalin!</div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     /* ==========================================================================
        KONFIGURASI UTAMA DELTA LINK — EDIT DI SINI UNTUK MENAMBAH / MENGUBAH PRODUK
@@ -1027,7 +1224,8 @@
          status: "live",                // "live" atau "soon"
          badgeText: "LIVE • WEB",       // teks label kecil di samping judul
          icon: "logo",                  // logo | globe | chart | cpu | layers
-         logoFile: "logo-app.png"       // opsional: gambar logo sendiri (menggantikan icon)
+         logoFile: "logo-app.png",      // opsional: gambar logo sendiri (menggantikan icon)
+         eta: "Rilis Q1 2027"           // opsional, khusus "soon": perkiraan rilis
        }
        ========================================================================== */
     const SITE_CONFIG = {
@@ -1054,7 +1252,7 @@
         {
           title: "SAGELTA",
           description: "Sistem pendukung keputusan untuk rekomendasi lab",
-          url: "http://sagelta.streamlit.app/",
+          url: "https://sagelta.streamlit.app/",
           logoFile: "logo-sagelta.png",
           category: "Aplikasi AI & Analitik",
           status: "live",
@@ -1165,19 +1363,21 @@
         ? SITE_CONFIG.links
         : SITE_CONFIG.links.filter(item => item.category === activeCategory);
 
-      list.innerHTML = filtered.map(item => {
+      list.innerHTML = filtered.map((item, index) => {
         const url = safeUrl(item.url);
         const isSoon = item.status === "soon" || url === "#";
         const cleanDomain = !isSoon
           ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
-          : "Segera dirilis oleh DELTA Lab";
+          : (item.eta ? `Perkiraan: ${item.eta}` : "Sedang dalam pengembangan");
 
         return `
           <a class="link-card ${isSoon ? "coming-soon" : ""}"
              href="${isSoon ? "#" : esc(url)}"
              ${isSoon ? "" : 'target="_blank" rel="noopener noreferrer"'}
              data-soon="${isSoon}"
-             data-title="${esc(item.title)}">
+             data-title="${esc(item.title)}"
+             data-eta="${esc(item.eta || "")}"
+             style="--i:${index}">
             <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" ? "has-logo" : ""}">
               ${item.logoFile
                 ? `<img class="link-logo-img" src="${esc(item.logoFile)}" alt="" />`
@@ -1221,7 +1421,8 @@
             card.classList.remove("shake");
             void card.offsetWidth;
             card.classList.add("shake");
-            showToast(`${card.dataset.title} sedang dalam tahap pengembangan.`);
+            const eta = card.dataset.eta ? ` Perkiraan ${card.dataset.eta}.` : " Nantikan peluncurannya!";
+            showToast(`${card.dataset.title} sedang dikembangkan DELTA Lab.${eta}`);
           }
         });
       });
@@ -1287,6 +1488,106 @@
       } catch {
         showToast("Tautan siap dibagikan!");
       }
+    });
+
+    /* ==========================================================================
+       QR CODE: dibuat di browser, logo DELTA Lab di tengah, siap diunduh
+       ========================================================================== */
+    const QR_URL = "https://deltalink.vercel.app/";
+    const qrOverlay = document.getElementById("qrOverlay");
+    const qrImage = document.getElementById("qrImage");
+    let qrDataUrl = null;
+    let qrLastFocus = null;
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    async function buildQr() {
+      if (qrDataUrl) return qrDataUrl;
+      if (typeof QRCode === "undefined") throw new Error("QR library unavailable");
+
+      const holder = document.createElement("div");
+      new QRCode(holder, {
+        text: QR_URL,
+        width: 1000,
+        height: 1000,
+        colorDark: "#2A2B2E",
+        colorLight: "#FFFFFF",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      const qrCanvas = holder.querySelector("canvas");
+
+      const pad = 70;
+      const size = qrCanvas.width + pad * 2;
+      const out = document.createElement("canvas");
+      out.width = out.height = size;
+      const ctx = out.getContext("2d");
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(qrCanvas, pad, pad);
+
+      try {
+        const logo = await loadImage(SITE_CONFIG.logoFile);
+        const tile = size * 0.2;
+        const tx = (size - tile) / 2;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(tx, tx, tile, tile, tile * 0.2) : ctx.rect(tx, tx, tile, tile);
+        ctx.fill();
+        const lh = tile * 0.8;
+        const lw = logo.width * (lh / logo.height);
+        ctx.drawImage(logo, (size - lw) / 2, (size - lh) / 2, lw, lh);
+      } catch {}
+
+      try {
+        qrDataUrl = out.toDataURL("image/png");
+      } catch {
+        qrDataUrl = qrCanvas.toDataURL("image/png");
+      }
+      return qrDataUrl;
+    }
+
+    async function openQr() {
+      try {
+        qrImage.src = await buildQr();
+      } catch {
+        showToast("QR code gagal dimuat. Periksa koneksi internet.");
+        return;
+      }
+      document.getElementById("qrUrl").textContent = QR_URL.replace(/^https:\/\//, "").replace(/\/$/, "");
+      qrLastFocus = document.activeElement;
+      qrOverlay.classList.add("open");
+      qrOverlay.setAttribute("aria-hidden", "false");
+      document.getElementById("qrClose").focus();
+    }
+
+    function closeQr() {
+      qrOverlay.classList.remove("open");
+      qrOverlay.setAttribute("aria-hidden", "true");
+      if (qrLastFocus) qrLastFocus.focus();
+    }
+
+    document.getElementById("qrBtn").addEventListener("click", openQr);
+    document.getElementById("qrClose").addEventListener("click", closeQr);
+    qrOverlay.addEventListener("click", (e) => { if (e.target === qrOverlay) closeQr(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && qrOverlay.classList.contains("open")) closeQr();
+    });
+    document.getElementById("qrDownload").addEventListener("click", () => {
+      if (!qrDataUrl) return;
+      const a = document.createElement("a");
+      a.href = qrDataUrl;
+      a.download = "qr-deltalink.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast("QR code berhasil diunduh!");
     });
 
     initApp();

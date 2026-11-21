@@ -1,0 +1,11 @@
+Cara update Github
+==========================================
+cd "/Volumes/Data/TEL-U/DELTA LAB/DELTA LINK"
+git add -A
+git commit -m "Update daftar aplikasi"
+git push
+Sekitar setengah menit kemudian, perubahan akan muncul di deltalink.vercel.app.
+
+Saat menghubungkan project, Vercel membuat file .env.local. File ini tidak ikut ke GitHub karena sudah dikecualikan oleh .gitignore (.env*).
+
+Kalau nanti ingin memakai domain sendiri, misalnya link.deltalab.id, domainnya bisa ditambahkan di Vercel → Project deltalink → Settings → Domains.
