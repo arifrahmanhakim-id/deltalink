@@ -203,6 +203,7 @@
     }
 
     .container {
+      position: relative;
       width: 100%;
       max-width: 560px;
       padding-top: 14px;
@@ -997,16 +998,87 @@
       color: #F3F4F6;
     }
 
-    /* Maskot footer: logo bermata yang meloncat */
+    /* Maskot: logo bermata yang meloncat di samping kartu game */
     .mascot {
       position: relative;
-      width: 44px;
-      height: 96px;
+      width: 60px;
+      height: 106px;
       padding: 0;
       border: none;
       background: none;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .mascot-home {
+      position: absolute;
+      z-index: 5;
+      width: 60px;
+      height: 106px;
+      pointer-events: none;
+    }
+
+    .mascot-home[hidden] {
+      display: none;
+    }
+
+    .mascot-home .mascot {
+      pointer-events: auto;
+    }
+
+    /* Di HP maskot sedikit lebih kecil dan nangkring di atas kartu */
+    .mascot-home.is-perched,
+    .mascot-home.is-perched .mascot {
+      width: 46px;
+      height: 84px;
+    }
+
+    .mc-limb { fill: #6B0F14; }
+    .mc-face { fill: #FFFFFF; }
+    [data-theme="dark"] .mc-limb { fill: #A81C24; }
+
+    .mascot {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Setelah diseret, maskot "melayang" di atas halaman */
+    .mascot.is-floating {
+      position: fixed;
+      z-index: 240;   /* di atas header, di bawah dialog */
+      left: 0;
+      top: 0;
+    }
+
+    .mascot.is-dragging {
+      cursor: grabbing;
+    }
+
+    .mascot.is-dragging .mascot-body {
+      animation: mascotDangle 0.5s ease-in-out infinite alternate;
+      transform-origin: 50% 10%;
+    }
+
+    .mascot.is-dragging .mascot-shadow {
+      animation: none;
+      transform: scaleX(0.4);
+      opacity: 0.3;
+    }
+
+    .mascot.is-landing .mascot-body {
+      animation: mascotLand 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    @keyframes mascotDangle {
+      from { transform: translateY(-6px) rotate(-12deg); }
+      to   { transform: translateY(-6px) rotate(12deg); }
+    }
+
+    @keyframes mascotLand {
+      0%   { transform: translateY(0); }
+      40%  { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
     }
 
     .mascot:focus-visible {
@@ -1031,13 +1103,90 @@
       height: auto;
     }
 
+    /* Ikon emoji flat di dalam teks */
+    .fi {
+      display: inline-block;
+      width: 1.3em;
+      height: 1.3em;
+      vertical-align: -0.3em;
+      margin: 0 0.05em;
+    }
+
+    .fi svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Balon ucapan maskot: muncul di atas maskot, ikut saat dipindah */
+    .mascot-bubble {
+      --shift: 0px;
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 6px);
+      width: max-content;
+      max-width: 190px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--neu-border);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--text-primary);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      white-space: normal;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(calc(-50% + var(--shift))) translateY(6px) scale(0.9);
+      transform-origin: 50% 100%;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .mascot-bubble::after {
+      content: "";
+      position: absolute;
+      left: calc(50% - var(--shift));
+      bottom: -6px;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      background: var(--bg-base);
+      border-right: 1px solid var(--neu-border);
+      border-bottom: 1px solid var(--neu-border);
+      transform: rotate(45deg);
+    }
+
+    .mascot-bubble.is-below {
+      bottom: auto;
+      top: calc(100% + 6px);
+      transform-origin: 50% 0;
+    }
+
+    .mascot-bubble.is-below::after {
+      bottom: auto;
+      top: -6px;
+      transform: rotate(225deg);
+    }
+
+    .mascot-bubble.show {
+      opacity: 1;
+      transform: translateX(calc(-50% + var(--shift))) translateY(0) scale(1);
+    }
+
+    .mascot-pupil {
+      transition: transform 0.18s ease-out;
+    }
+
     .mascot-shadow {
       position: absolute;
       left: 50%;
       bottom: 0;
-      width: 34px;
+      width: 40px;
       height: 7px;
-      margin-left: -17px;
+      margin-left: -20px;
       border-radius: 50%;
       background: rgba(0, 0, 0, 0.16);
       animation: mascotShadow 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -1047,32 +1196,25 @@
       background: rgba(0, 0, 0, 0.4);
     }
 
-    .mascot-eye {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: mascotBlink 4.2s infinite;
-    }
 
-    .mascot-pupil {
-      transition: transform 0.15s ease-out;
-    }
-
+    /* Salto berporos di tengah badan (bukan di kaki) agar berputar di tempat */
     .mascot.is-flip .mascot-body {
-      animation: mascotFlip 0.9s cubic-bezier(0.34, 1.2, 0.64, 1);
+      transform-origin: 50% 50%;
+      animation: mascotFlip 0.9s ease-in-out;
     }
 
     .mascot.is-flip .mascot-shadow {
       animation: mascotShadowFlip 0.9s ease;
     }
 
+    /* Hanya geser & miring — tanpa scale agar logo tidak pernah gepeng */
     @keyframes mascotHop {
-      0%   { transform: translateY(0) scale(1.1, 0.9); }
-      12%  { transform: translateY(0) scale(0.94, 1.06); }
-      40%  { transform: translateY(-20px) scale(1, 1) rotate(-4deg); }
-      55%  { transform: translateY(-20px) scale(1, 1) rotate(3deg); }
-      80%  { transform: translateY(0) scale(1.1, 0.9); }
-      90%  { transform: translateY(0) scale(0.98, 1.02); }
-      100% { transform: translateY(0) scale(1.1, 0.9); }
+      0%, 12%  { transform: translateY(0) rotate(0deg); }
+      40%      { transform: translateY(-20px) rotate(-4deg); }
+      55%      { transform: translateY(-20px) rotate(3deg); }
+      80%      { transform: translateY(0) rotate(0deg); }
+      88%      { transform: translateY(-3px) rotate(0deg); }
+      100%     { transform: translateY(0) rotate(0deg); }
     }
 
     @keyframes mascotShadow {
@@ -1080,16 +1222,14 @@
       40%, 55% { transform: scaleX(0.6); opacity: 0.5; }
     }
 
-    @keyframes mascotBlink {
-      0%, 92%, 100% { transform: scaleY(1); }
-      95% { transform: scaleY(0.1); }
-    }
 
     @keyframes mascotFlip {
-      0%   { transform: translateY(0) scale(1.15, 0.85); }
-      45%  { transform: translateY(-40px) rotate(-200deg); }
-      80%  { transform: translateY(0) rotate(-360deg) scale(1.12, 0.88); }
-      100% { transform: translateY(0) rotate(-360deg) scale(1); }
+      0%   { transform: translateY(0) rotate(0deg); }
+      20%  { transform: translateY(-30px) rotate(-60deg); }
+      50%  { transform: translateY(-46px) rotate(-200deg); }
+      78%  { transform: translateY(0) rotate(-360deg); }
+      88%  { transform: translateY(-5px) rotate(-360deg); }
+      100% { transform: translateY(0) rotate(-360deg); }
     }
 
     @keyframes mascotShadowFlip {
@@ -1100,9 +1240,10 @@
     @media (prefers-reduced-motion: reduce) {
       .mascot-body,
       .mascot-shadow,
-      .mascot-eye,
       .mascot.is-flip .mascot-body,
-      .mascot.is-flip .mascot-shadow {
+      .mascot.is-flip .mascot-shadow,
+      .mascot.is-dragging .mascot-body,
+      .mascot.is-landing .mascot-body {
         animation: none;
       }
     }
@@ -1500,7 +1641,16 @@
       cursor: pointer;
       transition: var(--transition);
     }
+    .ttt-cell { display: grid; place-items: center; padding: 0; }
     .ttt-cell:hover:not(:disabled) { box-shadow: var(--neu-in-sm); }
+    .ttt-logo { height: 66%; width: auto; }
+    .ttt-o { width: 58%; height: 58%; }
+    .tl-a { fill: var(--telu-maroon); }
+    .tl-b { fill: var(--telu-grey); }
+    .ttt-cell.is-win .tl-a,
+    .ttt-cell.is-lose .tl-a { fill: #FFFFFF; }
+    .ttt-cell.is-win .tl-b,
+    .ttt-cell.is-lose .tl-b { fill: rgba(255, 255, 255, 0.7); }
     .ttt-cell:disabled { cursor: default; }
     .ttt-cell.is-x { color: var(--telu-maroon); box-shadow: var(--neu-in-sm); animation: tttPop 0.25s ease; }
     .ttt-cell.is-o { color: var(--telu-grey-dark); box-shadow: var(--neu-in-sm); animation: tttPop 0.25s ease; }
@@ -1899,26 +2049,32 @@
       </noscript>
     </section>
 
+    <!-- Maskot: logo DELTA Lab bermata, posisi awal di samping kartu Arena Data (diatur JS) -->
+    <div class="mascot-home" id="mascotHome" hidden>
+    <button class="mascot" id="mascot" type="button" data-i18n-aria="mascotAria" aria-label="Maskot DELTA Lab, ketuk atau seret aku!">
+      <span class="mascot-body">
+        <svg viewBox="20 0 170 240" aria-hidden="true">
+          <ellipse class="mc-limb" cx="80" cy="226" rx="15" ry="8"/>
+          <ellipse class="mc-limb" cx="120" cy="226" rx="15" ry="8"/>
+          <circle class="mc-face" cx="100" cy="160" r="54"/>
+          <path d="M135 24C110 4 60 14 58 52C56 82 100 95 138 112C148 116 153 125 158 139A62 62 0 0 1 120 219" fill="none" stroke="#8C151B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M168 48Q152 86 131 106A62 62 0 1 0 144 204" fill="none" stroke="#6D6E71" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="70" cy="178" rx="8" ry="4.5" fill="#FF8FA3" opacity="0.85"/>
+          <ellipse cx="130" cy="178" rx="8" ry="4.5" fill="#FF8FA3" opacity="0.85"/>
+          <g class="mascot-pupil">
+            <ellipse cx="83" cy="159" rx="10" ry="12.5" fill="#2B2B2E"/><circle cx="79.5" cy="154" r="4" fill="#FFFFFF"/><circle cx="86.5" cy="165" r="2" fill="#FFFFFF"/>
+            <ellipse cx="117" cy="159" rx="10" ry="12.5" fill="#2B2B2E"/><circle cx="113.5" cy="154" r="4" fill="#FFFFFF"/><circle cx="120.5" cy="165" r="2" fill="#FFFFFF"/>
+          </g>
+          <path d="M93 178q3.5 5 7 0q3.5 5 7 0" fill="none" stroke="#2B2B2E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="mascot-shadow" aria-hidden="true"></span>
+      <span class="mascot-bubble" id="mascotBubble" role="status" aria-live="polite"></span>
+    </button>
+    </div>
+
     <!-- Footer & Official Copyright -->
     <footer class="footer">
-      <!-- Maskot: logo DELTA Lab bermata yang meloncat-loncat (pemanis) -->
-      <button class="mascot" id="mascot" type="button" data-i18n-aria="mascotAria" aria-label="Maskot DELTA Lab, ketuk aku!">
-        <span class="mascot-body">
-          <svg viewBox="-10 -20 240 410" aria-hidden="true">
-            <path d="M167 22C132 -1 76 4 46 39C18 72 22 121 57 154C82 177 118 197 147 222C182 252 194 297 175 339C164 361 146 373 126 377C159 376 191 356 206 322C225 278 211 224 172 190C143 165 107 146 83 122C57 96 56 58 80 34C103 12 139 10 167 22Z" fill="#8C151B"/>
-            <path d="M196 86C167 127 123 156 76 184C27 213 2 263 14 313C25 357 69 382 117 377C143 374 166 359 179 336C163 347 143 352 122 349C83 343 56 310 60 271C64 234 92 208 125 186C161 162 186 127 196 86Z" fill="#6D6E71"/>
-            <g class="mascot-eye">
-              <circle cx="62" cy="58" r="27" fill="#FFFFFF" stroke="#2B2B2E" stroke-width="6"/>
-              <g class="mascot-pupil"><circle cx="62" cy="58" r="12" fill="#2B2B2E"/><circle cx="66" cy="53" r="4" fill="#FFFFFF"/></g>
-            </g>
-            <g class="mascot-eye">
-              <circle cx="122" cy="30" r="27" fill="#FFFFFF" stroke="#2B2B2E" stroke-width="6"/>
-              <g class="mascot-pupil"><circle cx="122" cy="30" r="12" fill="#2B2B2E"/><circle cx="126" cy="25" r="4" fill="#FFFFFF"/></g>
-            </g>
-          </svg>
-        </span>
-        <span class="mascot-shadow" aria-hidden="true"></span>
-      </button>
       <p class="copyright-text">
         &copy; <span id="copyYear">2026</span> <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
         <span class="footer-uni">Telkom University</span> · All Rights Reserved.
@@ -1978,7 +2134,7 @@
         <p class="qr-sub" id="gameQuestion"></p>
         <div class="game-stats">
           <span><span data-i18n="gameScore">Skor</span> <b id="gameScore">0</b></span>
-          <span>Streak <b id="gameStreak">0</b> 🔥</span>
+          <span>Streak <b id="gameStreak">0</b> <span class="fi" data-icon="flame" aria-hidden="true"></span></span>
         </div>
         <div class="game-chart"><svg id="gameChart" viewBox="0 0 300 170" role="img" aria-label="Grafik"></svg></div>
         <p class="game-feedback" id="gameFeedback" aria-live="polite"></p>
@@ -2176,13 +2332,13 @@
         arenaNew: "BARU",
         gameBackAria: "Kembali ke daftar game",
         gameScore: "Skor",
-        gameRight: "Tepat! 🎯",
+        gameRight: "Tepat! :target:",
         gameAccuracy: "Akurasi tebakanmu",
         gameBest: (pct) => `Rekor terbaik: ${pct}%`,
-        gameNewBest: "🏆 Rekor baru!",
+        gameNewBest: ":trophy: Rekor baru!",
         gameShareBtn: "Bagikan skor",
         gamePlayAgain: "Main lagi",
-        gameShareText: (pct, name) => `Skorku ${pct}% di ${name} · Arena Data DELTA Lab 📊 Bisa kalahkan?`,
+        gameShareText: (pct, name) => `Skorku ${pct}% di ${name} · Arena Data DELTA Lab :chart: Bisa kalahkan?`,
         gameShared: "Skor siap dibagikan — tautan disalin!",
         trendName: "Tebak Tren",
         trendDesc: "Tebak arah grafik berikutnya",
@@ -2200,8 +2356,8 @@
         corrLock: "Kunci tebakan",
         corrSliderAria: "Tebakan nilai r",
         corrResult: (kind, r, g) => kind === "hit"
-          ? `Tepat! 🎯 r = ${r}`
-          : `${kind === "near" ? "Hampir! 👌" : "Meleset —"} r = ${r} (tebakanmu ${g})`,
+          ? `Tepat! :target: r = ${r}`
+          : `${kind === "near" ? "Hampir! :sweat:" : "Meleset —"} r = ${r} (tebakanmu ${g})`,
         outName: "Cari Outlier",
         outDesc: "Temukan titik yang keluar dari pola",
         outQ: "Titik mana yang outlier?",
@@ -2219,17 +2375,19 @@
         distUniform: "Seragam",
         tttName: "Tic Tac Toe",
         tttDesc: "Kalahkan AI DELTA, 3 berjajar menang",
-        tttQ: "Buat 3 X berjajar sebelum AI!",
-        tttTip: "Tip: tekan 1–9 · kamu X, AI O",
-        tttYourTurn: "Giliranmu — kamu X",
-        tttThinking: "AI sedang berpikir… 🤖",
-        tttWin: "Kamu menang! 🎉",
-        tttDraw: "Seri 🤝",
-        tttLose: "AI menang 🤖",
+        tttQ: "Buat 3 logo DELTA berjajar sebelum AI!",
+        tttTip: "Tip: tekan 1–9 · kamu logo DELTA, AI O",
+        tttYourTurn: "Giliranmu — kamu logo DELTA",
+        tttThinking: "AI sedang berpikir... :robot:",
+        tttWin: "Kamu menang! :party:",
+        tttDraw: "Seri :neutral:",
+        tttLose: "AI menang :robot:",
         tttEndLabel: "Skor kemenanganmu",
-        mascotAria: "Maskot DELTA Lab, ketuk aku!",
-        mascotLines: ["Halo! Selamat datang di DELTA Link 👋", "Hore, aku bisa salto! 🤸", "Sudah coba Arena Data? 🎮", "Data itu seru, lho! 📊", "Hehe, geli! 😆"],
-        gameTiers: ["Masih Overfitting 😅", "Sedang Belajar 📈", "Analis Andal 📊", "Data Scientist 🧠"],
+        mascotAria: "Maskot DELTA Lab, ketuk atau seret aku!",
+        mascotDropHint: "Wee! :sparkle: Ketuk 2× untuk memulangkanku ke kartu game",
+        mascotHome: "Aku pulang ke samping kartu game :house:",
+        mascotLines: ["Halo! Selamat datang di DELTA Link :smile:", "Hore, aku bisa salto! :party:", "Sudah coba Arena Data? :gamepad:", "Data itu seru, lho! :chart:", "Hehe, geli! :laugh:"],
+        gameTiers: ["Masih Overfitting :sweat:", "Sedang Belajar :chart:", "Analis Andal :target:", "Data Scientist :bulb:"],
         switchTo: "Switch to English",
         switchLabel: "EN"
       },
@@ -2275,8 +2433,8 @@
         corrLock: "Lock in guess",
         corrSliderAria: "Your guess for r",
         corrResult: (kind, r, g) => kind === "hit"
-          ? `Spot on! 🎯 r = ${r}`
-          : `${kind === "near" ? "Close! 👌" : "Missed —"} r = ${r} (you said ${g})`,
+          ? `Spot on! :target: r = ${r}`
+          : `${kind === "near" ? "Close! :sweat:" : "Missed —"} r = ${r} (you said ${g})`,
         outName: "Spot the Outlier",
         outDesc: "Find the point that breaks the pattern",
         outQ: "Which point is the outlier?",
@@ -2294,29 +2452,31 @@
         distUniform: "Uniform",
         tttName: "Tic-Tac-Toe",
         tttDesc: "Beat the DELTA AI, three in a row wins",
-        tttQ: "Get three X's in a row before the AI!",
-        tttTip: "Tip: press 1–9 · you're X, AI is O",
-        tttYourTurn: "Your turn — you're X",
-        tttThinking: "AI is thinking… 🤖",
-        tttWin: "You win! 🎉",
-        tttDraw: "Draw 🤝",
-        tttLose: "AI wins 🤖",
+        tttQ: "Get three DELTA logos in a row before the AI!",
+        tttTip: "Tip: press 1–9 · you're the DELTA logo, AI is O",
+        tttYourTurn: "Your turn — you're the DELTA logo",
+        tttThinking: "AI is thinking... :robot:",
+        tttWin: "You win! :party:",
+        tttDraw: "Draw :neutral:",
+        tttLose: "AI wins :robot:",
         tttEndLabel: "Your win score",
-        mascotAria: "DELTA Lab mascot, tap me!",
-        mascotLines: ["Hi! Welcome to DELTA Link 👋", "Wheee, a backflip! 🤸", "Tried the Data Arena yet? 🎮", "Data is fun, you know! 📊", "Hehe, that tickles! 😆"],
+        mascotAria: "DELTA Lab mascot, tap or drag me!",
+        mascotDropHint: "Wheee! :sparkle: Double-tap to send me back to the game card",
+        mascotHome: "Back home by the game card :house:",
+        mascotLines: ["Hi! Welcome to DELTA Link :smile:", "Wheee, a backflip! :party:", "Tried the Data Arena yet? :gamepad:", "Data is fun, you know! :chart:", "Hehe, that tickles! :laugh:"],
         dirUp: "Up",
         dirFlat: "Flat",
         dirDown: "Down",
         gameNow: "NOW",
-        gameRight: "Spot on! 🎯",
+        gameRight: "Spot on! :target:",
         gameAccuracy: "Your prediction accuracy",
         gameBest: (pct) => `Best score: ${pct}%`,
-        gameNewBest: "🏆 New record!",
+        gameNewBest: ":trophy: New record!",
         gameShareBtn: "Share score",
         gamePlayAgain: "Play again",
-        gameShareText: (pct, name) => `I scored ${pct}% on ${name} · DELTA Lab's Data Arena 📊 Can you beat it?`,
+        gameShareText: (pct, name) => `I scored ${pct}% on ${name} · DELTA Lab's Data Arena :chart: Can you beat it?`,
         gameShared: "Score ready to share — link copied!",
-        gameTiers: ["Still Overfitting 😅", "Learning Fast 📈", "Sharp Analyst 📊", "Data Scientist 🧠"],
+        gameTiers: ["Still Overfitting :sweat:", "Learning Fast :chart:", "Sharp Analyst :target:", "Data Scientist :bulb:"],
         switchTo: "Ganti ke Bahasa Indonesia",
         switchLabel: "ID"
       }
@@ -2356,6 +2516,41 @@
     let activeCategory = ALL;
 
     /* Cegah XSS: semua teks dari data di-escape sebelum masuk innerHTML */
+    /* Ikon emoji gaya flat (SVG sendiri, tampil sama di semua perangkat).
+       Tulis :nama: di dalam teks, lalu tampilkan lewat setRich(). */
+    const FLAT_ICONS = {
+      smile: '<circle cx="12" cy="12" r="10" fill="#FFC83D"/><circle cx="8.6" cy="10" r="1.4" fill="#4A3220"/><circle cx="15.4" cy="10" r="1.4" fill="#4A3220"/><path d="M7.6 13.8a5 5 0 0 0 8.8 0" fill="none" stroke="#4A3220" stroke-width="1.7" stroke-linecap="round"/><circle cx="6.6" cy="13.4" r="1.4" fill="#FF8A8A" opacity=".7"/><circle cx="17.4" cy="13.4" r="1.4" fill="#FF8A8A" opacity=".7"/>',
+      laugh: '<circle cx="12" cy="12" r="10" fill="#FFC83D"/><path d="M6.8 10.4l1.8-1.8 1.8 1.8M13.6 10.4l1.8-1.8 1.8 1.8" fill="none" stroke="#4A3220" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 13.2h10a5 5 0 0 1-10 0z" fill="#4A3220"/><path d="M9.6 16.9a3.4 3.4 0 0 0 4.8 0 2.6 2.6 0 0 0-4.8 0z" fill="#FF6B7A"/>',
+      sweat: '<circle cx="12" cy="12.5" r="9.5" fill="#FFC83D"/><circle cx="8.8" cy="11" r="1.3" fill="#4A3220"/><circle cx="15.2" cy="11" r="1.3" fill="#4A3220"/><path d="M8.2 15a4.6 4.6 0 0 0 7.6 0" fill="none" stroke="#4A3220" stroke-width="1.6" stroke-linecap="round"/><path d="M19.6 1.8c1.3 1.8 2 3 2 3.9a2 2 0 0 1-4 0c0-.9.7-2.1 2-3.9z" fill="#5AB4F0"/>',
+      neutral: '<circle cx="12" cy="12" r="10" fill="#FFC83D"/><circle cx="8.6" cy="10" r="1.4" fill="#4A3220"/><circle cx="15.4" cy="10" r="1.4" fill="#4A3220"/><line x1="8.4" y1="15.2" x2="15.6" y2="15.2" stroke="#4A3220" stroke-width="1.7" stroke-linecap="round"/>',
+      party: '<path d="M3 21l4.6-12.2 7.6 7.6z" fill="#F7A531"/><path d="M5 16.2l2.8 2.8M6.3 12.6l5.1 5.1" stroke="#E8505B" stroke-width="1.6"/><circle cx="15" cy="4.5" r="1.4" fill="#E8505B"/><circle cx="20.2" cy="9.2" r="1.4" fill="#5AB4F0"/><rect x="17" y="2.6" width="2.4" height="2.4" rx=".5" fill="#2FBF71" transform="rotate(20 18.2 3.8)"/><path d="M11.6 7.6c1.6-1.2 1.6-3 .4-4.6M16.6 12.6c1.2-1.6 3-1.6 4.6-.4" fill="none" stroke="#8C5CE6" stroke-width="1.6" stroke-linecap="round"/>',
+      trophy: '<path d="M7 5H4.2a3.2 3.2 0 0 0 3.4 4.4M17 5h2.8a3.2 3.2 0 0 1-3.4 4.4" fill="none" stroke="#F7A531" stroke-width="1.8"/><path d="M7 3h10v5.5a5 5 0 0 1-10 0z" fill="#FFC83D"/><rect x="11" y="13" width="2" height="3.6" fill="#F7A531"/><rect x="7.5" y="16.6" width="9" height="4" rx="1.2" fill="#8C5A2B"/>',
+      target: '<circle cx="12" cy="12" r="10" fill="#E8505B"/><circle cx="12" cy="12" r="6.6" fill="#FFFFFF"/><circle cx="12" cy="12" r="3.2" fill="#E8505B"/>',
+      robot: '<rect x="11.2" y="1.8" width="1.6" height="4" fill="#8A8E94"/><circle cx="12" cy="2.2" r="1.7" fill="#E8505B"/><rect x="2" y="10.5" width="2.2" height="5" rx="1.1" fill="#8A8E94"/><rect x="19.8" y="10.5" width="2.2" height="5" rx="1.1" fill="#8A8E94"/><rect x="4" y="5.5" width="16" height="15" rx="4.5" fill="#B8BCC2"/><rect x="6.5" y="9.2" width="11" height="6.4" rx="3.2" fill="#2B2B2E"/><circle cx="9.6" cy="12.4" r="1.4" fill="#5AE0F0"/><circle cx="14.4" cy="12.4" r="1.4" fill="#5AE0F0"/>',
+      house: '<path d="M5.5 10.5V20.5h13V10.5L12 5z" fill="#FFC83D"/><path d="M3 11.6L12 4l9 7.6" fill="none" stroke="#E8505B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="14.4" width="4" height="6.1" rx="1" fill="#8C5A2B"/>',
+      sparkle: '<path d="M12 2l2.6 6.4L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.4-.6z" fill="#FFC83D"/><path d="M12 6.5l1.3 3.2 3.3.3-2.5 2.2.8 3.3L12 13.8" fill="#FFE08A"/>',
+      gamepad: '<rect x="2" y="7" width="20" height="11.5" rx="5.75" fill="#6C63FF"/><rect x="5.6" y="11.8" width="5.2" height="1.9" rx=".95" fill="#FFFFFF"/><rect x="7.25" y="10.15" width="1.9" height="5.2" rx=".95" fill="#FFFFFF"/><circle cx="15.8" cy="11.4" r="1.4" fill="#FFC83D"/><circle cx="18.2" cy="14" r="1.4" fill="#FF6B7A"/>',
+      chart: '<rect x="3" y="19.6" width="18" height="1.9" rx=".95" fill="#8A8E94"/><rect x="4.4" y="12" width="4.2" height="6.8" rx="1.2" fill="#5AB4F0"/><rect x="9.9" y="7" width="4.2" height="11.8" rx="1.2" fill="#2FBF71"/><rect x="15.4" y="3" width="4.2" height="15.8" rx="1.2" fill="#E8505B"/>',
+      bulb: '<path d="M12 2.5a7 7 0 0 0-4 12.7V18h8v-2.8A7 7 0 0 0 12 2.5z" fill="#FFC83D"/><path d="M10 11.2l2 2 2-2M12 13.2V18" fill="none" stroke="#F7A531" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="8.5" y="18.4" width="7" height="1.9" rx=".95" fill="#8A8E94"/><rect x="9.6" y="20.9" width="4.8" height="1.6" rx=".8" fill="#8A8E94"/>',
+      flame: '<path d="M12 2c1 3.5 5.2 5.6 5.2 10.6a5.2 5.2 0 0 1-10.4 0c0-2.1 1-3.7 2.4-4.7.2 1.6.9 2.7 2.1 3.1C10.6 8.4 11 5 12 2z" fill="#F7A531"/><path d="M12 11.6c.9 1.7 2.7 2.5 2.7 4.6a2.7 2.7 0 0 1-5.4 0c0-1.3.9-2.3 1.7-2.9.1.9.6 1.5 1 1.7-.2-1.1-.4-2.1 0-3.4z" fill="#E8505B"/>'
+    };
+
+    function flatIcon(name) {
+      return FLAT_ICONS[name]
+        ? `<span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24">${FLAT_ICONS[name]}</svg></span>`
+        : "";
+    }
+
+    /* Teks + ikon: bagian teks tetap di-escape, hanya :nama: yang dikenal jadi ikon */
+    function setRich(el, text) {
+      el.innerHTML = esc(text).replace(/:([a-z]+):/g, (m, n) => (FLAT_ICONS[n] ? flatIcon(n) : m));
+    }
+
+    /* Untuk teks polos (bagikan / clipboard): buang token ikon */
+    function plainText(text) {
+      return String(text).replace(/\s*:([a-z]+):/g, (m, n) => (FLAT_ICONS[n] ? "" : m)).trim();
+    }
+
     function esc(value) {
       return String(value ?? "").replace(/[&<>"']/g, ch => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -2446,6 +2641,7 @@
           </a>
         `;
       }).join("");
+      if (window.positionMascotHome) requestAnimationFrame(window.positionMascotHome);
 
       list.querySelectorAll(".link-card").forEach(card => {
         card.addEventListener("click", (e) => {
@@ -2475,6 +2671,10 @@
         });
       });
     }
+
+    document.querySelectorAll(".fi[data-icon]").forEach(el => {
+      el.innerHTML = `<svg viewBox="0 0 24 24">${FLAT_ICONS[el.dataset.icon] || ""}</svg>`;
+    });
 
     function renderAll() {
       applyStaticText();
@@ -3129,12 +3329,15 @@
 
     /* --------------------------------------------------------------------------
        GAME 5 — TIC TAC TOE
-       Pemain X melawan AI O dalam 5 babak, giliran pertama bergantian.
+       Pemain (bidak logo DELTA, internal "X") melawan AI O dalam 5 babak, giliran pertama bergantian.
        AI memakai minimax tapi sesekali "lengah" agar bisa dikalahkan.
        Menang = 1 poin, seri = ½ poin.
        -------------------------------------------------------------------------- */
     const TTT_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
     const TTT_MISTAKE = 0.3;
+    /* Bidak pemain = logo DELTA Lab, bidak AI = cincin O */
+    const TTT_PIECE_X = `<svg class="ttt-logo" viewBox="0 0 220 380" aria-hidden="true"><path class="tl-a" d="M167 22C132 -1 76 4 46 39C18 72 22 121 57 154C82 177 118 197 147 222C182 252 194 297 175 339C164 361 146 373 126 377C159 376 191 356 206 322C225 278 211 224 172 190C143 165 107 146 83 122C57 96 56 58 80 34C103 12 139 10 167 22Z"/><path class="tl-b" d="M196 86C167 127 123 156 76 184C27 213 2 263 14 313C25 357 69 382 117 377C143 374 166 359 179 336C163 347 143 352 122 349C83 343 56 310 60 271C64 234 92 208 125 186C161 162 186 127 196 86Z"/></svg>`;
+    const TTT_PIECE_O = `<svg class="ttt-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>`;
 
     function tttWinner(b) {
       for (const l of TTT_LINES) {
@@ -3232,14 +3435,14 @@
         const line = new Set(c.result ? c.result.line : []);
         gameActions.querySelectorAll(".ttt-cell").forEach((el, i) => {
           const v = c.board[i];
-          el.textContent = v || "";
+          el.innerHTML = v === "X" ? TTT_PIECE_X : v === "O" ? TTT_PIECE_O : "";
           el.className = `ttt-cell${v ? ` is-${v.toLowerCase()}` : ""}${line.has(i) ? (c.result.who === "X" ? " is-win" : " is-lose") : ""}`;
           el.disabled = reveal || c.busy || Boolean(v);
-          el.setAttribute("aria-label", v ? `${i + 1}: ${v}` : String(i + 1));
+          el.setAttribute("aria-label", v ? `${i + 1}: ${v === "X" ? "DELTA" : "AI"}` : String(i + 1));
         });
         if (!reveal) {
           const fb = $("gameFeedback");
-          fb.textContent = ui(c.busy ? "tttThinking" : "tttYourTurn");
+          setRich(fb, ui(c.busy ? "tttThinking" : "tttYourTurn"));
           fb.className = "game-feedback";
         }
       },
@@ -3364,7 +3567,7 @@
       arena.score += points;
       arena.streak = points >= 1 ? arena.streak + 1 : 0;
       const fb = $("gameFeedback");
-      fb.textContent = text;
+      setRich(fb, text);
       fb.className = `game-feedback ${points >= 1 ? "ok" : points > 0 ? "mid" : "bad"}`;
       arena.game.draw(true);
       updateHud();
@@ -3394,8 +3597,8 @@
       const tiers = ui("gameTiers");
       $("gameEndLabel").textContent = ui(arena.game.endLabel || "gameAccuracy");
       $("gameEndScore").textContent = `${pct}%`;
-      $("gameEndTier").textContent = pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0];
-      $("gameEndBest").textContent = isRecord ? ui("gameNewBest") : ui("gameBest")(best);
+      setRich($("gameEndTier"), pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0]);
+      setRich($("gameEndBest"), isRecord ? ui("gameNewBest") : ui("gameBest")(best));
     }
 
     function openGame() {
@@ -3437,7 +3640,7 @@
 
     $("gameShare").addEventListener("click", async () => {
       if (!arena.end) return;
-      const text = ui("gameShareText")(arena.end.pct, ui(arena.game.name));
+      const text = plainText(ui("gameShareText")(arena.end.pct, ui(arena.game.name)));
       const url = "https://deltalink.vercel.app/";
       if (navigator.share) {
         try { await navigator.share({ title: ui("arenaName"), text, url }); return; } catch (err) {
@@ -3454,39 +3657,192 @@
     refreshCardHint();
 
     /* ==========================================================================
-       MASKOT FOOTER: mata mengikuti kursor, ketuk untuk salto
+       MASKOT: tinggal di samping kartu game, mata mengikuti kursor,
+       ketuk untuk salto, seret untuk memindahkan
        ========================================================================== */
     (function initMascot() {
       const mascot = document.getElementById("mascot");
       if (!mascot) return;
-      const pupils = [...mascot.querySelectorAll(".mascot-pupil")];
-      let frame = 0, px = 0, py = 0, lineIdx = 0;
+      let lineIdx = 0;
 
-      function look() {
-        frame = 0;
-        const r = mascot.getBoundingClientRect();
-        const dx = px - (r.left + r.width / 2);
-        const dy = py - (r.top + r.height * 0.2);
-        const len = Math.hypot(dx, dy) || 1;
-        const k = Math.min(1, len / 160) * 9;     // geser maks. 9 unit di dalam bola mata
-        const t = `translate(${((dx / len) * k).toFixed(1)} ${((dy / len) * k).toFixed(1)})`;
-        pupils.forEach(p => p.setAttribute("transform", t));
+      /* Balon ucapan di dekat maskot (bukan toast di bawah layar) */
+      const bubble = document.getElementById("mascotBubble");
+      let bubbleTimer = 0;
+      function say(text) {
+        setRich(bubble, text);
+        bubble.classList.remove("is-below");
+        bubble.style.setProperty("--shift", "0px");
+        bubble.classList.add("show");
+        /* Jaga balon tetap di dalam layar: geser ke samping / pindah ke bawah */
+        const r = bubble.getBoundingClientRect();
+        const m = 8;
+        let shift = 0;
+        if (r.left < m) shift = m - r.left;
+        else if (r.right > window.innerWidth - m) shift = window.innerWidth - m - r.right;
+        bubble.style.setProperty("--shift", `${Math.round(shift)}px`);
+        if (r.top < m) bubble.classList.add("is-below");
+        clearTimeout(bubbleTimer);
+        bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 2800);
       }
 
+      /* Mata mengikuti kursor: kedua pupil digeser searah (tidak juling),
+         lalu kembali menatap ke depan setelah kursor diam 2 detik */
+      const pupils = [...mascot.querySelectorAll(".mascot-pupil")];
+      let lookFrame = 0, lookIdle = 0, px = 0, py = 0;
+      function setPupils(t) { pupils.forEach(p => { p.style.transform = t; }); }
+      function look() {
+        lookFrame = 0;
+        const r = mascot.getBoundingClientRect();
+        if (!r.width) return;
+        const dx = px - (r.left + r.width / 2);
+        const dy = py - (r.top + r.height * 0.6);    // ketinggian mata di wajah bulat
+        const len = Math.hypot(dx, dy) || 1;
+        const k = Math.min(1, len / 140) * 6;         // maks. 6 unit agar mata tetap di dalam wajah
+        setPupils(`translate(${((dx / len) * k).toFixed(1)}px, ${((dy / len) * k).toFixed(1)}px)`);
+      }
       window.addEventListener("pointermove", (e) => {
         px = e.clientX; py = e.clientY;
-        if (!frame) frame = requestAnimationFrame(look);
+        if (!lookFrame) lookFrame = requestAnimationFrame(look);
+        clearTimeout(lookIdle);
+        lookIdle = setTimeout(() => setPupils(""), 2000);
       }, { passive: true });
+      document.documentElement.addEventListener("pointerleave", () => setPupils(""));
 
+      /* ---- Seret & lepas: maskot bisa dipindah ke mana saja ---- */
+      const POS_KEY = "deltalink-mascot-pos";
+      const drag = { id: null, sx: 0, sy: 0, ox: 0, oy: 0, moved: false, suppressClick: false, hinted: false };
+
+      function clampPos(x, y) {
+        const w = mascot.offsetWidth, h = mascot.offsetHeight;
+        return [
+          Math.min(Math.max(4, x), window.innerWidth - w - 4),
+          Math.min(Math.max(4, y), window.innerHeight - h - 4)
+        ];
+      }
+
+      function placeAt(x, y) {
+        const [cx, cy] = clampPos(x, y);
+        mascot.style.transform = `translate(${cx}px, ${cy}px)`;
+        mascot.dataset.x = cx;
+        mascot.dataset.y = cy;
+      }
+
+      function float(x, y) {
+        mascot.classList.add("is-floating");
+        placeAt(x, y);
+      }
+
+      /* Posisi rumah: di samping kartu Arena Data. Pakai offsetTop/Left
+         (bukan getBoundingClientRect) agar animasi masuk kartu tidak mengganggu. */
+      const home = document.getElementById("mascotHome");
+      const container = home.parentElement;
+      function offsetIn(el, root) {
+        let x = 0, y = 0;
+        for (let n = el; n && n !== root; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; }
+        return [x, y];
+      }
+      window.positionMascotHome = function () {
+        const card = document.querySelector('.link-card[data-game="true"]') || document.querySelector(".link-card");
+        if (!card) { home.hidden = true; return; }
+        home.hidden = false;
+        const [cx, cy] = offsetIn(card, container);
+        const cRect = container.getBoundingClientRect();
+        const room = window.innerWidth - cRect.right;
+        if (room >= 100) {
+          /* Laptop: berdiri di sebelah kanan kartu, kaki sejajar dasar kartu */
+          home.classList.remove("is-perched");
+          home.style.left = `${cx + card.offsetWidth + 14}px`;
+          home.style.top = `${cy + card.offsetHeight - home.offsetHeight}px`;
+        } else {
+          /* HP: nangkring di tepi atas kartu, di kiri ikon panah */
+          home.classList.add("is-perched");
+          home.style.left = `${cx + card.offsetWidth - home.offsetWidth - 58}px`;
+          home.style.top = `${cy - home.offsetHeight + 6}px`;
+        }
+      };
+      window.positionMascotHome();
+      window.addEventListener("resize", window.positionMascotHome);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(window.positionMascotHome);
+
+      function goHome() {
+        mascot.classList.remove("is-floating");
+        mascot.style.transform = "";
+        try { localStorage.removeItem(POS_KEY); } catch {}
+      }
+
+      function savePos() {
+        /* Simpan sebagai pecahan layar agar tetap pas setelah ukuran jendela berubah */
+        const fx = Number(mascot.dataset.x) / window.innerWidth;
+        const fy = Number(mascot.dataset.y) / window.innerHeight;
+        try { localStorage.setItem(POS_KEY, JSON.stringify([fx, fy])); } catch {}
+      }
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(POS_KEY) || "null");
+        if (Array.isArray(saved) && saved.every(Number.isFinite)) {
+          float(saved[0] * window.innerWidth, saved[1] * window.innerHeight);
+        }
+      } catch {}
+
+      mascot.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        const r = mascot.getBoundingClientRect();
+        Object.assign(drag, { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: e.clientX - r.left, oy: e.clientY - r.top, moved: false });
+        mascot.setPointerCapture(e.pointerId);
+      });
+
+      mascot.addEventListener("pointermove", (e) => {
+        if (drag.id !== e.pointerId) return;
+        if (!drag.moved) {
+          if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
+          drag.moved = true;
+          mascot.classList.remove("is-flip", "is-landing");
+          mascot.classList.add("is-dragging");
+        }
+        float(e.clientX - drag.ox, e.clientY - drag.oy);
+      });
+
+      function endDrag(e) {
+        if (drag.id !== e.pointerId) return;
+        drag.id = null;
+        if (!drag.moved) return;
+        drag.suppressClick = true;
+        setTimeout(() => { drag.suppressClick = false; }, 0);
+        mascot.classList.remove("is-dragging");
+        void mascot.offsetWidth;
+        mascot.classList.add("is-landing");
+        savePos();
+        if (!drag.hinted) { drag.hinted = true; say(ui("mascotDropHint")); }
+      }
+      mascot.addEventListener("pointerup", endDrag);
+      mascot.addEventListener("pointercancel", endDrag);
+
+
+      window.addEventListener("resize", () => {
+        if (mascot.classList.contains("is-floating")) placeAt(Number(mascot.dataset.x), Number(mascot.dataset.y));
+      });
+
+      let lastTap = 0;
       mascot.addEventListener("click", () => {
+        if (drag.suppressClick) return;
+        /* Ketuk dua kali (dblclick tidak andal di ponsel) → pulang ke samping kartu game */
+        const now = Date.now();
+        if (now - lastTap < 350 && mascot.classList.contains("is-floating")) {
+          lastTap = 0;
+          goHome();
+          requestAnimationFrame(() => say(ui("mascotHome")));
+          return;
+        }
+        lastTap = now;
         mascot.classList.remove("is-flip");
         void mascot.offsetWidth;
         mascot.classList.add("is-flip");
         const lines = ui("mascotLines");
-        showToast(lines[lineIdx++ % lines.length]);
+        say(lines[lineIdx++ % lines.length]);
       });
       mascot.addEventListener("animationend", (e) => {
         if (e.animationName === "mascotFlip") mascot.classList.remove("is-flip");
+        if (e.animationName === "mascotLand") mascot.classList.remove("is-landing");
       });
     })();
 
