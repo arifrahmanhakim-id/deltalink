@@ -266,7 +266,7 @@
       width: 34px;
       height: 34px;
       flex-shrink: 0;
-      border-radius: 10px;
+      border-radius: 50%;
       background: #FFFFFF;
       box-shadow: var(--neu-out-xs);
       display: flex;
@@ -275,7 +275,7 @@
     }
 
     .top-brand-logo img {
-      height: 24px;
+      height: 22px;
       width: auto;
     }
 
@@ -1112,11 +1112,119 @@
     }
 
     /* ==========================================================================
-       MINI GAME: TEBAK TREN
+       ARENA DATA: MENU + MINI GAME
        ========================================================================== */
     .game-dialog {
       max-width: 400px;
       padding: 22px 18px 18px;
+    }
+
+    .game-back {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .game-back[hidden],
+    .game-round[hidden],
+    .game-menu[hidden] {
+      display: none;
+    }
+
+    .game-head {
+      padding: 0 34px;
+    }
+
+    .arena-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .arena-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--neu-border);
+      border-radius: var(--radius-md);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .arena-item:hover {
+      transform: translateY(-1px);
+    }
+
+    .arena-item:active {
+      box-shadow: var(--neu-in-sm);
+      transform: none;
+    }
+
+    .arena-icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: var(--telu-maroon);
+      box-shadow: var(--neu-out-sm);
+    }
+
+    .arena-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .arena-name {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .arena-item:hover .arena-name {
+      color: var(--telu-maroon);
+    }
+
+    [data-theme="dark"] .arena-item:hover .arena-name {
+      color: #FFFFFF;
+    }
+
+    .arena-desc {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    .arena-best {
+      flex: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-base);
+      box-shadow: var(--neu-in-sm);
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .arena-best.is-new {
+      color: #FFFFFF;
+      background: var(--telu-maroon);
+      box-shadow: none;
+      letter-spacing: 0.04em;
     }
 
     .game-head {
@@ -1205,6 +1313,8 @@
 
     .game-feedback.ok { color: #1F8A55; }
     .game-feedback.bad { color: var(--telu-maroon); }
+    .game-feedback.mid { color: #A86A00; }
+    [data-theme="dark"] .game-feedback.mid { color: #FFD58A; }
     [data-theme="dark"] .game-feedback.ok { color: #8BE3B3; }
     [data-theme="dark"] .game-feedback.bad { color: #FFC2C5; }
 
@@ -1214,6 +1324,66 @@
       gap: 10px;
       margin-top: 8px;
     }
+
+    .game-actions.cols-1 { grid-template-columns: 1fr; }
+    .game-actions.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .game-actions.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .game-actions.cols-4 .guess-btn { font-size: 16px; font-weight: 800; padding: 12px 4px; }
+
+    /* Scatter, histogram & penanda outlier */
+    .g-axis { stroke: var(--telu-grey); stroke-width: 1.2; opacity: 0.6; }
+    .g-pt { fill: var(--telu-grey-dark); opacity: 0.72; }
+    [data-theme="dark"] .g-pt { fill: #FFFFFF; opacity: 0.8; }
+    .g-label { fill: var(--telu-maroon); font: 800 13px "JetBrains Mono", monospace; }
+    [data-theme="dark"] .g-label { fill: #FFB3B7; }
+    .g-fit {
+      fill: none;
+      stroke: var(--telu-maroon);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      opacity: 0.85;
+      animation: gDraw 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    [data-theme="dark"] .g-fit { stroke: #FFB3B7; }
+    .g-bar { fill: var(--telu-grey-dark); opacity: 0.55; transition: fill 0.3s ease, opacity 0.3s ease; }
+    [data-theme="dark"] .g-bar { fill: #FFFFFF; opacity: 0.6; }
+    .g-bar.rev { fill: var(--telu-maroon); opacity: 0.8; }
+    [data-theme="dark"] .g-bar.rev { fill: #FFB3B7; }
+    .g-cand { cursor: pointer; }
+    .g-hit { fill: transparent; }
+    .g-ring { fill: var(--telu-maroon-soft); stroke: var(--telu-maroon); stroke-width: 1.6; }
+    .g-cdot { fill: var(--telu-maroon); }
+    .g-ltr { fill: var(--telu-maroon); font: 800 12px "Plus Jakarta Sans", sans-serif; }
+    [data-theme="dark"] .g-ring { stroke: #FFB3B7; }
+    [data-theme="dark"] .g-cdot,
+    [data-theme="dark"] .g-ltr { fill: #FFB3B7; }
+    .g-cand:hover .g-ring { stroke-width: 2.6; }
+    .g-cand.is-dim { opacity: 0.35; cursor: default; }
+    .g-cand.is-answer, .g-cand.is-wrong { cursor: default; }
+    .g-cand.is-answer .g-ring { fill: rgba(31, 138, 85, 0.18); stroke: #1F8A55; stroke-width: 2.6; }
+    .g-cand.is-answer .g-cdot, .g-cand.is-answer .g-ltr { fill: #1F8A55; }
+    [data-theme="dark"] .g-cand.is-answer .g-ring { stroke: #8BE3B3; }
+    [data-theme="dark"] .g-cand.is-answer .g-cdot,
+    [data-theme="dark"] .g-cand.is-answer .g-ltr { fill: #8BE3B3; }
+    .g-cand.is-wrong { opacity: 0.6; }
+
+    /* Kontrol Tebak Korelasi */
+    .corr-ctrl { display: grid; gap: 8px; }
+    .corr-scale {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .corr-val { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+    .corr-range { width: 100%; accent-color: var(--telu-maroon); height: 24px; cursor: pointer; }
+    .corr-range:disabled { cursor: default; opacity: 0.6; }
+    .corr-ctrl .corr-go { margin-top: 2px; }
+    .corr-ctrl .corr-go:disabled { opacity: 0.55; cursor: default; }
 
     .guess-btn {
       display: flex;
@@ -1618,9 +1788,14 @@
     </div>
   </div>
 
-  <!-- Mini Game: Tebak Tren -->
+  <!-- Arena Data: kumpulan mini game -->
   <div class="qr-overlay" id="gameOverlay" aria-hidden="true">
     <div class="qr-dialog game-dialog" role="dialog" aria-modal="true" aria-labelledby="gameTitle">
+      <button class="neu-icon-btn game-back" id="gameBack" type="button" data-i18n-aria="gameBackAria" aria-label="Kembali ke daftar game" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
       <button class="neu-icon-btn qr-close" id="gameClose" type="button" data-i18n-aria="close" aria-label="Tutup">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1628,24 +1803,25 @@
         </svg>
       </button>
       <div class="game-head">
-        <h2 class="qr-title" id="gameTitle" data-i18n="gameName">Tebak Tren</h2>
-        <span class="game-round" id="gameRound">1/10</span>
+        <h2 class="qr-title" id="gameTitle">Arena Data</h2>
+        <span class="game-round" id="gameRound" hidden>1/10</span>
       </div>
 
-      <div class="game-play" id="gamePlay">
-        <p class="qr-sub" data-i18n="gameQuestion">Ke mana grafik bergerak berikutnya?</p>
+      <div class="game-menu" id="gameMenu">
+        <p class="qr-sub" data-i18n="arenaSub">Pilih tantangan dan asah intuisi datamu</p>
+        <div class="arena-list" id="arenaList"></div>
+      </div>
+
+      <div class="game-play" id="gamePlay" hidden>
+        <p class="qr-sub" id="gameQuestion"></p>
         <div class="game-stats">
           <span><span data-i18n="gameScore">Skor</span> <b id="gameScore">0</b></span>
           <span>Streak <b id="gameStreak">0</b> 🔥</span>
         </div>
         <div class="game-chart"><svg id="gameChart" viewBox="0 0 300 170" role="img" aria-label="Grafik"></svg></div>
         <p class="game-feedback" id="gameFeedback" aria-live="polite"></p>
-        <div class="game-actions">
-          <button class="guess-btn" type="button" data-guess="up"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="15 7 21 7 21 13"></polyline></svg><span data-i18n="dirUp">Naik</span></button>
-          <button class="guess-btn" type="button" data-guess="flat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><polyline points="15 6 21 12 15 18"></polyline></svg><span data-i18n="dirFlat">Stabil</span></button>
-          <button class="guess-btn" type="button" data-guess="down"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 7 9 13 13 9 21 17"></polyline><polyline points="15 17 21 17 21 11"></polyline></svg><span data-i18n="dirDown">Turun</span></button>
-        </div>
-        <p class="game-tip" data-i18n="gameTip">Tip: pakai tombol panah ↑ → ↓</p>
+        <div class="game-actions" id="gameActions"></div>
+        <p class="game-tip" id="gameTip"></p>
       </div>
 
       <div class="game-end" id="gameEnd" hidden>
@@ -1683,7 +1859,7 @@
          icon: "logo",                  // logo | globe | chart | cpu | layers
          logoFile: "logo-app.png",      // opsional: gambar logo sendiri (menggantikan icon)
          eta: "Rilis Q1 2027",          // opsional, khusus "soon": perkiraan rilis
-         type: "game"                   // khusus kartu mini game Tebak Tren
+         type: "game"                   // khusus kartu Arena Data (membuka menu mini game)
        }
        ========================================================================== */
     const SITE_CONFIG = {
@@ -1754,15 +1930,15 @@
           icon: "layers"
         },
         {
-          title: "Tebak Tren",
+          title: "Arena Data",
           description: {
-            id: "Mini game: tebak arah grafik berikutnya",
-            en: "Mini game: guess where the chart goes next"
+            id: "Mini game data: tren, korelasi, outlier & distribusi",
+            en: "Data mini games: trends, correlation, outliers & distributions"
           },
           type: "game",
           category: "Mini Game",
           badgeText: { id: "MAIN", en: "PLAY" },
-          icon: "trend"
+          icon: "arena"
         }
       ]
     };
@@ -1800,6 +1976,7 @@
       chart: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
       cpu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
       trend: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>`,
+      arena: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12a4 4 0 0 1 4 4v1.5a3.5 3.5 0 0 1-6.3 2.1L14.5 14h-5l-1.2 1.6A3.5 3.5 0 0 1 2 13.5V12a4 4 0 0 1 4-4z"/><line x1="7" y1="10" x2="7" y2="13"/><line x1="5.5" y1="11.5" x2="8.5" y2="11.5"/><circle cx="16" cy="10.8" r="0.6" fill="currentColor"/><circle cx="18" cy="12.4" r="0.6" fill="currentColor"/></svg>`,
       layers: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
     };
 
@@ -1829,24 +2006,55 @@
         copyFallback: "Tautan siap dibagikan!",
         installed: "DELTA Link terpasang di perangkat Anda!",
         backToTop: "Kembali ke atas",
-        gameName: "Tebak Tren",
-        gameQuestion: "Ke mana grafik bergerak berikutnya?",
+        arenaName: "Arena Data",
+        arenaSub: "Pilih tantangan dan asah intuisi datamu",
+        arenaHint: (n) => `${n} game · ± 30 detik per game`,
+        arenaHintBest: (n, pct) => `${n} game · rekor tertinggi ${pct}%`,
+        arenaRounds: (n) => `${n} ronde`,
+        arenaNew: "BARU",
+        gameBackAria: "Kembali ke daftar game",
         gameScore: "Skor",
-        gameTip: "Tip: pakai tombol panah ↑ → ↓",
+        gameRight: "Tepat! 🎯",
+        gameAccuracy: "Akurasi tebakanmu",
+        gameBest: (pct) => `Rekor terbaik: ${pct}%`,
+        gameNewBest: "🏆 Rekor baru!",
+        gameShareBtn: "Bagikan skor",
+        gamePlayAgain: "Main lagi",
+        gameShareText: (pct, name) => `Skorku ${pct}% di ${name} · Arena Data DELTA Lab 📊 Bisa kalahkan?`,
+        gameShared: "Skor siap dibagikan — tautan disalin!",
+        trendName: "Tebak Tren",
+        trendDesc: "Tebak arah grafik berikutnya",
+        trendQ: "Ke mana grafik bergerak berikutnya?",
+        trendTip: "Tip: pakai tombol panah ↑ → ↓",
+        trendWrong: (dir) => `Meleset — grafiknya ${dir.toLowerCase()}`,
         dirUp: "Naik",
         dirFlat: "Stabil",
         dirDown: "Turun",
         gameNow: "SEKARANG",
-        gameRight: "Tepat! 🎯",
-        gameWrong: (dir) => `Meleset — grafiknya ${dir.toLowerCase()}`,
-        gameAccuracy: "Akurasi tebakanmu",
-        gameBest: (n) => `Skor terbaik: ${n}/10`,
-        gameNewBest: "🏆 Rekor baru!",
-        gameHint: "10 ronde · ± 30 detik",
-        gameShareBtn: "Bagikan skor",
-        gamePlayAgain: "Main lagi",
-        gameShareText: (pct) => `Akurasi tebakan trenku ${pct}% di Tebak Tren DELTA Lab 📈 Bisa kalahkan?`,
-        gameShared: "Skor siap dibagikan — tautan disalin!",
+        corrName: "Tebak Korelasi",
+        corrDesc: "Perkirakan nilai r dari scatter plot",
+        corrQ: "Berapa koefisien korelasi (r) data ini?",
+        corrTip: "Tip: ← → untuk menggeser, Enter untuk mengunci",
+        corrLock: "Kunci tebakan",
+        corrSliderAria: "Tebakan nilai r",
+        corrResult: (kind, r, g) => kind === "hit"
+          ? `Tepat! 🎯 r = ${r}`
+          : `${kind === "near" ? "Hampir! 👌" : "Meleset —"} r = ${r} (tebakanmu ${g})`,
+        outName: "Cari Outlier",
+        outDesc: "Temukan titik yang keluar dari pola",
+        outQ: "Titik mana yang outlier?",
+        outTip: "Tip: ketuk titiknya atau tekan A–D",
+        outWrong: (l) => `Meleset — outliernya titik ${l}`,
+        ptA: "A", ptB: "B", ptC: "C", ptD: "D",
+        distName: "Bentuk Distribusi",
+        distDesc: "Kenali bentuk histogram sekilas",
+        distQ: "Distribusi apa yang membentuk histogram ini?",
+        distTip: "Tip: tekan 1–4",
+        distWrong: (name) => `Meleset — ini distribusi ${name.toLowerCase()}`,
+        distNormal: "Normal",
+        distSkew: "Miring",
+        distBimodal: "Bimodal",
+        distUniform: "Seragam",
         gameTiers: ["Masih Overfitting 😅", "Sedang Belajar 📈", "Analis Andal 📊", "Data Scientist 🧠"],
         switchTo: "Switch to English",
         switchLabel: "EN"
@@ -1873,23 +2081,54 @@
         copyFallback: "Link ready to share!",
         installed: "DELTA Link is installed on your device!",
         backToTop: "Back to top",
-        gameName: "Guess the Trend",
-        gameQuestion: "Where does the chart go next?",
+        arenaName: "Data Arena",
+        arenaSub: "Pick a challenge and sharpen your data intuition",
+        arenaHint: (n) => `${n} games · ~30 seconds each`,
+        arenaHintBest: (n, pct) => `${n} games · top record ${pct}%`,
+        arenaRounds: (n) => `${n} rounds`,
+        arenaNew: "NEW",
+        gameBackAria: "Back to game list",
         gameScore: "Score",
-        gameTip: "Tip: use the arrow keys ↑ → ↓",
+        trendName: "Guess the Trend",
+        trendDesc: "Guess where the chart goes next",
+        trendQ: "Where does the chart go next?",
+        trendTip: "Tip: use the arrow keys ↑ → ↓",
+        trendWrong: (dir) => `Missed — it went ${dir.toLowerCase()}`,
+        corrName: "Guess the Correlation",
+        corrDesc: "Estimate r from a scatter plot",
+        corrQ: "What's the correlation coefficient (r)?",
+        corrTip: "Tip: ← → to slide, Enter to lock in",
+        corrLock: "Lock in guess",
+        corrSliderAria: "Your guess for r",
+        corrResult: (kind, r, g) => kind === "hit"
+          ? `Spot on! 🎯 r = ${r}`
+          : `${kind === "near" ? "Close! 👌" : "Missed —"} r = ${r} (you said ${g})`,
+        outName: "Spot the Outlier",
+        outDesc: "Find the point that breaks the pattern",
+        outQ: "Which point is the outlier?",
+        outTip: "Tip: tap the point or press A–D",
+        outWrong: (l) => `Missed — the outlier was ${l}`,
+        ptA: "A", ptB: "B", ptC: "C", ptD: "D",
+        distName: "Name the Distribution",
+        distDesc: "Read a histogram's shape at a glance",
+        distQ: "Which distribution made this histogram?",
+        distTip: "Tip: press 1–4",
+        distWrong: (name) => `Missed — it was ${name.toLowerCase()}`,
+        distNormal: "Normal",
+        distSkew: "Skewed",
+        distBimodal: "Bimodal",
+        distUniform: "Uniform",
         dirUp: "Up",
         dirFlat: "Flat",
         dirDown: "Down",
         gameNow: "NOW",
         gameRight: "Spot on! 🎯",
-        gameWrong: (dir) => `Missed — it went ${dir.toLowerCase()}`,
         gameAccuracy: "Your prediction accuracy",
-        gameBest: (n) => `Best score: ${n}/10`,
+        gameBest: (pct) => `Best score: ${pct}%`,
         gameNewBest: "🏆 New record!",
-        gameHint: "10 rounds · ~30 seconds",
         gameShareBtn: "Share score",
         gamePlayAgain: "Play again",
-        gameShareText: (pct) => `I scored ${pct}% on DELTA Lab's Guess the Trend 📈 Can you beat it?`,
+        gameShareText: (pct, name) => `I scored ${pct}% on ${name} · DELTA Lab's Data Arena 📊 Can you beat it?`,
         gameShared: "Score ready to share — link copied!",
         gameTiers: ["Still Overfitting 😅", "Learning Fast 📈", "Sharp Analyst 📊", "Data Scientist 🧠"],
         switchTo: "Ganti ke Bahasa Indonesia",
@@ -2233,25 +2472,30 @@
     })();
 
     /* ==========================================================================
-       MINI GAME: TEBAK TREN
-       Grafik dibuat acak dari tren + musiman + noise. Pemain menebak arah
-       rata-rata 3 titik terakhir yang tersembunyi dibanding titik "sekarang".
+       ARENA DATA — KUMPULAN MINI GAME
+       Satu dialog: menu pilihan game → main → skor akhir.
+       Tiap game cukup mendefinisikan: rounds, mount(), newRound(), draw(), onKey().
+       Untuk menambah game baru, tambahkan objek ke ARENA_GAMES di bawah.
        ========================================================================== */
-    const GAME_ROUNDS = 10;
-    const G = { W: 300, H: 170, N: 26, SPLIT: 17 };
-    const gameOverlay = document.getElementById("gameOverlay");
-    const gameChart = document.getElementById("gameChart");
-    const guessBtns = [...document.querySelectorAll(".guess-btn")];
-    const game = { round: 0, score: 0, streak: 0, locked: false, current: null, open: false, lastFocus: null };
+    const $ = (id) => document.getElementById(id);
+    const gameOverlay = $("gameOverlay");
+    const gameChart = $("gameChart");
+    const gameActions = $("gameActions");
+    const arena = {
+      game: null, view: "menu", round: 0, score: 0, streak: 0,
+      locked: false, current: null, open: false, lastFocus: null, session: 0, end: null
+    };
 
-    function readBest() {
-      try { return Number(localStorage.getItem("deltalink-trend-best")) || 0; } catch { return 0; }
-    }
-
-    function gameHintText() {
-      const best = readBest();
-      return best > 0 ? ui("gameBest")(best) : ui("gameHint");
-    }
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const randInt = (a, b) => Math.floor(rand(a, b + 1));
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const shuffle = (arr) => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
 
     function gauss() {
       let u = 0, v = 0;
@@ -2260,9 +2504,46 @@
       return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
     }
 
-    const rand = (a, b) => a + Math.random() * (b - a);
+    const fmtR = (r) => `${r > 0.004 ? "+" : r < -0.004 ? "−" : ""}${Math.abs(r).toFixed(2)}`;
+    const fmtScore = (s) => (Number.isInteger(s) ? String(s) : s.toFixed(1));
 
-    function labelOf(vals) {
+    /* Tombol pilihan ganda yang dipakai bersama oleh beberapa game */
+    function choiceButtons(options, cols) {
+      gameActions.className = `game-actions cols-${cols}`;
+      gameActions.innerHTML = options.map(o => `
+        <button class="guess-btn" type="button" data-guess="${o.key}">
+          ${o.icon || ""}<span data-i18n="${o.label}">${esc(ui(o.label))}</span>
+        </button>`).join("");
+      gameActions.querySelectorAll(".guess-btn").forEach(b => {
+        b.addEventListener("click", () => arena.game.answer(b.dataset.guess));
+      });
+    }
+
+    function resetChoices() {
+      gameActions.querySelectorAll(".guess-btn").forEach(b => {
+        b.disabled = false;
+        b.classList.remove("is-correct", "is-wrong", "is-answer");
+      });
+    }
+
+    function markChoices(chosen, answer) {
+      gameActions.querySelectorAll(".guess-btn").forEach(b => {
+        b.disabled = true;
+        if (b.dataset.guess === chosen) b.classList.add(chosen === answer ? "is-correct" : "is-wrong");
+        else if (b.dataset.guess === answer) b.classList.add("is-answer");
+      });
+    }
+
+    const svgIcon = (inner) => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+
+    /* --------------------------------------------------------------------------
+       GAME 1 — TEBAK TREN
+       Grafik acak dari tren + musiman + noise. Pemain menebak arah rata-rata
+       3 titik terakhir yang tersembunyi dibanding titik "sekarang".
+       -------------------------------------------------------------------------- */
+    const G = { W: 300, H: 170, N: 26, SPLIT: 17 };
+
+    function trendLabel(vals) {
       const hist = vals.slice(0, G.SPLIT);
       const span = Math.max(Math.max(...hist) - Math.min(...hist), 6);
       const now = vals[G.SPLIT - 1];
@@ -2271,172 +2552,583 @@
       return d > 0.35 ? "up" : d < -0.35 ? "down" : "flat";
     }
 
-    function genSeries() {
-      const target = ["up", "flat", "down"][Math.floor(Math.random() * 3)];
-      let vals = [];
-      for (let attempt = 0; attempt < 120; attempt++) {
-        /* Disetel lewat simulasi: pemain yang membaca arah tren benar ±70%,
-           sisanya kejutan karena tren sesekali berbalik */
-        const trend = rand(-1.6, 1.6);
-        const shift = Math.random() < 0.12 ? rand(-1.5, 1.5) : 0;   // kadang tren berubah arah
-        const amp = rand(0, 3);
-        const period = rand(10, 20);
-        const phase = rand(0, Math.PI * 2);
-        const noise = rand(0.3, 0.8);
-        let level = 50;
-        vals = [];
-        for (let i = 0; i < G.N; i++) {
-          level += i < G.SPLIT ? trend : trend + shift;
-          vals.push(level + amp * Math.sin((2 * Math.PI * i) / period + phase) + gauss() * noise);
+    const trendGame = {
+      id: "trend",
+      rounds: 10,
+      name: "trendName",
+      desc: "trendDesc",
+      question: "trendQ",
+      tip: "trendTip",
+      icon: ICONS.trend,
+      mount() {
+        choiceButtons([
+          { key: "up", label: "dirUp", icon: svgIcon('<polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="15 7 21 7 21 13"></polyline>') },
+          { key: "flat", label: "dirFlat", icon: svgIcon('<line x1="3" y1="12" x2="21" y2="12"></line><polyline points="15 6 21 12 15 18"></polyline>') },
+          { key: "down", label: "dirDown", icon: svgIcon('<polyline points="3 7 9 13 13 9 21 17"></polyline><polyline points="15 17 21 17 21 11"></polyline>') }
+        ], 3);
+      },
+      newRound() {
+        resetChoices();
+        const target = pick(["up", "flat", "down"]);
+        let vals = [];
+        for (let attempt = 0; attempt < 120; attempt++) {
+          /* Disetel lewat simulasi: pemain yang membaca arah tren benar ±70%,
+             sisanya kejutan karena tren sesekali berbalik */
+          const trend = rand(-1.6, 1.6);
+          const shift = Math.random() < 0.12 ? rand(-1.5, 1.5) : 0;
+          const amp = rand(0, 3);
+          const period = rand(10, 20);
+          const phase = rand(0, Math.PI * 2);
+          const noise = rand(0.3, 0.8);
+          let level = 50;
+          vals = [];
+          for (let i = 0; i < G.N; i++) {
+            level += i < G.SPLIT ? trend : trend + shift;
+            vals.push(level + amp * Math.sin((2 * Math.PI * i) / period + phase) + gauss() * noise);
+          }
+          if (trendLabel(vals) === target) break;
         }
-        if (labelOf(vals) === target) break;
+        return { vals, label: trendLabel(vals) };
+      },
+      draw(reveal) {
+        const { vals } = arena.current;
+        const hist = vals.slice(0, G.SPLIT);
+        const hMin = Math.min(...hist), hMax = Math.max(...hist);
+        const span = Math.max(hMax - hMin, 6);
+        const yMin = hMin - span * 0.75, yMax = hMax + span * 0.75;
+        const padX = 12, padY = 12;
+        const x = i => padX + (i * (G.W - padX * 2)) / (G.N - 1);
+        const y = v => {
+          const t = (v - yMin) / (yMax - yMin);
+          return Math.min(G.H - padY, Math.max(padY, G.H - padY - t * (G.H - padY * 2)));
+        };
+        const pts = (from, to) => vals.slice(from, to).map((v, k) => `${x(from + k).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+        const sx = x(G.SPLIT - 1);
+
+        let svg = gridLines();
+        svg += `<rect class="g-future" x="${sx}" y="0" width="${G.W - sx}" height="${G.H}" />`;
+        svg += `<line class="g-divider" x1="${sx}" y1="0" x2="${sx}" y2="${G.H}" />`;
+        svg += `<text class="g-now" x="${sx - 6}" y="14" text-anchor="end">${esc(ui("gameNow"))}</text>`;
+        svg += `<polygon class="g-area" points="${x(0)},${G.H} ${pts(0, G.SPLIT)} ${sx},${G.H}" />`;
+        svg += `<polyline class="g-hist" points="${pts(0, G.SPLIT)}" />`;
+        svg += reveal
+          ? `<polyline class="g-reveal" pathLength="1" points="${pts(G.SPLIT - 1, G.N)}" />`
+          : `<text class="g-q" x="${(sx + G.W) / 2}" y="${G.H / 2 + 10}" text-anchor="middle">?</text>`;
+        svg += `<circle class="g-dot" cx="${sx}" cy="${y(vals[G.SPLIT - 1])}" r="4.5" />`;
+        gameChart.innerHTML = svg;
+      },
+      answer(dir) {
+        if (!canAnswer()) return;
+        const answer = arena.current.label;
+        markChoices(dir, answer);
+        const key = { up: "dirUp", flat: "dirFlat", down: "dirDown" }[answer];
+        settle(dir === answer ? 1 : 0, dir === answer ? ui("gameRight") : ui("trendWrong")(ui(key)));
+      },
+      onKey(e) {
+        const dir = { ArrowUp: "up", ArrowRight: "flat", ArrowDown: "down" }[e.key];
+        if (!dir) return false;
+        this.answer(dir);
+        return true;
       }
-      return { vals, label: labelOf(vals) };
-    }
+    };
 
-    function drawChart(reveal) {
-      const { vals } = game.current;
-      const hist = vals.slice(0, G.SPLIT);
-      const hMin = Math.min(...hist), hMax = Math.max(...hist);
-      const span = Math.max(hMax - hMin, 6);
-      const yMin = hMin - span * 0.75, yMax = hMax + span * 0.75;
-      const padX = 12, padY = 12;
-      const x = i => padX + (i * (G.W - padX * 2)) / (G.N - 1);
-      const y = v => {
-        const t = (v - yMin) / (yMax - yMin);
-        return Math.min(G.H - padY, Math.max(padY, G.H - padY - t * (G.H - padY * 2)));
-      };
-      const pts = (from, to) => vals.slice(from, to).map((v, k) => `${x(from + k).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-      const sx = x(G.SPLIT - 1);
-      const last = vals[G.SPLIT - 1];
-
-      let svg = "";
-      [0.25, 0.5, 0.75].forEach(f => {
+    function gridLines() {
+      return [0.25, 0.5, 0.75].map(f => {
         const gy = (G.H * f).toFixed(1);
-        svg += `<line class="g-grid" x1="0" y1="${gy}" x2="${G.W}" y2="${gy}" />`;
-      });
-      svg += `<rect class="g-future" x="${sx}" y="0" width="${G.W - sx}" height="${G.H}" />`;
-      svg += `<line class="g-divider" x1="${sx}" y1="0" x2="${sx}" y2="${G.H}" />`;
-      svg += `<text class="g-now" x="${sx - 6}" y="14" text-anchor="end">${esc(ui("gameNow"))}</text>`;
-      svg += `<polygon class="g-area" points="${x(0)},${G.H} ${pts(0, G.SPLIT)} ${sx},${G.H}" />`;
-      svg += `<polyline class="g-hist" points="${pts(0, G.SPLIT)}" />`;
-      if (reveal) {
-        svg += `<polyline class="g-reveal" pathLength="1" points="${pts(G.SPLIT - 1, G.N)}" />`;
-      } else {
-        svg += `<text class="g-q" x="${(sx + G.W) / 2}" y="${G.H / 2 + 10}" text-anchor="middle">?</text>`;
+        return `<line class="g-grid" x1="0" y1="${gy}" x2="${G.W}" y2="${gy}" />`;
+      }).join("");
+    }
+
+    /* Peta koordinat data [0..1] → SVG untuk scatter plot */
+    const SP = { L: 18, R: 12, T: 14, B: 14 };
+    const sx01 = (v) => SP.L + v * (G.W - SP.L - SP.R);
+    const sy01 = (v) => G.H - SP.B - v * (G.H - SP.T - SP.B);
+
+    function scatterAxes() {
+      return `<line class="g-axis" x1="${SP.L - 6}" y1="${G.H - SP.B + 6}" x2="${G.W - 4}" y2="${G.H - SP.B + 6}" />` +
+             `<line class="g-axis" x1="${SP.L - 6}" y1="${SP.T - 6}" x2="${SP.L - 6}" y2="${G.H - SP.B + 6}" />`;
+    }
+
+    /* --------------------------------------------------------------------------
+       GAME 2 — TEBAK KORELASI
+       Scatter 40 titik dengan korelasi acak. Skor 1 bila selisih ≤ 0,10,
+       setengah bila ≤ 0,20.
+       -------------------------------------------------------------------------- */
+    const corrGame = {
+      id: "corr",
+      rounds: 8,
+      name: "corrName",
+      desc: "corrDesc",
+      question: "corrQ",
+      tip: "corrTip",
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="3" stroke-dasharray="2 3"/><circle cx="6" cy="16" r="1.6" fill="currentColor"/><circle cx="10" cy="14" r="1.6" fill="currentColor"/><circle cx="13" cy="9" r="1.6" fill="currentColor"/><circle cx="17" cy="8" r="1.6" fill="currentColor"/><circle cx="18" cy="4.5" r="1.6" fill="currentColor"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-1";
+        gameActions.innerHTML = `
+          <div class="corr-ctrl">
+            <div class="corr-scale"><span>−1</span><output class="corr-val" id="corrVal">0.00</output><span>+1</span></div>
+            <input class="corr-range" id="corrRange" type="range" min="-1" max="1" step="0.05" value="0"
+                   data-i18n-aria="corrSliderAria" aria-label="${esc(ui("corrSliderAria"))}" />
+            <button class="qr-download corr-go" id="corrGo" type="button" data-i18n="corrLock">${esc(ui("corrLock"))}</button>
+          </div>`;
+        const range = $("corrRange");
+        range.addEventListener("input", () => { $("corrVal").textContent = fmtR(Number(range.value)); });
+        $("corrGo").addEventListener("click", () => this.answer());
+      },
+      newRound() {
+        const range = $("corrRange");
+        range.disabled = false;
+        range.value = "0";
+        $("corrVal").textContent = fmtR(0);
+        $("corrGo").disabled = false;
+        const target = Math.max(-0.98, Math.min(0.98, rand(-1, 1)));
+        const n = 40;
+        const xs = [], ys = [];
+        for (let i = 0; i < n; i++) {
+          const a = gauss();
+          xs.push(a);
+          ys.push(target * a + Math.sqrt(1 - target * target) * gauss());
+        }
+        const mx = xs.reduce((s, v) => s + v, 0) / n;
+        const my = ys.reduce((s, v) => s + v, 0) / n;
+        let sxy = 0, sxx = 0, syy = 0;
+        for (let i = 0; i < n; i++) {
+          sxy += (xs[i] - mx) * (ys[i] - my);
+          sxx += (xs[i] - mx) ** 2;
+          syy += (ys[i] - my) ** 2;
+        }
+        const r = sxy / Math.sqrt(sxx * syy);
+        const norm = (arr) => {
+          const lo = Math.min(...arr), hi = Math.max(...arr);
+          return arr.map(v => (v - lo) / (hi - lo || 1));
+        };
+        const nx = norm(xs), ny = norm(ys);
+        /* Garis regresi dalam koordinat ternormalisasi */
+        const nmx = nx.reduce((s, v) => s + v, 0) / n;
+        const nmy = ny.reduce((s, v) => s + v, 0) / n;
+        let num = 0, den = 0;
+        for (let i = 0; i < n; i++) { num += (nx[i] - nmx) * (ny[i] - nmy); den += (nx[i] - nmx) ** 2; }
+        const slope = num / den;
+        return { nx, ny, r, slope, icpt: nmy - slope * nmx, guess: null };
+      },
+      draw(reveal) {
+        const c = arena.current;
+        let svg = gridLines() + scatterAxes();
+        if (reveal) {
+          /* Potong garis agar tetap di dalam area [0..1] */
+          let x0 = 0, x1 = 1;
+          if (Math.abs(c.slope) > 1e-6) {
+            const xa = (0 - c.icpt) / c.slope, xb = (1 - c.icpt) / c.slope;
+            x0 = Math.max(0, Math.min(xa, xb));
+            x1 = Math.min(1, Math.max(xa, xb));
+          }
+          const ly = (x) => c.icpt + c.slope * x;
+          svg += `<line class="g-fit" pathLength="1" x1="${sx01(x0)}" y1="${sy01(ly(x0))}" x2="${sx01(x1)}" y2="${sy01(ly(x1))}" />`;
+        }
+        svg += c.nx.map((v, i) => `<circle class="g-pt" cx="${sx01(v).toFixed(1)}" cy="${sy01(c.ny[i]).toFixed(1)}" r="3.6" />`).join("");
+        if (reveal) {
+          svg += `<text class="g-label" x="${SP.L}" y="${SP.T + 4}">r = ${fmtR(c.r)}</text>`;
+        }
+        gameChart.innerHTML = svg;
+      },
+      answer() {
+        if (!canAnswer()) return;
+        const range = $("corrRange");
+        const g = Number(range.value);
+        const r = arena.current.r;
+        const err = Math.abs(g - r);
+        const points = err <= 0.1 ? 1 : err <= 0.2 ? 0.5 : 0;
+        range.disabled = true;
+        $("corrGo").disabled = true;
+        $("corrVal").textContent = fmtR(g);
+        settle(points, ui("corrResult")(points === 1 ? "hit" : points ? "near" : "miss", fmtR(r), fmtR(g)));
+      },
+      onKey(e) {
+        const range = $("corrRange");
+        if (e.key === "Enter") {
+          if (document.activeElement && document.activeElement.id === "corrGo") return false;
+          this.answer();
+          return true;
+        }
+        if ((e.key === "ArrowLeft" || e.key === "ArrowRight") && document.activeElement !== range) {
+          const v = Number(range.value) + (e.key === "ArrowRight" ? 0.05 : -0.05);
+          range.value = String(Math.max(-1, Math.min(1, v)));
+          $("corrVal").textContent = fmtR(Number(range.value));
+          return true;
+        }
+        return false;
       }
-      svg += `<circle class="g-dot" cx="${sx}" cy="${y(last)}" r="4.5" />`;
-      gameChart.innerHTML = svg;
+    };
+
+    /* --------------------------------------------------------------------------
+       GAME 3 — CARI OUTLIER
+       Pola linear atau lengkung + noise. Empat titik ditandai A–D: satu outlier
+       sungguhan (jauh dari pola), tiga lainnya jebakan — titik di ujung sumbu,
+       titik tertinggi/terendah yang masih ikut pola, dan titik agak menyimpang.
+       -------------------------------------------------------------------------- */
+    const LETTERS = ["A", "B", "C", "D"];
+
+    const outlierGame = {
+      id: "outlier",
+      rounds: 8,
+      name: "outName",
+      desc: "outDesc",
+      question: "outQ",
+      tip: "outTip",
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="1.6" fill="currentColor"/><circle cx="9" cy="15" r="1.6" fill="currentColor"/><circle cx="13" cy="13" r="1.6" fill="currentColor"/><circle cx="19" cy="9" r="1.6" fill="currentColor"/><circle cx="16" cy="18.5" r="1.6" fill="currentColor"/><circle cx="16" cy="18.5" r="4.4"/><circle cx="7" cy="6" r="1.6" fill="currentColor"/></svg>`,
+      mount() {
+        choiceButtons(LETTERS.map(l => ({ key: l, label: `pt${l}` })), 4);
+      },
+      newRound() {
+        resetChoices();
+        for (let attempt = 0; attempt < 50; attempt++) {
+          const curve = Math.random() < 0.4;
+          const k = rand(0.35, 0.75) * (Math.random() < 0.5 ? 1 : -1);
+          const cv = rand(1.4, 2.2) * (Math.random() < 0.5 ? 1 : -1);
+          const f = curve
+            ? (x) => 0.5 + cv * ((x - 0.5) ** 2 - 0.083)
+            : (x) => 0.5 + k * (x - 0.5);
+          const sigma = rand(0.035, 0.05);
+          const n = 26;
+          const xs = [], ys = [];
+          for (let i = 0; i < n; i++) {
+            const x = (i + rand(0.1, 0.9)) / n;
+            const res = Math.max(-1.6, Math.min(1.6, gauss())) * sigma;
+            xs.push(x);
+            ys.push(f(x) + res);
+          }
+          const idx = shuffle([...Array(n).keys()]);
+          const used = new Set();
+          const take = (i) => { used.add(i); return i; };
+          /* Jebakan 1: titik paling ujung sumbu-x (masih ikut pola) */
+          const edge = take(Math.random() < 0.5 ? 0 : n - 1);
+          ys[edge] = f(xs[edge]) + gauss() * sigma * 0.4;
+          /* Jebakan 2: nilai y paling ekstrem yang masih ikut pola */
+          const free = idx.filter(i => !used.has(i) && i > 1 && i < n - 2);
+          const high = Math.random() < 0.5;
+          const ext = take(free.reduce((b, i) => ((high ? ys[i] > ys[b] : ys[i] < ys[b]) ? i : b), free[0]));
+          /* Jebakan 3: agak menyimpang, tapi masih wajar */
+          const mild = take(idx.find(i => !used.has(i) && i > 1 && i < n - 2));
+          ys[mild] = f(xs[mild]) + (Math.random() < 0.5 ? 1 : -1) * rand(1.8, 2.2) * sigma;
+          /* Outlier sungguhan */
+          const out = take(idx.find(i => !used.has(i) && i > 1 && i < n - 2));
+          const dev = rand(3.6, 5) * sigma;
+          ys[out] = f(xs[out]) + (Math.random() < 0.5 ? dev : -dev);
+          if (ys[out] < 0.03 || ys[out] > 0.97) ys[out] = 2 * f(xs[out]) - ys[out];
+
+          if (Math.min(...ys) < 0.02 || Math.max(...ys) > 0.98) continue;
+          const cands = shuffle([out, edge, ext, mild]);
+          const labels = {};
+          cands.forEach((i, j) => { labels[i] = LETTERS[j]; });
+          return { xs, ys, f, labels, answer: labels[out], chosen: null };
+        }
+        return this.newRound();
+      },
+      draw(reveal) {
+        const c = arena.current;
+        let svg = gridLines() + scatterAxes();
+        if (reveal) {
+          const pts = [];
+          for (let t = 0; t <= 40; t++) pts.push(`${sx01(t / 40).toFixed(1)},${sy01(c.f(t / 40)).toFixed(1)}`);
+          svg += `<polyline class="g-fit" pathLength="1" points="${pts.join(" ")}" />`;
+        }
+        svg += c.xs.map((x, i) => (c.labels[i] ? "" : `<circle class="g-pt" cx="${sx01(x).toFixed(1)}" cy="${sy01(c.ys[i]).toFixed(1)}" r="3.6" />`)).join("");
+        Object.keys(c.labels).forEach(key => {
+          const i = Number(key);
+          const l = c.labels[i];
+          const cx = sx01(c.xs[i]), cy = sy01(c.ys[i]);
+          const state = reveal ? (l === c.answer ? " is-answer" : l === c.chosen ? " is-wrong" : " is-dim") : "";
+          const lx = cx > G.W - 30 ? cx - 12 : cx + 12;
+          const ly = cy < 20 ? cy + 14 : cy - 7;
+          svg += `<g class="g-cand${state}" data-pick="${l}">
+            <circle class="g-hit" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="15" />
+            <circle class="g-ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="7.5" />
+            <circle class="g-cdot" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.8" />
+            <text class="g-ltr" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle">${l}</text>
+          </g>`;
+        });
+        gameChart.innerHTML = svg;
+        if (!reveal) {
+          gameChart.querySelectorAll(".g-cand").forEach(g => {
+            g.addEventListener("click", () => this.answer(g.dataset.pick));
+          });
+        }
+      },
+      answer(l) {
+        if (!canAnswer()) return;
+        arena.current.chosen = l;
+        const ans = arena.current.answer;
+        markChoices(l, ans);
+        settle(l === ans ? 1 : 0, l === ans ? ui("gameRight") : ui("outWrong")(ans));
+      },
+      onKey(e) {
+        const k = e.key.toUpperCase();
+        const l = LETTERS.includes(k) ? k : LETTERS[Number(e.key) - 1];
+        if (!l) return false;
+        this.answer(l);
+        return true;
+      }
+    };
+
+    /* --------------------------------------------------------------------------
+       GAME 4 — BENTUK DISTRIBUSI
+       Histogram dari 150–300 sampel; jumlah bin berubah-ubah agar tidak hafalan.
+       -------------------------------------------------------------------------- */
+    const DIST_KEYS = ["normal", "skew", "bimodal", "uniform"];
+    const DIST_LABEL = { normal: "distNormal", skew: "distSkew", bimodal: "distBimodal", uniform: "distUniform" };
+
+    const distGame = {
+      id: "dist",
+      rounds: 10,
+      name: "distName",
+      desc: "distDesc",
+      question: "distQ",
+      tip: "distTip",
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><rect x="4" y="15" width="3" height="6"/><rect x="8.5" y="8" width="3" height="13"/><rect x="13" y="4" width="3" height="17"/><rect x="17.5" y="12" width="3" height="9"/></svg>`,
+      mount() {
+        const ic = {
+          normal: svgIcon('<path d="M2 19c4 0 5-13 10-13s6 13 10 13"/>'),
+          skew: svgIcon('<path d="M2 19c2 0 3-13 7-13s7 11 13 13"/>'),
+          bimodal: svgIcon('<path d="M2 19c3 0 3-12 6-12s3 7 4 7 2-9 5-9 3 14 5 14"/>'),
+          uniform: svgIcon('<polyline points="2 19 4 8 20 8 22 19"/>')
+        };
+        choiceButtons(DIST_KEYS.map(k => ({ key: k, label: DIST_LABEL[k], icon: ic[k] })), 2);
+      },
+      newRound() {
+        resetChoices();
+        const kind = pick(DIST_KEYS);
+        const n = randInt(150, 300);
+        const s = [];
+        const w = rand(0.35, 0.65), gap = rand(3, 4.2), sk = rand(0.55, 0.85);
+        const flip = Math.random() < 0.5 ? -1 : 1;
+        for (let i = 0; i < n; i++) {
+          if (kind === "normal") s.push(gauss());
+          else if (kind === "skew") s.push(flip * Math.exp(gauss() * sk));
+          else if (kind === "bimodal") s.push(Math.random() < w ? gauss() : gauss() + gap);
+          else s.push(Math.random());
+        }
+        const bins = randInt(12, 18);
+        const lo = Math.min(...s), hi = Math.max(...s);
+        const counts = new Array(bins).fill(0);
+        s.forEach(v => { counts[Math.min(bins - 1, Math.floor(((v - lo) / (hi - lo)) * bins))] += 1; });
+        return { kind, counts };
+      },
+      draw(reveal) {
+        const { counts, kind } = arena.current;
+        const max = Math.max(...counts);
+        const L = 10, R = 10, T = 22, B = 14;
+        const bw = (G.W - L - R) / counts.length;
+        let svg = gridLines();
+        svg += `<line class="g-axis" x1="${L - 4}" y1="${G.H - B}" x2="${G.W - R + 4}" y2="${G.H - B}" />`;
+        svg += counts.map((c, i) => {
+          const h = (c / max) * (G.H - T - B);
+          return `<rect class="g-bar${reveal ? " rev" : ""}" x="${(L + i * bw + 1).toFixed(1)}" y="${(G.H - B - h).toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${h.toFixed(1)}" rx="2" />`;
+        }).join("");
+        if (reveal) svg += `<text class="g-label" x="${G.W / 2}" y="15" text-anchor="middle">${esc(ui(DIST_LABEL[kind]))}</text>`;
+        gameChart.innerHTML = svg;
+      },
+      answer(k) {
+        if (!canAnswer()) return;
+        const ans = arena.current.kind;
+        markChoices(k, ans);
+        settle(k === ans ? 1 : 0, k === ans ? ui("gameRight") : ui("distWrong")(ui(DIST_LABEL[ans])));
+      },
+      onKey(e) {
+        const k = DIST_KEYS[Number(e.key) - 1];
+        if (!k) return false;
+        this.answer(k);
+        return true;
+      }
+    };
+
+    const ARENA_GAMES = [trendGame, corrGame, outlierGame, distGame];
+    arenaReady = true;
+
+    /* --------------------------------------------------------------------------
+       MESIN ARENA: menu, ronde, skor, rekor
+       -------------------------------------------------------------------------- */
+    function readBest(g) {
+      try {
+        const v = localStorage.getItem(`deltalink-arena-${g.id}`);
+        if (v !== null) return Number(v) || 0;
+        /* Rekor lama Tebak Tren disimpan sebagai jumlah benar dari 10 */
+        if (g.id === "trend") return (Number(localStorage.getItem("deltalink-trend-best")) || 0) * 10;
+      } catch {}
+      return 0;
     }
 
-    function updateHud() {
-      document.getElementById("gameRound").textContent = `${Math.min(game.round, GAME_ROUNDS)}/${GAME_ROUNDS}`;
-      document.getElementById("gameScore").textContent = game.score;
-      document.getElementById("gameStreak").textContent = game.streak;
+    /* var (bukan const) karena kartu dirender sebelum bagian ini dijalankan */
+    var arenaReady;
+    function gameHintText() {
+      if (!arenaReady) return "";
+      const top = Math.max(...ARENA_GAMES.map(readBest));
+      return top > 0 ? ui("arenaHintBest")(ARENA_GAMES.length, top) : ui("arenaHint")(ARENA_GAMES.length);
     }
 
-    function nextRound() {
-      game.round += 1;
-      game.current = genSeries();
-      game.locked = false;
-      guessBtns.forEach(b => { b.disabled = false; b.classList.remove("is-correct", "is-wrong", "is-answer"); });
-      const fb = document.getElementById("gameFeedback");
-      fb.textContent = "";
-      fb.className = "game-feedback";
-      drawChart(false);
-      updateHud();
-    }
-
-    function startGame() {
-      Object.assign(game, { round: 0, score: 0, streak: 0 });
-      document.getElementById("gamePlay").hidden = false;
-      document.getElementById("gameEnd").hidden = true;
-      nextRound();
-    }
-
-    const DIR_KEY = { up: "dirUp", flat: "dirFlat", down: "dirDown" };
-
-    function makeGuess(dir) {
-      if (game.locked || !game.open) return;
-      game.locked = true;
-      const answer = game.current.label;
-      const right = dir === answer;
-      if (right) { game.score += 1; game.streak += 1; } else { game.streak = 0; }
-
-      guessBtns.forEach(b => {
-        b.disabled = true;
-        if (b.dataset.guess === dir) b.classList.add(right ? "is-correct" : "is-wrong");
-        else if (b.dataset.guess === answer) b.classList.add("is-answer");
-      });
-      const fb = document.getElementById("gameFeedback");
-      fb.textContent = right ? ui("gameRight") : ui("gameWrong")(ui(DIR_KEY[answer]));
-      fb.className = `game-feedback ${right ? "ok" : "bad"}`;
-      drawChart(true);
-      updateHud();
-
-      setTimeout(() => {
-        if (!game.open) return;
-        game.round >= GAME_ROUNDS ? endGame() : nextRound();
-      }, 1400);
-    }
-
-    function endGame() {
-      const pct = Math.round((game.score / GAME_ROUNDS) * 100);
-      const prevBest = readBest();
-      const isRecord = game.score > prevBest;
-      if (isRecord) { try { localStorage.setItem("deltalink-trend-best", String(game.score)); } catch {} }
-
-      const tiers = ui("gameTiers");
-      const tier = pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0];
-      document.getElementById("gameEndScore").textContent = `${pct}%`;
-      document.getElementById("gameEndTier").textContent = tier;
-      document.getElementById("gameEndBest").textContent = isRecord
-        ? ui("gameNewBest")
-        : ui("gameBest")(Math.max(prevBest, game.score));
-      document.getElementById("gamePlay").hidden = true;
-      document.getElementById("gameEnd").hidden = false;
-      document.getElementById("gameAgain").focus();
-
+    function refreshCardHint() {
       document.querySelectorAll('.link-card[data-game="true"] .link-url-hint')
         .forEach(el => { el.textContent = gameHintText(); });
     }
 
+    function canAnswer() {
+      return arena.open && arena.view === "play" && !arena.locked;
+    }
+
+    function setView(view) {
+      arena.view = view;
+      $("gameMenu").hidden = view !== "menu";
+      $("gamePlay").hidden = view !== "play";
+      $("gameEnd").hidden = view !== "end";
+      $("gameBack").hidden = view === "menu";
+      $("gameRound").hidden = view === "menu";
+      $("gameTitle").textContent = view === "menu" ? ui("arenaName") : ui(arena.game.name);
+    }
+
+    function renderMenu() {
+      $("arenaList").innerHTML = ARENA_GAMES.map(g => {
+        const best = readBest(g);
+        return `
+          <button class="arena-item" type="button" data-arena="${g.id}">
+            <span class="arena-icon" aria-hidden="true">${g.icon}</span>
+            <span class="arena-text">
+              <span class="arena-name">${esc(ui(g.name))}</span>
+              <span class="arena-desc">${esc(ui(g.desc))} · ${esc(ui("arenaRounds")(g.rounds))}</span>
+            </span>
+            <span class="arena-best ${best > 0 ? "" : "is-new"}">${best > 0 ? `${best}%` : esc(ui("arenaNew"))}</span>
+          </button>`;
+      }).join("");
+      $("arenaList").querySelectorAll(".arena-item").forEach(btn => {
+        btn.addEventListener("click", () => startGame(ARENA_GAMES.find(g => g.id === btn.dataset.arena)));
+      });
+    }
+
+    function showMenu() {
+      arena.session += 1;
+      arena.game = null;
+      renderMenu();
+      setView("menu");
+      const first = $("arenaList").querySelector(".arena-item");
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    function updateHud() {
+      const g = arena.game;
+      $("gameRound").textContent = `${Math.min(arena.round, g.rounds)}/${g.rounds}`;
+      $("gameScore").textContent = fmtScore(arena.score);
+      $("gameStreak").textContent = arena.streak;
+    }
+
+    function applyGameText() {
+      const g = arena.game;
+      $("gameQuestion").textContent = ui(g.question);
+      $("gameTip").textContent = ui(g.tip);
+      gameChart.setAttribute("aria-label", ui(g.question));
+    }
+
+    function startGame(g) {
+      arena.session += 1;
+      Object.assign(arena, { game: g, round: 0, score: 0, streak: 0, end: null });
+      g.mount();
+      applyGameText();
+      setView("play");
+      nextRound();
+      const first = gameActions.querySelector("button, input");
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    function nextRound() {
+      arena.round += 1;
+      arena.locked = false;
+      arena.current = arena.game.newRound();
+      const fb = $("gameFeedback");
+      fb.textContent = "";
+      fb.className = "game-feedback";
+      arena.game.draw(false);
+      updateHud();
+    }
+
+    /* Dipanggil game setelah pemain menjawab; points 0..1 */
+    function settle(points, text) {
+      arena.locked = true;
+      arena.score += points;
+      arena.streak = points >= 1 ? arena.streak + 1 : 0;
+      const fb = $("gameFeedback");
+      fb.textContent = text;
+      fb.className = `game-feedback ${points >= 1 ? "ok" : points > 0 ? "mid" : "bad"}`;
+      arena.game.draw(true);
+      updateHud();
+
+      const session = arena.session;
+      setTimeout(() => {
+        if (!arena.open || session !== arena.session) return;
+        arena.round >= arena.game.rounds ? endGame() : nextRound();
+      }, points >= 1 ? 1300 : 1900);
+    }
+
+    function endGame() {
+      const g = arena.game;
+      const pct = Math.round((arena.score / g.rounds) * 100);
+      const prevBest = readBest(g);
+      const isRecord = pct > prevBest;
+      if (isRecord) { try { localStorage.setItem(`deltalink-arena-${g.id}`, String(pct)); } catch {} }
+      arena.end = { pct, isRecord, best: Math.max(prevBest, pct) };
+      renderEnd();
+      setView("end");
+      $("gameAgain").focus({ preventScroll: true });
+      refreshCardHint();
+    }
+
+    function renderEnd() {
+      const { pct, isRecord, best } = arena.end;
+      const tiers = ui("gameTiers");
+      $("gameEndScore").textContent = `${pct}%`;
+      $("gameEndTier").textContent = pct >= 90 ? tiers[3] : pct >= 70 ? tiers[2] : pct >= 50 ? tiers[1] : tiers[0];
+      $("gameEndBest").textContent = isRecord ? ui("gameNewBest") : ui("gameBest")(best);
+    }
+
     function openGame() {
-      game.lastFocus = document.activeElement;
-      game.open = true;
-      startGame();
+      arena.lastFocus = document.activeElement;
+      arena.open = true;
       gameOverlay.classList.add("open");
       gameOverlay.setAttribute("aria-hidden", "false");
-      guessBtns[0].focus();
+      showMenu();
     }
 
     function closeGame() {
-      game.open = false;
+      arena.open = false;
+      arena.session += 1;
       gameOverlay.classList.remove("open");
       gameOverlay.setAttribute("aria-hidden", "true");
-      if (game.lastFocus) game.lastFocus.focus();
+      if (arena.lastFocus) arena.lastFocus.focus();
     }
 
-    guessBtns.forEach(b => b.addEventListener("click", () => makeGuess(b.dataset.guess)));
-    document.getElementById("gameClose").addEventListener("click", closeGame);
-    document.getElementById("gameAgain").addEventListener("click", startGame);
+    /* Ganti bahasa saat dialog terbuka */
+    function refreshArenaText() {
+      if (!arena.open) return;
+      if (arena.view === "menu") { renderMenu(); setView("menu"); return; }
+      setView(arena.view);
+      applyGameText();
+      if (arena.view === "play" && arena.current) arena.game.draw(arena.locked);
+      if (arena.view === "end" && arena.end) renderEnd();
+    }
+
+    $("gameBack").addEventListener("click", showMenu);
+    $("gameClose").addEventListener("click", closeGame);
+    $("gameAgain").addEventListener("click", () => startGame(arena.game));
     gameOverlay.addEventListener("click", (e) => { if (e.target === gameOverlay) closeGame(); });
     document.addEventListener("keydown", (e) => {
-      if (!game.open) return;
+      if (!arena.open) return;
       if (e.key === "Escape") { closeGame(); return; }
-      const map = { ArrowUp: "up", ArrowRight: "flat", ArrowDown: "down" };
-      if (map[e.key] && !document.getElementById("gamePlay").hidden) {
-        e.preventDefault();
-        makeGuess(map[e.key]);
-      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (canAnswer() && arena.game.onKey(e)) e.preventDefault();
     });
 
-    document.getElementById("gameShare").addEventListener("click", async () => {
-      const pct = Math.round((game.score / GAME_ROUNDS) * 100);
-      const text = ui("gameShareText")(pct);
+    $("gameShare").addEventListener("click", async () => {
+      if (!arena.end) return;
+      const text = ui("gameShareText")(arena.end.pct, ui(arena.game.name));
       const url = "https://deltalink.vercel.app/";
       if (navigator.share) {
-        try { await navigator.share({ title: ui("gameName"), text, url }); return; } catch (err) {
+        try { await navigator.share({ title: ui("arenaName"), text, url }); return; } catch (err) {
           if (err && err.name === "AbortError") return;
         }
       }
@@ -2447,6 +3139,7 @@
         showToast(`${text} ${url}`);
       }
     });
+    refreshCardHint();
 
     /* Ganti bahasa */
     document.getElementById("langToggle").addEventListener("click", () => {
@@ -2454,7 +3147,7 @@
       try { localStorage.setItem("deltalink-lang", lang); } catch {}
       activeCategory = ALL;
       renderAll();
-      if (game.open && game.current && !document.getElementById("gamePlay").hidden) drawChart(game.locked);
+      refreshArenaText();
     });
 
     /* PWA: tombol "Pasang Aplikasi" muncul bila browser mendukung */
