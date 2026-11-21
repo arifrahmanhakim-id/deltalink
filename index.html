@@ -1244,7 +1244,7 @@
     <!-- Footer & Official Copyright -->
     <footer class="footer">
       <p class="copyright-text">
-        &copy; 2026 <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
+        &copy; <span id="copyYear">2026</span> <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
         <span class="footer-uni">Telkom University</span> · All Rights Reserved.
       </p>
     </footer>
@@ -1622,6 +1622,7 @@
     }
 
     function initApp() {
+      document.getElementById("copyYear").textContent = new Date().getFullYear();
       renderAll();
       initBannerViz();
       renderBrandLogo("profileLogoContainer");
