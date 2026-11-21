@@ -917,16 +917,6 @@
       color: #FFFFFF;
     }
 
-    .badge-game {
-      background-color: transparent;
-      color: var(--telu-maroon);
-      box-shadow: inset 0 0 0 1.5px var(--telu-maroon);
-    }
-
-    [data-theme="dark"] .badge-game {
-      color: #FFFFFF;
-      box-shadow: inset 0 0 0 1.5px #FFFFFF;
-    }
 
     .link-desc {
       font-size: 12.5px;
@@ -2012,7 +2002,7 @@
             <div class="link-info">
               <div class="link-header-row">
                 <span class="link-title">${esc(item.title)}</span>
-                <span class="status-badge ${isGame ? "badge-game" : isSoon ? "badge-soon" : "badge-live"}">
+                <span class="status-badge ${isSoon ? "badge-soon" : "badge-live"}">
                   ${esc(tr(item.badgeText) || (isSoon ? "COMING SOON" : "LIVE"))}
                 </span>
               </div>
