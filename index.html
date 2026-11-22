@@ -1398,7 +1398,7 @@
       45% { transform: scaleX(0.4); opacity: 0.4; }
     }
 
-    /* Dipentokkan ke pojok layar: maskot berubah jadi tanda (garis/tab kecil)
+    /* Diseret ke tepi/pojok layar: maskot berubah jadi tanda (garis/tab kecil)
        yang menempel di tepi layar; ketuk tanda itu untuk menarik maskot keluar */
     .mascot.is-floating.is-gliding {
       transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
@@ -2768,7 +2768,7 @@
         mascotWelcome: "Halo! Selamat datang di DELTA Link :smile:",
         mascotDropHint: "Wee! :sparkle: Ketuk 2× untuk mengembalikanku ke tempat awal",
         mascotHome: "Aku kembali ke tempat awal :house:",
-        mascotTucked: "Maskot disimpan jadi tanda merah di tepi layar — ketuk tanda itu untuk mengeluarkannya",
+        mascotTucked: "Maskot disembunyikan jadi tanda merah di tepi layar — ketuk tanda itu untuk mengeluarkannya",
         mascotPeek: "Cilukba! Aku di sini :smile:",
         soundOn: "Matikan suara",
         soundOff: "Nyalakan suara",
@@ -2854,7 +2854,7 @@
         mascotWelcome: "Hi! Welcome to DELTA Link :smile:",
         mascotDropHint: "Wheee! :sparkle: Double-tap to send me back to my spot",
         mascotHome: "Back to my spot :house:",
-        mascotTucked: "Mascot tucked into the red tab at the screen edge — tap the tab to bring it back",
+        mascotTucked: "Mascot hidden as a red tab at the screen edge — tap the tab to bring it back",
         mascotPeek: "Peekaboo! Here I am :smile:",
         soundOn: "Mute sounds",
         soundOff: "Turn sounds on",
@@ -3428,6 +3428,17 @@
           bell(N(24), 0.6, 0.06);
         },
         tap() { tone(1200, { to: 1700, dur: 0.05, vol: 0.07 }); },
+        /* Membuka aplikasi dari kartu: desir naik + dua nada cerah */
+        launch() {
+          noise({ dur: 0.28, vol: 0.06, f: 500, to: 4500, q: 1 });
+          tone(N(7), { t: 0.04, dur: 0.14, type: "triangle", vol: 0.12 });
+          tone(N(14), { t: 0.12, dur: 0.4, type: "triangle", vol: 0.12, wet: 0.5 });
+        },
+        /* Kartu "segera hadir": dua ketukan teredam */
+        soon() {
+          tone(N(-5), { dur: 0.08, type: "triangle", vol: 0.12, lp: 1200 });
+          tone(N(-7), { t: 0.1, dur: 0.14, type: "triangle", vol: 0.1, lp: 1000 });
+        },
         open() {
           noise({ dur: 0.32, vol: 0.08, f: 400, to: 3200, q: 1.2 });
           tone(N(0), { t: 0.05, dur: 0.18, type: "triangle", vol: 0.12 });
@@ -3578,6 +3589,17 @@
     });
     renderSoundBtn();
     SFX.greet();
+
+    /* Bunyi klik untuk kartu aplikasi, banner, dan filter kategori (kartu game punya bunyinya sendiri) */
+    document.addEventListener("click", (e) => {
+      const t = e.target.closest(".link-card, #featuredBanner, .cat-pill, .qr-download");
+      if (!t) return;
+      if (t.classList.contains("link-card")) {
+        if (t.dataset.game === "true") return;
+        SFX.play(t.dataset.soon === "true" ? "soon" : "launch");
+      } else if (t.id === "featuredBanner") SFX.play("launch");
+      else if (!t.closest("#gameOverlay")) SFX.play("tap");
+    }, true);
 
     /* ==========================================================================
        MASKOT JEMPOL (SVG): dipakai sebagai bidak tic tac toe & efek menang.
@@ -4555,40 +4577,38 @@
         placeAt(x, y);
       }
 
-      /* ---- Dipentokkan ke pojok → bersembunyi, kepala miring mengintip ke tengah ---- */
-      let tucked = null;   // "tl" | "tr" | "bl" | "br" | null
+      /* ---- Diseret ke tepi kiri/kanan layar → disimpan jadi tanda (tab) di tepi itu ---- */
+      let tucked = null;   // { side: "l" | "r", fy: posisi tanda (pecahan tinggi layar) } | null
       let glideTimer = 0;
       function glide() {
         mascot.classList.add("is-gliding");
         clearTimeout(glideTimer);
         glideTimer = setTimeout(() => mascot.classList.remove("is-gliding"), 500);
       }
-      function cornerOf(x, y) {
-        const w = mascot.offsetWidth, h = mascot.offsetHeight, T = 30;
-        const v = y <= T ? "t" : y + h >= window.innerHeight - T ? "b" : "";
-        const hz = x <= T ? "l" : x + w >= window.innerWidth - T ? "r" : "";
-        return v && hz ? v + hz : null;
+      function edgeOf(x, y) {
+        const w = mascot.offsetWidth, h = mascot.offsetHeight, T = 24;
+        const side = x <= T ? "l" : x + w >= window.innerWidth - T ? "r" : "";
+        return side ? { side, fy: (y + h / 2) / window.innerHeight } : null;
       }
-      function tuckTo(corner) {
-        tucked = corner;
+      function tuckTo(t) {
+        tucked = t;
         mascot.classList.add("is-floating", "is-tucked");
-        mascot.dataset.side = corner[1];
+        mascot.dataset.side = t.side;
         const w = mascot.offsetWidth, h = mascot.offsetHeight;   // ukuran tanda (CSS .is-tucked)
-        const x = corner[1] === "r" ? window.innerWidth - w : 0;
-        const y = corner[0] === "b" ? window.innerHeight - h - 96 : 96;
+        const x = t.side === "r" ? window.innerWidth - w : 0;
+        const y = Math.min(Math.max(72, t.fy * window.innerHeight - h / 2), window.innerHeight - h - 16);
         mascot.style.transform = `translate(${x}px, ${y}px)`;
         mascot.dataset.x = x;
         mascot.dataset.y = y;
       }
       function untuck() {
-        const corner = tucked;
+        const t = tucked;
         tucked = null;
         mascot.classList.remove("is-tucked");
         const w = mascot.offsetWidth, h = mascot.offsetHeight;
-        const x = corner[1] === "r" ? window.innerWidth - w - 28 : 28;
-        const y = corner[0] === "b" ? window.innerHeight - h - 28 : 84;   // di bawah bilah atas
+        const x = t.side === "r" ? window.innerWidth - w - 28 : 28;
         glide();
-        float(x, y);
+        float(x, t.fy * window.innerHeight - h / 2);
         savePos();
       }
 
@@ -4641,7 +4661,7 @@
         /* Simpan sebagai pecahan layar agar tetap pas setelah ukuran jendela berubah */
         const fx = Number(mascot.dataset.x) / window.innerWidth;
         const fy = Number(mascot.dataset.y) / window.innerHeight;
-        try { localStorage.setItem(POS_KEY, JSON.stringify(tucked ? { tuck: tucked } : [fx, fy])); } catch {}
+        try { localStorage.setItem(POS_KEY, JSON.stringify(tucked ? { tuck: tucked.side, fy: tucked.fy } : [fx, fy])); } catch {}
       }
 
       try {
@@ -4649,9 +4669,12 @@
         if (Array.isArray(saved) && saved.every(Number.isFinite)) {
           userPlaced = true;
           float(saved[0] * window.innerWidth, saved[1] * window.innerHeight);
-        } else if (saved && /^[tb][lr]$/.test(saved.tuck)) {
+        } else if (saved && /^[lr]$/.test(saved.tuck) && Number.isFinite(saved.fy)) {
           userPlaced = true;
-          tuckTo(saved.tuck);
+          tuckTo({ side: saved.tuck, fy: saved.fy });
+        } else if (saved && /^[tb][lr]$/.test(saved.tuck)) {   // format lama (pojok)
+          userPlaced = true;
+          tuckTo({ side: saved.tuck[1], fy: saved.tuck[0] === "b" ? 0.85 : 0.2 });
         }
       } catch {}
       if (!userPlaced) goDefault();
@@ -4684,7 +4707,7 @@
           SFX.play("lift");
         }
         float(e.clientX - drag.ox, e.clientY - drag.oy);
-        drag.corner = cornerOf(Number(mascot.dataset.x), Number(mascot.dataset.y));
+        drag.corner = edgeOf(Number(mascot.dataset.x), Number(mascot.dataset.y));
         mascot.classList.toggle("is-near-corner", Boolean(drag.corner));
       });
 
