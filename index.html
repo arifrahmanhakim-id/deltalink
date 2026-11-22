@@ -1398,25 +1398,63 @@
       45% { transform: scaleX(0.4); opacity: 0.4; }
     }
 
-    /* Dipentokkan ke pojok layar: maskot bersembunyi, hanya kepalanya mengintip */
+    /* Dipentokkan ke pojok layar: maskot berubah jadi tanda (garis/tab kecil)
+       yang menempel di tepi layar; ketuk tanda itu untuk menarik maskot keluar */
     .mascot.is-floating.is-gliding {
       transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
     }
 
-    .mascot.is-tucked .mascot-body {
-      animation: none;
-      transform: translateY(16px);
-      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+    .mascot.is-floating.is-tucked {
+      width: 18px !important;
+      height: 64px !important;
     }
 
-    .mascot.is-tucked:hover .mascot-body,
-    .mascot.is-tucked:focus-visible .mascot-body {
-      transform: translateY(0);
-    }
-
+    .mascot.is-tucked .mascot-body,
     .mascot.is-tucked .mascot-shadow,
     .mascot.is-tucked .mascot-bubble {
       display: none;
+    }
+
+    .mascot-tab {
+      display: none;
+    }
+
+    .mascot.is-tucked .mascot-tab {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: linear-gradient(180deg, #E1202B, #9E0F18);
+      box-shadow: 0 4px 14px rgba(158, 15, 24, 0.35);
+      transition: width 0.2s ease;
+      animation: tabIn 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .mascot.is-tucked[data-side="r"] .mascot-tab { right: 0; border-radius: 12px 0 0 12px; }
+    .mascot.is-tucked[data-side="l"] .mascot-tab { left: 0; border-radius: 0 12px 12px 0; }
+
+    .mascot.is-tucked:hover .mascot-tab,
+    .mascot.is-tucked:focus-visible .mascot-tab {
+      width: 26px;
+    }
+
+    /* Dua titik putih = mata maskot, ikut berkedip */
+    .mascot-tab i {
+      width: 5px;
+      height: 7px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      animation: mascotBlink 4.6s infinite;
+    }
+
+    @keyframes tabIn {
+      from { transform: scaleX(0); }
+      to   { transform: none; }
     }
 
     /* Saat diseret mendekati pojok: beri tanda bahwa ia akan bersembunyi */
@@ -1426,8 +1464,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .mascot.is-floating.is-gliding,
-      .mascot.is-tucked .mascot-body {
+      .mascot.is-tucked .mascot-tab {
         transition: none;
+        animation: none;
       }
     }
 
@@ -2405,6 +2444,7 @@
           </g>
         </svg>
       </span>
+      <span class="mascot-tab" aria-hidden="true"><i></i><i></i></span>
       <span class="mascot-shadow" aria-hidden="true"></span>
       <span class="mascot-bubble" id="mascotBubble" role="status" aria-live="polite"></span>
     </button>
@@ -2728,7 +2768,7 @@
         mascotWelcome: "Halo! Selamat datang di DELTA Link :smile:",
         mascotDropHint: "Wee! :sparkle: Ketuk 2× untuk mengembalikanku ke tempat awal",
         mascotHome: "Aku kembali ke tempat awal :house:",
-        mascotTucked: "Maskot bersembunyi di pojok — ketuk untuk memanggilnya lagi",
+        mascotTucked: "Maskot disimpan jadi tanda merah di tepi layar — ketuk tanda itu untuk mengeluarkannya",
         mascotPeek: "Cilukba! Aku di sini :smile:",
         soundOn: "Matikan suara",
         soundOff: "Nyalakan suara",
@@ -2814,7 +2854,7 @@
         mascotWelcome: "Hi! Welcome to DELTA Link :smile:",
         mascotDropHint: "Wheee! :sparkle: Double-tap to send me back to my spot",
         mascotHome: "Back to my spot :house:",
-        mascotTucked: "Mascot is hiding in the corner — tap it to call it back",
+        mascotTucked: "Mascot tucked into the red tab at the screen edge — tap the tab to bring it back",
         mascotPeek: "Peekaboo! Here I am :smile:",
         soundOn: "Mute sounds",
         soundOff: "Turn sounds on",
@@ -4531,15 +4571,14 @@
       }
       function tuckTo(corner) {
         tucked = corner;
-        const w = mascot.offsetWidth, h = mascot.offsetHeight;
-        const inset = Math.round(w * 0.42);
-        const cx = corner[1] === "r" ? window.innerWidth - inset : inset;
-        const cy = corner[0] === "b" ? window.innerHeight - inset : inset;
-        const rot = { br: -45, bl: 45, tr: -135, tl: 135 }[corner];
         mascot.classList.add("is-floating", "is-tucked");
-        mascot.style.transform = `translate(${cx - w / 2}px, ${cy - h / 2}px) rotate(${rot}deg)`;
-        mascot.dataset.x = cx - w / 2;
-        mascot.dataset.y = cy - h / 2;
+        mascot.dataset.side = corner[1];
+        const w = mascot.offsetWidth, h = mascot.offsetHeight;   // ukuran tanda (CSS .is-tucked)
+        const x = corner[1] === "r" ? window.innerWidth - w : 0;
+        const y = corner[0] === "b" ? window.innerHeight - h - 96 : 96;
+        mascot.style.transform = `translate(${x}px, ${y}px)`;
+        mascot.dataset.x = x;
+        mascot.dataset.y = y;
       }
       function untuck() {
         const corner = tucked;
