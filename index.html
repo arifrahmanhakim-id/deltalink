@@ -1601,6 +1601,10 @@
        ========================================================================== */
     .game-dialog {
       max-width: 400px;
+      max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;          /* layar pendek: isi tetap di dalam pop up */
+      overscroll-behavior: contain;
       padding: 22px 18px 18px;
     }
 
@@ -1861,7 +1865,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      width: min(100%, 264px);
+      width: min(100%, 264px, 48vh);   /* papan mengecil di layar pendek agar muat */
       margin: 0 auto;
     }
     .ttt-cell {
