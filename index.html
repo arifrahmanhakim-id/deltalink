@@ -1906,12 +1906,11 @@
     .tm.is-happy .tm-happy,
     .ttt-cell.is-win .tm-happy { display: inline; }
     .ttt-cell.is-win .tm {
-      transform-origin: 50% 90%;
-      animation: tmCheer 0.32s ease-in-out infinite alternate;
+      animation: tmCheer 0.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
     }
     @keyframes tmCheer {
-      from { transform: translateY(0) rotate(-7deg); }
-      to   { transform: translateY(-7%) rotate(7deg); }
+      from { transform: translateY(2%); }
+      to   { transform: translateY(-6%); }
     }
 
     /* Efek menang: maskot muncul dari tengah, bintang-bintang memancar keluar */
@@ -1932,30 +1931,39 @@
       opacity: 0;
       animation: wbVeil 1.7s ease forwards;
     }
-    .wb-glow {
-      position: absolute;
-      width: 70%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 205, 80, 0.75) 0%, rgba(255, 205, 80, 0.25) 40%, rgba(255, 205, 80, 0) 70%);
-      animation: wbGlow 1.7s ease-out forwards;
-    }
+    /* Sinar pelangi berputar pelan di belakang maskot */
     .wb-rays {
       position: absolute;
-      width: 120%;
+      width: 130%;
       aspect-ratio: 1;
-      background: repeating-conic-gradient(rgba(255, 196, 60, 0.22) 0deg 10deg, rgba(255, 196, 60, 0) 10deg 30deg);
-      -webkit-mask: radial-gradient(circle, #000 0%, #000 25%, transparent 60%);
-      mask: radial-gradient(circle, #000 0%, #000 25%, transparent 60%);
+      background: repeating-conic-gradient(
+        rgba(255, 82, 82, 0.28) 0deg 8deg, transparent 8deg 20deg,
+        rgba(255, 179, 0, 0.28) 20deg 28deg, transparent 28deg 40deg,
+        rgba(76, 175, 80, 0.26) 40deg 48deg, transparent 48deg 60deg,
+        rgba(33, 150, 243, 0.26) 60deg 68deg, transparent 68deg 80deg,
+        rgba(156, 39, 176, 0.24) 80deg 88deg, transparent 88deg 100deg);
+      -webkit-mask: radial-gradient(circle, #000 0%, #000 22%, transparent 62%);
+      mask: radial-gradient(circle, #000 0%, #000 22%, transparent 62%);
       animation: wbRays 1.7s linear forwards;
+    }
+    /* Lencana bulat yang rapi sebagai panggung maskot */
+    .wb-badge {
+      position: absolute;
+      width: min(56%, 200px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #FFFFFF 0%, #FFF4E0 70%, #FFE2B3 100%);
+      box-shadow: 0 0 0 6px rgba(255, 200, 61, 0.55), 0 0 0 12px rgba(225, 32, 43, 0.18), 0 12px 30px rgba(0, 0, 0, 0.18);
+      animation: wbBadge 1.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     .wb-hero {
       position: relative;
-      width: min(46%, 170px);
+      width: min(40%, 150px);
       animation: wbHero 1.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
-    .wb-hero .tm { width: 100%; height: auto; filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18)); }
-    .wb-star {
+    .wb-hero .tm { width: 100%; height: auto; }
+    .wb-star,
+    .wb-dot {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -1966,41 +1974,47 @@
       opacity: 0;
       animation: wbStar var(--d) cubic-bezier(0.12, 0.75, 0.3, 1) var(--delay) forwards;
     }
-    .wb-star svg { display: block; width: 100%; height: 100%; }
+    .wb-star svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.25));
+    }
+    .wb-dot { border-radius: 50%; background: var(--c); }
     @keyframes wbStar {
       0%   { transform: translate(0, 0) scale(0.2) rotate(0deg); opacity: 0; }
       10%  { opacity: 1; }
-      70%  { opacity: 1; }
+      72%  { opacity: 1; }
       100% { transform: translate(var(--x), var(--y)) scale(1) rotate(var(--r)); opacity: 0; }
     }
     @keyframes wbHero {
-      0%   { transform: scale(0) rotate(-25deg); opacity: 0; }
-      22%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
-      36%  { transform: scale(1) rotate(0deg); }
-      48%  { transform: translateY(-6%) rotate(-3deg); }
-      60%  { transform: translateY(0) rotate(0deg); }
-      82%  { transform: scale(1); opacity: 1; }
-      100% { transform: scale(0.8) translateY(-10%); opacity: 0; }
-    }
-    @keyframes wbGlow {
       0%   { transform: scale(0); opacity: 0; }
-      25%  { opacity: 1; }
-      100% { transform: scale(2.4); opacity: 0; }
+      20%  { transform: scale(1.08); opacity: 1; }
+      32%  { transform: scale(1); }
+      84%  { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0; }
+    }
+    @keyframes wbBadge {
+      0%   { transform: scale(0); opacity: 0; }
+      18%  { transform: scale(1.06); opacity: 1; }
+      30%  { transform: scale(1); }
+      84%  { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.92); opacity: 0; }
     }
     @keyframes wbRays {
       0%   { transform: scale(0.3) rotate(0deg); opacity: 0; }
       20%  { opacity: 1; }
       80%  { opacity: 1; }
-      100% { transform: scale(1.1) rotate(60deg); opacity: 0; }
+      100% { transform: scale(1.1) rotate(45deg); opacity: 0; }
     }
     @keyframes wbVeil {
       0%   { opacity: 0; }
-      15%, 75% { opacity: 0.72; }
+      15%, 78% { opacity: 0.9; }
       100% { opacity: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .wb-star, .wb-rays, .wb-glow { display: none; }
-      .wb-hero { animation: wbVeil 1.7s ease forwards; }
+      .wb-star, .wb-dot, .wb-rays { display: none; }
+      .wb-hero, .wb-badge { animation: wbVeil 1.7s ease forwards; }
       .ttt-cell.is-win .tm { animation: none; }
       .tm-eyes { animation: none; }
     }
@@ -3644,7 +3658,7 @@
 
     /* Efek menang: maskot muncul dari tengah, bintang memancar ke segala arah */
     const STAR_SVG = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.7l7.1-.6z"/></svg>';
-    const STAR_COLORS = ["#FFC83D", "#FFB000", "#FF6B6B", "#E1202B", "#FFE07A", "#FFFFFF"];
+    const STAR_COLORS = ["#FF3B3B", "#FF8A00", "#FFC400", "#2ECC71", "#00B8D9", "#3D7BFF", "#9B5CFF", "#FF4FA3"];
     function celebrate(host, { big = false } = {}) {
       if (!host) return;
       const old = host.querySelector(".win-burst");
@@ -3652,15 +3666,21 @@
       const el = document.createElement("div");
       el.className = "win-burst";
       el.setAttribute("aria-hidden", "true");
-      const n = big ? 26 : 18;
+      /* Bintang & konfeti warna-warni memancar rata dari tengah (warna digilir agar merata) */
+      const n = big ? 24 : 18;
       let stars = "";
       for (let i = 0; i < n; i++) {
-        const a = (i / n) * Math.PI * 2 + rand(-0.15, 0.15);
-        const dist = rand(110, big ? 230 : 190);
-        const s = rand(12, 26).toFixed(0);
-        stars += `<span class="wb-star" style="--x:${(Math.cos(a) * dist).toFixed(0)}px;--y:${(Math.sin(a) * dist).toFixed(0)}px;--r:${randInt(-200, 200)}deg;--s:${s}px;--c:${pick(STAR_COLORS)};--d:${rand(0.9, 1.4).toFixed(2)}s;--delay:${rand(0.05, 0.3).toFixed(2)}s">${STAR_SVG}</span>`;
+        const a = (i / n) * Math.PI * 2 + rand(-0.12, 0.12);
+        const dist = rand(120, big ? 230 : 190);
+        const sz = rand(16, 28).toFixed(0);
+        stars += `<span class="wb-star" style="--x:${(Math.cos(a) * dist).toFixed(0)}px;--y:${(Math.sin(a) * dist).toFixed(0)}px;--r:${randInt(-180, 180)}deg;--s:${sz}px;--c:${STAR_COLORS[i % STAR_COLORS.length]};--d:${rand(1, 1.4).toFixed(2)}s;--delay:${rand(0.08, 0.25).toFixed(2)}s">${STAR_SVG}</span>`;
       }
-      el.innerHTML = `<span class="wb-veil"></span><span class="wb-rays"></span><span class="wb-glow"></span>${stars}<span class="wb-hero">${thumbMascotSvg("is-happy")}</span>`;
+      for (let i = 0; i < n; i++) {
+        const a = ((i + 0.5) / n) * Math.PI * 2;
+        const dist = rand(80, big ? 200 : 160);
+        stars += `<span class="wb-dot" style="--x:${(Math.cos(a) * dist).toFixed(0)}px;--y:${(Math.sin(a) * dist).toFixed(0)}px;--r:0deg;--s:${rand(6, 10).toFixed(0)}px;--c:${STAR_COLORS[(i + 3) % STAR_COLORS.length]};--d:${rand(0.9, 1.3).toFixed(2)}s;--delay:${rand(0.1, 0.3).toFixed(2)}s"></span>`;
+      }
+      el.innerHTML = `<span class="wb-veil"></span><span class="wb-rays"></span>${stars}<span class="wb-badge"></span><span class="wb-hero">${thumbMascotSvg("is-happy")}</span>`;
       host.appendChild(el);
       SFX.play("sparkle");
       setTimeout(() => el.remove(), 1800);
