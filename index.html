@@ -1875,7 +1875,15 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    .ttt-cell { display: grid; place-items: center; padding: 0; }
+    .ttt-cell {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;   /* isi kotak tidak boleh mengubah ukuran kotak */
+    }
     .ttt-cell:hover:not(:disabled) { box-shadow: var(--neu-in-sm); }
     .ttt-o { width: 58%; height: 58%; }
     .ttt-cell:disabled { cursor: default; }
@@ -1893,7 +1901,15 @@
     /* Maskot jempol DELTA (bidak tic tac toe & efek menang) — mata berkedip,
        berubah jadi mata senyum ^ ^ saat menang */
     .tm { display: block; overflow: visible; }
-    .ttt-cell .tm { width: 88%; height: 88%; }
+    /* Bidak diposisikan absolut di tengah kotak: semua kotak tetap persegi & sejajar */
+    .ttt-cell .tm,
+    .ttt-cell .ttt-o {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+    }
+    .ttt-cell .tm { width: 86%; height: 86%; }
     .tm-eyes {
       transform-box: fill-box;
       transform-origin: center;
