@@ -300,25 +300,162 @@
     }
 
     .top-actions {
+      position: relative;
       display: flex;
-      gap: 10px;
     }
 
-    @media (max-width: 420px) {
-      .top-actions {
-        gap: 8px;
-      }
+    .top-bar.menu-open {
+      z-index: 245;   /* di atas maskot yang melayang */
     }
 
-    #soundToggle.is-off {
-      color: var(--text-muted, #9CA3AF);
+    /* Tombol burger: tiga garis → silang saat menu terbuka */
+    .burger {
+      position: relative;
+      width: 18px;
+      height: 14px;
     }
 
-    .lang-btn {
-      font-family: inherit;
-      font-size: 12px;
+    .burger span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2.2px;
+      border-radius: 2px;
+      background: currentColor;
+      transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+    }
+
+    .burger span:nth-child(1) { top: 0; }
+    .burger span:nth-child(2) { top: 6px; }
+    .burger span:nth-child(3) { top: 12px; }
+
+    .menu-btn[aria-expanded="true"] { color: var(--telu-maroon); box-shadow: var(--neu-in-sm); }
+    .menu-btn[aria-expanded="true"] .burger span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+    .menu-btn[aria-expanded="true"] .burger span:nth-child(2) { opacity: 0; }
+    .menu-btn[aria-expanded="true"] .burger span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+    .top-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 248px;
+      max-width: calc(100vw - 32px);
+      padding: 8px;
+      border-radius: var(--radius-lg, 18px);
+      border: 1px solid var(--neu-border);
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-lg);
+      transform-origin: top right;
+      animation: menuIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .top-menu[hidden] { display: none; }
+
+    @keyframes menuIn {
+      from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 10px;
+      border: none;
+      border-radius: 12px;
+      background: none;
+      color: var(--text-primary);
+      font: 700 14px/1.2 "Plus Jakarta Sans", sans-serif;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .menu-item[hidden] { display: none; }
+
+    .menu-item:hover,
+    .menu-item:focus-visible {
+      background: rgba(127, 127, 127, 0.1);
+      outline: none;
+    }
+
+    .menu-item:focus-visible { box-shadow: inset 0 0 0 2px var(--telu-maroon); }
+
+    .menu-ico {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      box-shadow: var(--neu-out-xs, var(--neu-out-sm));
+      color: var(--telu-maroon);
+    }
+
+    [data-theme="dark"] .menu-ico { color: #FFB3B7; }
+
+    .menu-label { flex: 1; min-width: 0; }
+
+    .menu-sep {
+      display: block;
+      height: 1px;
+      margin: 6px 10px;
+      background: var(--neu-border);
+    }
+
+    /* Pilihan bahasa: dua segmen, yang aktif disorot */
+    .menu-seg {
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 999px;
+      box-shadow: var(--neu-in-sm);
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.04em;
+    }
+
+    .menu-seg span {
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: var(--text-muted);
+    }
+
+    .menu-seg span.is-active {
+      background: var(--telu-maroon);
+      color: #FFFFFF;
+    }
+
+    /* Sakelar mini untuk mode gelap & suara */
+    .menu-switch {
+      position: relative;
+      flex-shrink: 0;
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(127, 127, 127, 0.3);
+      transition: background 0.2s ease;
+    }
+
+    .menu-switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .menu-item[aria-checked="true"] .menu-switch { background: var(--telu-maroon); }
+    .menu-item[aria-checked="true"] .menu-switch::after { transform: translateX(16px); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .top-menu { animation: none; }
+      .burger span, .menu-switch, .menu-switch::after { transition: none; }
     }
 
     .neu-icon-btn[hidden] {
@@ -2044,43 +2181,39 @@
         <span class="top-brand-text">DELTA Link</span>
       </a>
       <div class="top-actions">
-        <button class="neu-icon-btn" id="installBtn" hidden data-i18n-title="installTitle" data-i18n-aria="installTitle" title="Pasang Aplikasi" aria-label="Pasang Aplikasi">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="2.5"></rect>
-            <polyline points="9 11 12 14 15 11"></polyline>
-            <line x1="12" y1="6" x2="12" y2="14"></line>
-            <line x1="11" y1="18" x2="13" y2="18"></line>
-          </svg>
+        <button class="neu-icon-btn menu-btn" id="menuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="topMenu" data-i18n-title="menuTitle" data-i18n-aria="menuTitle" title="Menu" aria-label="Menu">
+          <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
         </button>
-        <button class="neu-icon-btn" id="soundToggle" type="button" title="Matikan suara" aria-label="Matikan suara" aria-pressed="true">
-          <svg id="soundIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg>
-        </button>
-        <button class="neu-icon-btn lang-btn" id="langToggle" type="button" title="Switch to English" aria-label="Switch to English">EN</button>
-        <button class="neu-icon-btn" id="themeToggle" data-i18n-title="themeTitle" data-i18n-aria="themeTitle" title="Ganti Tema Terang / Gelap" aria-label="Ganti Tema">
-          <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
-        <button class="neu-icon-btn" id="qrBtn" data-i18n-title="qrTitleBtn" data-i18n-aria="qrTitleBtn" title="Tampilkan QR Code" aria-label="Tampilkan QR Code" aria-haspopup="dialog">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            <line x1="14" y1="14" x2="14" y2="14.01"></line>
-            <line x1="21" y1="14" x2="21" y2="21"></line>
-            <line x1="14" y1="21" x2="17.5" y2="21"></line>
-            <line x1="17.5" y1="17.5" x2="17.5" y2="14"></line>
-          </svg>
-        </button>
-        <button class="neu-icon-btn" id="shareBtn" data-i18n-title="shareTitle" data-i18n-aria="shareTitle" title="Salin Tautan Halaman" aria-label="Salin Tautan Halaman">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-        </button>
+        <div class="top-menu" id="topMenu" role="menu" hidden>
+          <button class="menu-item" id="langToggle" type="button" role="menuitem">
+            <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"></circle><line x1="2.5" y1="12" x2="21.5" y2="12"></line><path d="M12 2.5a14.5 14.5 0 0 1 0 19a14.5 14.5 0 0 1 0-19z"></path></svg></span>
+            <span class="menu-label" data-i18n="menuLang">Bahasa</span>
+            <span class="menu-seg" aria-hidden="true"><span data-lang="id">ID</span><span data-lang="en">EN</span></span>
+          </button>
+          <button class="menu-item" id="themeToggle" type="button" role="menuitemcheckbox" aria-checked="false">
+            <span class="menu-ico"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+            <span class="menu-label" data-i18n="menuDark">Mode gelap</span>
+            <span class="menu-switch" aria-hidden="true"></span>
+          </button>
+          <button class="menu-item" id="soundToggle" type="button" role="menuitemcheckbox" aria-checked="true">
+            <span class="menu-ico"><svg id="soundIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></svg></span>
+            <span class="menu-label" data-i18n="menuSound">Suara</span>
+            <span class="menu-switch" aria-hidden="true"></span>
+          </button>
+          <span class="menu-sep" role="separator"></span>
+          <button class="menu-item" id="qrBtn" type="button" role="menuitem" aria-haspopup="dialog">
+            <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><line x1="14" y1="14" x2="14" y2="14.01"></line><line x1="21" y1="14" x2="21" y2="21"></line><line x1="14" y1="21" x2="17.5" y2="21"></line><line x1="17.5" y1="17.5" x2="17.5" y2="14"></line></svg></span>
+            <span class="menu-label" data-i18n="qrTitleBtn">Tampilkan QR Code</span>
+          </button>
+          <button class="menu-item" id="shareBtn" type="button" role="menuitem">
+            <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>
+            <span class="menu-label" data-i18n="shareTitle">Salin Tautan Halaman</span>
+          </button>
+          <button class="menu-item" id="installBtn" type="button" role="menuitem" hidden>
+            <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"></rect><polyline points="9 11 12 14 15 11"></polyline><line x1="12" y1="6" x2="12" y2="14"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg></span>
+            <span class="menu-label" data-i18n="installTitle">Pasang Aplikasi</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -2515,6 +2648,10 @@
         qrTitleBtn: "Tampilkan QR Code",
         shareTitle: "Salin Tautan Halaman",
         installTitle: "Pasang Aplikasi",
+        menuTitle: "Menu",
+        menuLang: "Bahasa",
+        menuDark: "Mode gelap",
+        menuSound: "Suara",
         verified: "Akun resmi DELTA Lab",
         catAria: "Kategori Aplikasi",
         listAria: "Daftar Aplikasi DELTA Lab",
@@ -2609,6 +2746,10 @@
         qrTitleBtn: "Show QR Code",
         shareTitle: "Copy Page Link",
         installTitle: "Install App",
+        menuTitle: "Menu",
+        menuLang: "Language",
+        menuDark: "Dark mode",
+        menuSound: "Sound",
         verified: "Official DELTA Lab account",
         catAria: "App Categories",
         listAria: "DELTA Lab App Directory",
@@ -2721,7 +2862,7 @@
       document.querySelectorAll("[data-i18n-title]").forEach(el => { el.title = ui(el.dataset.i18nTitle); });
       document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", ui(el.dataset.i18nAria)); });
       const langBtn = document.getElementById("langToggle");
-      langBtn.textContent = ui("switchLabel");
+      langBtn.querySelectorAll("[data-lang]").forEach(el => el.classList.toggle("is-active", el.dataset.lang === lang));
       langBtn.title = ui("switchTo");
       langBtn.setAttribute("aria-label", ui("switchTo"));
     }
@@ -2928,6 +3069,7 @@
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
       themeIcon.innerHTML = theme === "dark" ? SUN_ICON : MOON_ICON;
+      themeToggle.setAttribute("aria-checked", String(theme === "dark"));
     }
 
     (function initTheme() {
@@ -2942,6 +3084,46 @@
       applyTheme(next);
       try { localStorage.setItem("deltalink-theme", next); } catch {}
     });
+
+    /* Menu burger: semua tombol utilitas dikumpulkan dalam satu menu */
+    (function initTopMenu() {
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("topMenu");
+      const bar = document.getElementById("topBar");
+      const items = () => [...menu.querySelectorAll(".menu-item:not([hidden])")];
+      function setOpen(open, focusBtn = false) {
+        menu.hidden = !open;
+        btn.setAttribute("aria-expanded", String(open));
+        bar.classList.toggle("menu-open", open);
+        if (open) { SFX.play("tap"); items()[0].focus({ preventScroll: true }); }
+        else if (focusBtn) btn.focus({ preventScroll: true });
+      }
+      btn.addEventListener("click", () => setOpen(menu.hidden));
+      /* Aksi yang membuka sesuatu (QR, bagikan, pasang) menutup menu;
+         sakelar (bahasa, tema, suara) membiarkannya terbuka agar perubahan terlihat */
+      ["qrBtn", "shareBtn", "installBtn"].forEach(id => {
+        document.getElementById(id).addEventListener("click", () => setOpen(false));
+      });
+      ["langToggle", "themeToggle"].forEach(id => {
+        document.getElementById(id).addEventListener("click", () => SFX.play("tap"));
+      });
+      document.addEventListener("pointerdown", (e) => {
+        if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) setOpen(false);
+      });
+      document.addEventListener("keydown", (e) => {
+        if (menu.hidden) return;
+        if (e.key === "Escape") { setOpen(false, true); return; }
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          const list = items();
+          const i = list.indexOf(document.activeElement);
+          list[(i + (e.key === "ArrowDown" ? 1 : -1) + list.length) % list.length].focus();
+        }
+      });
+      menu.addEventListener("focusout", (e) => {
+        if (!menu.hidden && e.relatedTarget && !menu.contains(e.relatedTarget) && e.relatedTarget !== btn) setOpen(false);
+      });
+    })();
 
     /* Share Link */
     document.getElementById("shareBtn").addEventListener("click", async () => {
@@ -3348,8 +3530,7 @@
       document.getElementById("soundIcon").innerHTML = SFX.on ? SOUND_ON_ICON : SOUND_OFF_ICON;
       btn.classList.toggle("is-off", !SFX.on);
       btn.title = label;
-      btn.setAttribute("aria-label", label);
-      btn.setAttribute("aria-pressed", String(SFX.on));
+      btn.setAttribute("aria-checked", String(SFX.on));
     }
     document.getElementById("soundToggle").addEventListener("click", () => {
       SFX.setOn(!SFX.on);
