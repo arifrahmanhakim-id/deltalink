@@ -1697,6 +1697,25 @@
       line-height: 1.35;
     }
 
+    a.arena-item { text-decoration: none; }
+
+    .ta-url {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ta-go {
+      flex: none;
+      color: var(--text-secondary);
+    }
+
+    .arena-item:hover .ta-go { color: var(--telu-maroon); }
+    [data-theme="dark"] .arena-item:hover .ta-go { color: #FFFFFF; }
+
     .arena-best {
       flex: none;
       font-family: "JetBrains Mono", monospace;
@@ -2576,6 +2595,23 @@
     </div>
   </div>
 
+  <!-- Kartu koleksi (mis. Contoh TA): daftar tautan -->
+  <div class="qr-overlay" id="taOverlay" aria-hidden="true">
+    <div class="qr-dialog game-dialog" role="dialog" aria-modal="true" aria-labelledby="taTitle">
+      <button class="neu-icon-btn qr-close" id="taClose" type="button" data-i18n-aria="close" aria-label="Tutup">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="game-head">
+        <h2 class="qr-title" id="taTitle">Contoh TA</h2>
+      </div>
+      <p class="qr-sub" id="taSub"></p>
+      <div class="arena-list" id="taList"></div>
+    </div>
+  </div>
+
   <!-- Toast Feedback -->
   <div class="toast" id="toast">Tautan berhasil disalin!</div>
 
@@ -2599,6 +2635,15 @@
          logoFile: "logo-app.png",      // opsional: gambar logo sendiri (menggantikan icon)
          eta: "Rilis Q1 2027",          // opsional, khusus "soon": perkiraan rilis
          type: "game"                   // khusus kartu Arena Data (membuka menu mini game)
+       }
+
+       Kartu koleksi (mis. Contoh TA) membuka pop up berisi daftar tautan:
+       {
+         title: "Contoh TA",
+         type: "collection",
+         items: [                       // tambah tautan baru cukup di sini
+           { title: "Nama", description: { id: "...", en: "..." }, url: "https://..." }
+         ]
        }
        ========================================================================== */
     const SITE_CONFIG = {
@@ -2669,6 +2714,27 @@
           icon: "layers"
         },
         {
+          title: "Contoh TA",
+          description: {
+            id: "Kumpulan aplikasi hasil Tugas Akhir mahasiswa",
+            en: "A showcase of students' final-project apps"
+          },
+          type: "collection",
+          category: { id: "Contoh TA", en: "Thesis Showcase" },
+          badgeText: { id: "KOLEKSI", en: "SHOWCASE" },
+          icon: "grad",
+          items: [
+            {
+              title: "Judol Detector",
+              description: {
+                id: "Deteksi konten promosi judi online",
+                en: "Detects online gambling promotion content"
+              },
+              url: "https://judol-detector.streamlit.app/"
+            }
+          ]
+        },
+        {
           title: "Arena Data",
           description: {
             id: "Mini game: tren, korelasi, outlier, distribusi & tic tac toe",
@@ -2716,6 +2782,7 @@
       cpu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
       trend: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>`,
       arena: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12a4 4 0 0 1 4 4v1.5a3.5 3.5 0 0 1-6.3 2.1L14.5 14h-5l-1.2 1.6A3.5 3.5 0 0 1 2 13.5V12a4 4 0 0 1 4-4z"/><line x1="7" y1="10" x2="7" y2="13"/><line x1="5.5" y1="11.5" x2="8.5" y2="11.5"/><circle cx="16" cy="10.8" r="0.6" fill="currentColor"/><circle cx="18" cy="12.4" r="0.6" fill="currentColor"/></svg>`,
+      grad: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2.5 9 2.5 12 0v-5"/><line x1="22" y1="10" x2="22" y2="16"/></svg>`,
       layers: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`
     };
 
@@ -2755,6 +2822,8 @@
         arenaHintBest: (n, pct) => `${n} game · rekor tertinggi ${pct}%`,
         arenaRounds: (n) => `${n} ronde`,
         arenaNew: "BARU",
+        taSub: "Aplikasi hasil Tugas Akhir mahasiswa DELTA Lab",
+        taCount: (n) => `${n} contoh TA · ketuk untuk melihat`,
         gameBackAria: "Kembali ke daftar game",
         gameScore: "Skor",
         gameRight: "Tepat! :target:",
@@ -2853,6 +2922,8 @@
         arenaHintBest: (n, pct) => `${n} games · top record ${pct}%`,
         arenaRounds: (n) => `${n} rounds`,
         arenaNew: "NEW",
+        taSub: "Final-project apps by DELTA Lab students",
+        taCount: (n) => `${n} thesis project${n === 1 ? "" : "s"} · tap to browse`,
         gameBackAria: "Back to game list",
         gameScore: "Score",
         trendName: "Guess the Trend",
@@ -3036,24 +3107,28 @@
       list.innerHTML = filtered.map((item, index) => {
         const url = safeUrl(item.url);
         const isGame = item.type === "game";
-        const isSoon = !isGame && (item.status === "soon" || url === "#");
+        const isColl = item.type === "collection";
+        const isSoon = !isGame && !isColl && (item.status === "soon" || url === "#");
         const cleanDomain = isGame
           ? gameHintText()
+          : isColl
+            ? ui("taCount")((item.items || []).length)
           : !isSoon
             ? url.replace(/^https?:\/\//i, "").replace(/\/$/, "")
             : (item.eta ? `${ui("eta")}: ${tr(item.eta)}` : ui("inDev"));
 
         return `
           <a class="link-card ${isSoon ? "coming-soon" : ""} ${isGame ? "game-card" : ""}"
-             href="${isSoon || isGame ? "#" : esc(url)}"
-             ${isSoon || isGame ? "" : 'target="_blank" rel="noopener noreferrer"'}
-             ${isGame ? 'role="button" aria-haspopup="dialog"' : ""}
+             href="${isSoon || isGame || isColl ? "#" : esc(url)}"
+             ${isSoon || isGame || isColl ? "" : 'target="_blank" rel="noopener noreferrer"'}
+             ${isGame || isColl ? 'role="button" aria-haspopup="dialog"' : ""}
              data-soon="${isSoon}"
              data-game="${isGame}"
+             data-collection="${isColl ? esc(item.title) : ""}"
              data-title="${esc(item.title)}"
              data-eta="${esc(tr(item.eta))}"
              style="--i:${index}">
-            <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" || isGame ? "has-logo" : ""}">
+            <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" || isGame || isColl ? "has-logo" : ""}">
               ${item.logoFile
                 ? `<img class="link-logo-img" src="${esc(item.logoFile)}" alt="" />`
                 : (ICONS[item.icon] || ICONS.globe)}
@@ -3072,6 +3147,8 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 ${isGame
                   ? '<polygon points="8 5 19 12 8 19 8 5"/>'
+                  : isColl
+                    ? '<polyline points="9 18 15 12 9 6"/>'
                   : isSoon
                     ? '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
                     : '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>'}
@@ -3096,6 +3173,12 @@
           if (card.dataset.game === "true") {
             e.preventDefault();
             openGame();
+            return;
+          }
+
+          if (card.dataset.collection) {
+            e.preventDefault();
+            openCollection(card.dataset.collection);
             return;
           }
 
@@ -3636,12 +3719,12 @@
 
     /* Bunyi klik untuk kartu aplikasi, banner, dan filter kategori (kartu game punya bunyinya sendiri) */
     document.addEventListener("click", (e) => {
-      const t = e.target.closest(".link-card, #featuredBanner, .cat-pill, .qr-download");
+      const t = e.target.closest(".link-card, .ta-item, #featuredBanner, .cat-pill, .qr-download");
       if (!t) return;
       if (t.classList.contains("link-card")) {
-        if (t.dataset.game === "true") return;
+        if (t.dataset.game === "true" || t.dataset.collection) return;
         SFX.play(t.dataset.soon === "true" ? "soon" : "launch");
-      } else if (t.id === "featuredBanner") SFX.play("launch");
+      } else if (t.id === "featuredBanner" || t.classList.contains("ta-item")) SFX.play("launch");
       else if (!t.closest("#gameOverlay")) SFX.play("tap");
     }, true);
 
@@ -4840,6 +4923,63 @@
       });
     })();
 
+    /* ==========================================================================
+       KARTU KOLEKSI (mis. Contoh TA): pop up berisi daftar tautan
+       ========================================================================== */
+    const taOverlay = document.getElementById("taOverlay");
+    const taState = { open: false, title: "", lastFocus: null };
+
+    function renderCollection() {
+      const item = SITE_CONFIG.links.find(l => l.type === "collection" && l.title === taState.title);
+      if (!item) return;
+      document.getElementById("taTitle").textContent = tr(item.title);
+      document.getElementById("taSub").textContent = tr(item.subtitle) || ui("taSub");
+      const arrow = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
+      document.getElementById("taList").innerHTML = (item.items || []).map(it => {
+        const url = safeUrl(it.url);
+        const icon = it.logoFile
+          ? `<img class="link-logo-img" src="${esc(it.logoFile)}" alt="" />`
+          : (ICONS[it.icon] || ICONS[item.icon] || ICONS.globe);
+        return `
+          <a class="arena-item ta-item" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
+            <span class="arena-icon" aria-hidden="true">${icon}</span>
+            <span class="arena-text">
+              <span class="arena-name">${esc(tr(it.title))}</span>
+              ${it.description ? `<span class="arena-desc">${esc(tr(it.description))}</span>` : ""}
+              <span class="ta-url">${esc(url.replace(/^https?:\/\//i, "").replace(/\/$/, ""))}</span>
+            </span>
+            <span class="ta-go" aria-hidden="true">${arrow}</span>
+          </a>`;
+      }).join("");
+    }
+
+    function openCollection(title) {
+      taState.title = title;
+      taState.lastFocus = document.activeElement;
+      taState.open = true;
+      renderCollection();
+      taOverlay.classList.add("open");
+      taOverlay.setAttribute("aria-hidden", "false");
+      SFX.play("open");
+      const first = document.querySelector("#taList .ta-item") || document.getElementById("taClose");
+      first.focus({ preventScroll: true });
+    }
+
+    function closeCollection() {
+      if (!taState.open) return;
+      SFX.play("close");
+      taState.open = false;
+      taOverlay.classList.remove("open");
+      taOverlay.setAttribute("aria-hidden", "true");
+      if (taState.lastFocus) taState.lastFocus.focus();
+    }
+
+    document.getElementById("taClose").addEventListener("click", closeCollection);
+    taOverlay.addEventListener("click", (e) => { if (e.target === taOverlay) closeCollection(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && taState.open) closeCollection();
+    });
+
     /* Ganti bahasa */
     document.getElementById("langToggle").addEventListener("click", () => {
       lang = lang === "id" ? "en" : "id";
@@ -4847,6 +4987,7 @@
       activeCategory = ALL;
       renderAll();
       refreshArenaText();
+      if (taState.open) renderCollection();
       renderSoundBtn();
     });
 
