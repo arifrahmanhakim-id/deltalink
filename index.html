@@ -2534,48 +2534,184 @@
 
     .intro.gate .intro-gate { display: flex; }
 
+    /* Tombol mulai: inti kaca bercahaya, cincin gradien berputar, titik data mengorbit,
+       kilau menyapu, dan equalizer kecil sebagai isyarat musik */
     .intro-start {
+      --mx: 0px;
+      --my: 0px;
       position: relative;
       display: grid;
       place-items: center;
-      width: 84px;
-      height: 84px;
-      margin-bottom: 14px;
-      padding: 0 0 0 4px;
+      width: 118px;
+      height: 118px;
+      margin-bottom: 26px;
+      padding: 0;
       border: none;
       border-radius: 50%;
-      background: #8C151B;
+      background: none;
       color: #FFFFFF;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15), 0 10px 40px rgba(200, 35, 43, 0.55);
       cursor: pointer;
-      animation: introBreath 2s ease-in-out infinite;
+      transform: translate(var(--mx), var(--my));
+      transition: transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+      animation: isEnter 0.9s cubic-bezier(0.2, 1.5, 0.4, 1) backwards;
     }
 
     .intro-start:focus { outline: none; }
-    .intro-start:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.7); outline-offset: 6px; }
+    .intro-start:focus-visible .is-dash { border-color: rgba(255, 255, 255, 0.8); }
 
-    .intro-start::before, .intro-start::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255, 107, 114, 0.7);
-      animation: introPing 2s ease-out infinite;
+    .intro-start > span { position: absolute; border-radius: 50%; pointer-events: none; }
+
+    .is-aura {
+      inset: -46px;
+      background: radial-gradient(circle, rgba(200, 35, 43, 0.5) 0%, rgba(200, 35, 43, 0.14) 45%, rgba(0, 0, 0, 0) 70%);
+      animation: isAura 2.6s ease-in-out infinite;
     }
 
-    .intro-start::after { animation-delay: 1s; }
+    .is-dash {
+      inset: -16px;
+      border: 1px dashed rgba(255, 255, 255, 0.22);
+      animation: isSpin 24s linear infinite reverse;
+      transition: border-color 0.3s ease;
+    }
+
+    .is-orbit { animation: isSpin 7s linear infinite; }
+    .is-orbit.o1 { inset: -16px; }
+    .is-orbit.o2 { inset: -30px; animation-duration: 11s; animation-direction: reverse; }
+    .is-orbit.o3 { inset: -16px; animation-duration: 7s; animation-delay: -3.5s; }
+
+    .is-orbit i {
+      position: absolute;
+      top: -3px;
+      left: calc(50% - 3px);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FF6B72;
+      box-shadow: 0 0 10px 2px rgba(255, 107, 114, 0.85);
+    }
+
+    .is-orbit.o2 i { width: 4px; height: 4px; left: calc(50% - 2px); top: -2px; background: #FFFFFF; box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7); }
+    .is-orbit.o3 i { width: 4px; height: 4px; left: calc(50% - 2px); top: -2px; background: #C9CACD; box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.5); }
+
+    .is-ring {
+      inset: 0;
+      background: conic-gradient(from 0deg, rgba(255, 107, 114, 0) 0deg, #8C151B 110deg, #FF6B72 220deg, #FFFFFF 262deg, rgba(255, 255, 255, 0) 300deg);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+              mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+      filter: drop-shadow(0 0 6px rgba(255, 107, 114, 0.8));
+      animation: isSpin 2.2s linear infinite;
+    }
+
+    .is-core {
+      inset: 11px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: radial-gradient(circle at 34% 28%, #E0464E 0%, #A3181F 42%, #5A0B10 100%);
+      box-shadow:
+        inset 0 2px 5px rgba(255, 255, 255, 0.45),
+        inset 0 -10px 20px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 14px 40px rgba(200, 35, 43, 0.6);
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* kilau diagonal yang menyapu inti */
+    .is-core::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(115deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.42) 50%, rgba(255, 255, 255, 0) 60%);
+      transform: translateX(-70%);
+      animation: isShine 3.2s ease-in-out 1s infinite;
+    }
+
+    .is-play {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      margin-left: 5px;
+      fill: #FFFFFF;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+      animation: isBeat 1.6s ease-in-out infinite;
+    }
+
+    .intro-start:hover { transform: translate(var(--mx), var(--my)) scale(1.07); }
+    .intro-start:hover .is-ring { animation-duration: 1s; }
+    .intro-start:hover .is-core { box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -10px 20px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2), 0 14px 60px rgba(255, 80, 88, 0.85); }
+    .intro-start:active { transform: translate(var(--mx), var(--my)) scale(0.94); }
+
+    .is-eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 16px;
+      margin-bottom: 10px;
+    }
+
+    .is-eq i {
+      width: 3px;
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(#FF6B72, #8C151B);
+      transform-origin: bottom;
+      animation: isEq 1s ease-in-out infinite;
+    }
+
+    .is-eq i:nth-child(2) { animation-delay: -0.4s; animation-duration: 0.8s; }
+    .is-eq i:nth-child(3) { animation-delay: -0.15s; animation-duration: 1.15s; }
+    .is-eq i:nth-child(4) { animation-delay: -0.6s; animation-duration: 0.7s; }
+    .is-eq i:nth-child(5) { animation-delay: -0.3s; animation-duration: 0.95s; }
+    .is-eq i:nth-child(6) { animation-delay: -0.75s; animation-duration: 1.2s; }
+    .is-eq i:nth-child(7) { animation-delay: -0.5s; animation-duration: 0.85s; }
 
     .intro-gate-label {
       margin: 0;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.45) 0%, #FFFFFF 45%, #FF6B72 55%, rgba(255, 255, 255, 0.45) 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+      animation: isText 3s linear infinite;
     }
 
-    .intro-gate-hint {
-      margin: 0;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
+    /* Saat diketuk: tombol mengembang & memudar, gerbang hilang */
+    .intro.leaving .intro-gate { display: flex; pointer-events: none; animation: introFade 0.6s ease forwards; }
+    .intro.leaving .intro-start { animation: isBoom 0.6s cubic-bezier(0.3, 0, 0.2, 1) forwards; }
+
+    @keyframes isSpin { to { transform: rotate(360deg); } }
+    @keyframes isAura {
+      0%, 100% { opacity: 0.7; transform: scale(0.92); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    @keyframes isShine {
+      0% { transform: translateX(-70%); }
+      45%, 100% { transform: translateX(70%); }
+    }
+    @keyframes isBeat {
+      0%, 100% { transform: scale(1); }
+      12% { transform: scale(1.1); }
+      24% { transform: scale(0.98); }
+      36% { transform: scale(1.06); }
+      50% { transform: scale(1); }
+    }
+    @keyframes isEq {
+      0%, 100% { transform: scaleY(0.25); }
+      50% { transform: scaleY(1); }
+    }
+    @keyframes isText { to { background-position: -250% 0; } }
+    @keyframes isEnter {
+      0% { opacity: 0; transform: scale(0.4); }
+      100% { opacity: 1; transform: translate(var(--mx), var(--my)); }
+    }
+    @keyframes isBoom {
+      0% { transform: scale(1); opacity: 1; filter: blur(0); }
+      100% { transform: scale(2.4); opacity: 0; filter: blur(6px); }
     }
 
     .intro.gate .intro-bar { opacity: 0; }
@@ -2676,11 +2812,19 @@
       <p class="intro-chip"><span>DELTA Link</span></p>
     </div>
     <div class="intro-gate">
-      <button class="intro-start" id="introStart" type="button">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="8 5 19 12 8 19 8 5"/></svg>
+      <button class="intro-start" id="introStart" type="button" aria-labelledby="introTap">
+        <span class="is-aura" aria-hidden="true"></span>
+        <span class="is-dash" aria-hidden="true"></span>
+        <span class="is-orbit o1" aria-hidden="true"><i></i></span>
+        <span class="is-orbit o2" aria-hidden="true"><i></i></span>
+        <span class="is-orbit o3" aria-hidden="true"><i></i></span>
+        <span class="is-ring" aria-hidden="true"></span>
+        <span class="is-core" aria-hidden="true">
+          <svg class="is-play" viewBox="0 0 24 24"><path d="M8.6 4.6c-1-.6-2.3.1-2.3 1.3v12.2c0 1.2 1.3 1.9 2.3 1.3l9.9-6.1c1-.6 1-2 0-2.6z"/></svg>
+        </span>
       </button>
+      <span class="is-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
       <p class="intro-gate-label" id="introTap">Ketuk untuk memulai</p>
-      <p class="intro-gate-hint" id="introHint">Nyalakan suara untuk pengalaman terbaik</p>
     </div>
     <button class="intro-skip" id="introSkip" type="button"><span id="introSkipText">Lewati</span>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
@@ -3237,7 +3381,6 @@
         arenaNew: "BARU",
         taSub: "Aplikasi hasil Tugas Akhir mahasiswa DELTA Lab",
         introTap: "Ketuk untuk memulai",
-        introHint: "Nyalakan suara untuk pengalaman terbaik",
         introSkip: "Lewati",
         taCount: (n) => `${n} contoh TA · ketuk untuk melihat`,
         gameBackAria: "Kembali ke daftar game",
@@ -3340,7 +3483,6 @@
         arenaNew: "NEW",
         taSub: "Final-project apps by DELTA Lab students",
         introTap: "Tap to start",
-        introHint: "Turn your sound on for the best experience",
         introSkip: "Skip",
         taCount: (n) => `${n} thesis project${n === 1 ? "" : "s"} · tap to browse`,
         gameBackAria: "Back to game list",
@@ -4288,7 +4430,6 @@
       let started = false, done = false, timer = 0, fx = null;
 
       document.getElementById("introTap").textContent = ui("introTap");
-      document.getElementById("introHint").textContent = ui("introHint");
       document.getElementById("introSkipText").textContent = ui("introSkip");
 
       /* Pecah judul jadi huruf, tagline jadi kata, untuk animasi berurutan */
@@ -4315,6 +4456,10 @@
       function start() {
         if (started) return;
         started = true;
+        if (el.classList.contains("gate")) {
+          el.classList.add("leaving");
+          setTimeout(() => el.classList.remove("leaving"), 650);
+        }
         el.classList.remove("gate");
         el.classList.add("play");
         SFX.intro();
@@ -4341,6 +4486,16 @@
 
       if (SFX.on && !SFX.canAutoplay()) {
         el.classList.add("gate");
+        /* Tombol sedikit "tertarik" ke arah kursor */
+        const btn = document.getElementById("introStart");
+        el.addEventListener("pointermove", (e) => {
+          if (started || e.pointerType !== "mouse") return;
+          const r = btn.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+          const k = Math.min(1, 220 / (Math.hypot(dx, dy) + 1));
+          btn.style.setProperty("--mx", `${(dx * 0.08 * k).toFixed(1)}px`);
+          btn.style.setProperty("--my", `${(dy * 0.08 * k).toFixed(1)}px`);
+        });
       } else {
         start();
       }
