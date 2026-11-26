@@ -1944,6 +1944,135 @@
     @keyframes tttPop { from { transform: scale(0.85); } to { transform: none; } }
     @media (prefers-reduced-motion: reduce) { .ttt-cell { animation: none !important; } }
 
+    /* ---- Tangkap Maskot ---- */
+    .wk-hole { overflow: hidden; }
+    .wk-pit {
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      bottom: 12%;
+      height: 22%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.12) 70%, transparent 72%);
+    }
+    .wk-hole .tm, .wk-hole .ttt-o { position: relative; animation: wkPop 0.22s cubic-bezier(0.2, 1.5, 0.4, 1); }
+    .wk-hole .tm { width: 78%; height: 78%; }
+    .wk-hole.is-bot { color: var(--telu-grey-dark); }
+    [data-theme="dark"] .wk-hole.is-bot { color: #FFFFFF; }
+    @keyframes wkPop { from { transform: translateY(70%) scale(0.6); } to { transform: none; } }
+
+    /* ---- Cari Maskot ---- */
+    .cups-stage {
+      position: relative;
+      width: min(100%, 300px);
+      height: 150px;
+      margin: 6px auto 0;
+    }
+    .cup {
+      --slot: 0;
+      --dur: 0.4s;
+      position: absolute;
+      bottom: 0;
+      left: calc(var(--slot) * 35%);
+      width: 30%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: left var(--dur) cubic-bezier(0.45, 0, 0.25, 1), transform var(--dur) ease;
+    }
+    .cup:disabled { cursor: default; }
+    .cup.front { z-index: 2; transform: translateY(8px) scale(1.05); }
+    .cup.back { z-index: 1; transform: translateY(-8px) scale(0.94); }
+    .cup-ball {
+      position: absolute;
+      left: 50%;
+      bottom: 2px;
+      width: 46%;
+      translate: -50% 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .cup-ball .tm { width: 100%; height: auto; }
+    .cup.lift .cup-ball { opacity: 1; }
+    .cup-shell {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 80%;
+      transition: transform 0.35s cubic-bezier(0.3, 1.3, 0.5, 1);
+    }
+    .cup-svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22)); }
+    .cup.lift .cup-shell { transform: translateY(-52%) rotate(-7deg); }
+    .cup:not(:disabled):hover .cup-shell { transform: translateY(-5%); }
+    .cup.is-win .cup-ball { filter: drop-shadow(0 0 10px rgba(31, 138, 85, 0.8)); }
+    .cup.is-lose .cup-shell { opacity: 0.55; }
+    .cups-nums {
+      display: flex;
+      justify-content: space-between;
+      width: min(100%, 300px);
+      margin: 6px auto 0;
+      padding: 0 12%;
+      font: 700 11px "JetBrains Mono", monospace;
+      color: var(--text-secondary);
+    }
+
+    /* ---- Ikuti Maskot ---- */
+    .simon {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      width: min(100%, 250px, 42vh);
+      margin: 4px auto 0;
+    }
+    .simon-pad {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 22px;
+      background: var(--c);
+      opacity: 0.5;
+      box-shadow: var(--neu-out-sm);
+      cursor: pointer;
+      transition: opacity 0.12s ease, transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+    }
+    .simon-pad:nth-child(1) { border-radius: 60px 18px 18px 18px; }
+    .simon-pad:nth-child(2) { border-radius: 18px 60px 18px 18px; }
+    .simon-pad:nth-child(3) { border-radius: 18px 18px 18px 60px; }
+    .simon-pad:nth-child(4) { border-radius: 18px 18px 60px 18px; }
+    .simon-pad:disabled { cursor: default; }
+    .simon-pad:not(:disabled):hover { opacity: 0.7; }
+    .simon-pad.lit { opacity: 1; transform: scale(1.05); filter: brightness(1.2); box-shadow: 0 0 26px var(--c); }
+    .simon-pad.hint { opacity: 1; animation: simonHint 0.5s ease-in-out 3; }
+    @keyframes simonHint { 50% { opacity: 0.35; } }
+    .simon-mascot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 34%;
+      aspect-ratio: 1;
+      translate: -50% -50%;
+      border-radius: 50%;
+      background: var(--bg-base);
+      box-shadow: var(--neu-out-sm);
+      pointer-events: none;
+    }
+    .simon-mascot .tm { width: 70%; height: 70%; }
+
+    /* ---- Tebak Persen ---- */
+    .g-pie-bg { fill: none; stroke: var(--telu-grey-soft); stroke-width: 30; }
+    .g-pie { fill: none; stroke: var(--telu-maroon); stroke-width: 30; }
+    [data-theme="dark"] .g-pie { stroke: #E0424A; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wk-hole .tm, .wk-hole .ttt-o, .simon-pad.hint { animation: none; }
+    }
+
+
     /* Maskot jempol DELTA (bidak tic tac toe & efek menang) — mata berkedip,
        berubah jadi mata senyum ^ ^ saat menang */
     .tm { display: block; overflow: visible; }
@@ -2799,7 +2928,7 @@
       position: fixed;
       left: 16px;
       bottom: max(16px, env(safe-area-inset-bottom));
-      z-index: 10001;
+      z-index: 245;   /* di atas halaman & maskot, di bawah pop up (250) */
       display: flex;
       align-items: center;
       gap: 4px;
@@ -3402,7 +3531,7 @@
       </div>
 
       <div class="game-menu" id="gameMenu">
-        <p class="qr-sub" data-i18n="arenaSub">Pilih tantangan dan asah intuisi datamu</p>
+        <p class="qr-sub" data-i18n="arenaSub">Pilih game dan main bareng maskot DELTA</p>
         <div class="arena-list" id="arenaList"></div>
       </div>
 
@@ -3582,8 +3711,8 @@
         {
           title: { id: "Arena Data", en: "Data Arena" },
           description: {
-            id: "Mini game: tren, korelasi, outlier, distribusi & tic tac toe",
-            en: "Mini games: trends, correlation, outliers, distributions & tic-tac-toe"
+            id: "Mini game seru bareng maskot DELTA: tic tac toe, tangkap & cari maskot, tebak data",
+            en: "Fun mini games with the DELTA mascot: tic-tac-toe, catch & find the mascot, data guessing"
           },
           type: "game",
           category: "Mini Game",
@@ -3662,7 +3791,7 @@
         installed: "DELTA Link terpasang di perangkat Anda!",
         backToTop: "Kembali ke atas",
         arenaName: "Arena Data",
-        arenaSub: "Pilih tantangan dan asah intuisi datamu",
+        arenaSub: "Pilih game dan main bareng maskot DELTA",
         arenaHint: (n) => `${n} game · ± 30 detik per game`,
         arenaHintBest: (n, pct) => `${n} game · rekor tertinggi ${pct}%`,
         arenaRounds: (n) => `${n} ronde`,
@@ -3738,6 +3867,39 @@
         tttDraw: "Seri :neutral:",
         tttLose: "AI menang :robot:",
         tttEndLabel: "Skor kemenanganmu",
+        whackName: "Tangkap Maskot",
+        whackDesc: "Ketuk maskot secepat kilat, hindari robot",
+        whackQ: "Ketuk maskot DELTA saat ia muncul!",
+        whackTip: "Tips: tekan 1–9 · jangan ketuk robot O",
+        whackReady: "Siap-siap…",
+        whackGo: "Tangkap!",
+        whackHit: "Tertangkap! :target:",
+        whackMiss: "Meleset!",
+        whackSlow: "Terlalu lambat, maskotnya kabur!",
+        whackBot: "Itu robot, bukan maskot!",
+        whackEnd: "Maskot tertangkap",
+        cupsName: "Cari Maskot",
+        cupsDesc: "Ikuti gelas tempat maskot bersembunyi",
+        cupsQ: "Di gelas mana maskot bersembunyi?",
+        cupsTip: "Tips: tekan 1–3",
+        cupsShow: "Ingat, maskot ada di sini!",
+        cupsWatch: "Perhatikan gelasnya…",
+        cupsPick: "Pilih gelasnya!",
+        cupsWrong: "Bukan di situ, maskot ada di gelas lain",
+        cupsEnd: "Tebakan jitu",
+        simonName: "Ikuti Maskot",
+        simonDesc: "Ingat urutan nyala lalu ulangi",
+        simonQ: "Ulangi urutan warna yang dinyalakan maskot!",
+        simonTip: "Tips: tekan 1–4",
+        simonWatch: (n) => `Perhatikan ${n} langkah…`,
+        simonGo: (n) => `Giliranmu! Sisa ${n} langkah`,
+        simonWrong: "Urutannya salah",
+        simonEnd: "Urutan benar",
+        pieName: "Tebak Persen",
+        pieDesc: "Kira-kira berapa persen bagian merah?",
+        pieQ: "Berapa persen bagian merah donat ini?",
+        pieTip: "Tips: tekan 1–4",
+        pieWrong: (p) => `Meleset, jawabannya ${p}%`,
         mascotAria: "Maskot DELTA Lab, ketuk atau seret aku!",
         mascotWelcome: "Halo! Selamat datang di DELTA Link :smile:",
         mascotDropHint: "Wee! :sparkle: Ketuk 2× untuk mengembalikanku ke tempat awal",
@@ -3778,7 +3940,7 @@
         installed: "DELTA Link is installed on your device!",
         backToTop: "Back to top",
         arenaName: "Data Arena",
-        arenaSub: "Pick a challenge and sharpen your data intuition",
+        arenaSub: "Pick a game and play with the DELTA mascot",
         arenaHint: (n) => `${n} games · ~30 seconds each`,
         arenaHintBest: (n, pct) => `${n} games · top record ${pct}%`,
         arenaRounds: (n) => `${n} rounds`,
@@ -3842,6 +4004,39 @@
         tttDraw: "Draw :neutral:",
         tttLose: "AI wins :robot:",
         tttEndLabel: "Your win score",
+        whackName: "Catch the Mascot",
+        whackDesc: "Tap the mascot lightning-fast, avoid the robot",
+        whackQ: "Tap the DELTA mascot when it pops up!",
+        whackTip: "Tip: press 1–9 · don't tap the robot O",
+        whackReady: "Get ready…",
+        whackGo: "Catch it!",
+        whackHit: "Caught it! :target:",
+        whackMiss: "Missed!",
+        whackSlow: "Too slow, the mascot got away!",
+        whackBot: "That's the robot, not the mascot!",
+        whackEnd: "Mascots caught",
+        cupsName: "Find the Mascot",
+        cupsDesc: "Follow the cup hiding the mascot",
+        cupsQ: "Which cup is the mascot hiding under?",
+        cupsTip: "Tip: press 1–3",
+        cupsShow: "Remember, the mascot is here!",
+        cupsWatch: "Watch the cups…",
+        cupsPick: "Pick a cup!",
+        cupsWrong: "Not there, the mascot was under another cup",
+        cupsEnd: "Correct finds",
+        simonName: "Follow the Mascot",
+        simonDesc: "Remember the light sequence, then repeat it",
+        simonQ: "Repeat the colours the mascot lights up!",
+        simonTip: "Tip: press 1–4",
+        simonWatch: (n) => `Watch ${n} steps…`,
+        simonGo: (n) => `Your turn! ${n} steps left`,
+        simonWrong: "Wrong order",
+        simonEnd: "Sequences right",
+        pieName: "Guess the Percent",
+        pieDesc: "Roughly what percent is the red part?",
+        pieQ: "What percent of this donut is red?",
+        pieTip: "Tip: press 1–4",
+        pieWrong: (p) => `Missed, it was ${p}%`,
         mascotAria: "DELTA Lab mascot, tap or drag me!",
         mascotWelcome: "Hi! Welcome to DELTA Link :smile:",
         mascotDropHint: "Wheee! :sparkle: Double-tap to send me back to my spot",
@@ -4522,6 +4717,19 @@
           noise({ dur: 0.25, vol: 0.06, f: 2600, to: 400, q: 1.2 });
           tone(N(7), { dur: 0.12, type: "triangle", vol: 0.09, to: N(0) });
         },
+        /* Tombol warna "Ikuti Maskot": C–E–G–C */
+        pad(i) {
+          const f = [N(0), N(4), N(7), N(12)][i] || N(0);
+          tone(f, { dur: 0.34, type: "triangle", vol: 0.16, wet: 0.3 });
+          tone(f * 2, { dur: 0.1, vol: 0.04 });
+        },
+        /* Maskot muncul dari lubang */
+        popup() {
+          tone(N(12), { dur: 0.08, vol: 0.08 });
+          tone(N(19), { t: 0.05, dur: 0.1, vol: 0.07 });
+        },
+        /* Gelas bergeser */
+        swish() { noise({ dur: 0.16, vol: 0.04, f: 2400, q: 0.8, peak: 0.5 }); },
         start() {
           [N(0), N(4), N(7), N(12)].forEach((f, i) => tone(f, { t: i * 0.06, dur: 0.16, type: "square", vol: 0.05, lp: 2400 }));
         },
@@ -6083,7 +6291,338 @@
       }
     };
 
-    const ARENA_GAMES = [trendGame, corrGame, outlierGame, distGame, tttGame];
+    /* --------------------------------------------------------------------------
+       GAME 6 — TANGKAP MASKOT (whack-a-mole)
+       Maskot muncul di salah satu dari 9 lubang; ketuk sebelum ia sembunyi.
+       Makin lama makin cepat; mulai babak 4 kadang muncul robot O pengecoh.
+       -------------------------------------------------------------------------- */
+    const whackGame = {
+      id: "whack",
+      rounds: 10,
+      name: "whackName",
+      desc: "whackDesc",
+      question: "whackQ",
+      tip: "whackTip",
+      endLabel: "whackEnd",
+      noChart: true,
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="19" rx="8" ry="2.6"/><path d="M8 18V11a4 4 0 0 1 8 0v7"/><circle cx="10.6" cy="11.4" r="0.9" fill="currentColor"/><circle cx="13.4" cy="11.4" r="0.9" fill="currentColor"/><path d="M4 6l2 1.5M20 6l-2 1.5M12 2.5V4.5"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-1";
+        gameActions.innerHTML = `<div class="ttt-board wk-board">${[...Array(9).keys()]
+          .map(i => `<button class="ttt-cell wk-hole" type="button" data-cell="${i}" aria-label="${i + 1}"><span class="wk-pit"></span></button>`).join("")}</div>`;
+        gameActions.querySelectorAll(".wk-hole").forEach(el => {
+          el.addEventListener("click", () => this.hit(Number(el.dataset.cell)));
+        });
+      },
+      newRound() {
+        const c = { up: -1, bot: -1, phase: "wait", tapped: -1 };
+        const session = arena.session;
+        const alive = () => arena.open && session === arena.session && arena.current === c;
+        const showFor = Math.max(620, 1350 - arena.round * 75);
+        setTimeout(() => {
+          if (!alive()) return;
+          c.up = randInt(0, 8);
+          if (arena.round >= 4 && Math.random() < 0.45) {
+            do { c.bot = randInt(0, 8); } while (c.bot === c.up);
+          }
+          c.phase = "up";
+          SFX.play("popup");
+          this.draw(false);
+          setTimeout(() => {
+            if (!alive() || c.phase !== "up") return;
+            c.phase = "done";
+            settle(0, ui("whackSlow"));
+          }, showFor);
+        }, rand(450, 1100));
+        return c;
+      },
+      hit(i) {
+        const c = arena.current;
+        if (!canAnswer() || c.phase !== "up") return;
+        c.phase = "done";
+        c.tapped = i;
+        if (i === c.up) settle(1, ui("whackHit"));
+        else settle(0, ui(i === c.bot ? "whackBot" : "whackMiss"));
+      },
+      draw(reveal) {
+        const c = arena.current;
+        gameActions.querySelectorAll(".wk-hole").forEach((el, i) => {
+          const isUp = i === c.up && (c.phase !== "wait");
+          const isBot = i === c.bot && c.phase !== "wait";
+          const want = isUp ? "m" : isBot ? "b" : "";
+          if ((el.dataset.v || "") !== want) {
+            el.dataset.v = want;
+            el.innerHTML = `<span class="wk-pit"></span>${want === "m" ? thumbMascotSvg(reveal && c.tapped === i ? "is-happy" : "") : want === "b" ? TTT_PIECE_O : ""}`;
+          }
+          const hitOk = reveal && c.tapped === i && i === c.up;
+          const hitBad = reveal && c.tapped === i && i !== c.up;
+          el.className = `ttt-cell wk-hole${want ? " is-up" : ""}${want === "b" ? " is-bot" : ""}${hitOk ? " is-win" : ""}${hitBad ? " is-lose" : ""}`;
+          el.disabled = reveal;
+        });
+        if (!reveal) {
+          const fb = $("gameFeedback");
+          fb.textContent = ui(c.phase === "up" ? "whackGo" : "whackReady");
+          fb.className = "game-feedback";
+        }
+      },
+      onKey(e) {
+        const n = Number(e.key);
+        if (!(n >= 1 && n <= 9)) return false;
+        this.hit(n - 1);
+        return true;
+      }
+    };
+
+    /* --------------------------------------------------------------------------
+       GAME 7 — CARI MASKOT (permainan gelas)
+       Maskot diperlihatkan di bawah satu gelas, lalu gelas ditukar-tukar.
+       Jumlah & kecepatan tukaran naik tiap babak.
+       -------------------------------------------------------------------------- */
+    const CUP_SVG = `<svg class="cup-svg" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><linearGradient id="cupG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7E0E14"/><stop offset=".45" stop-color="#D0262F"/><stop offset="1" stop-color="#8C151B"/></linearGradient></defs>
+      <path d="M20 94 L30 18 Q32 8 44 8 L56 8 Q68 8 70 18 L80 94 Z" fill="url(#cupG)"/>
+      <rect x="14" y="88" width="72" height="9" rx="4.5" fill="#6B0F14"/>
+      <path d="M36 22 Q38 16 44 15" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M52 40c-8-5-17 0-15 8 2 7 13 9 14 17 1 6-6 9-10 7 6 1 12-3 11-9-1-7-12-10-13-16-1-5 7-9 13-7z" fill="#FFFFFF" opacity=".9"/>
+    </svg>`;
+    const cupsGame = {
+      id: "cups",
+      rounds: 6,
+      name: "cupsName",
+      desc: "cupsDesc",
+      question: "cupsQ",
+      tip: "cupsTip",
+      endLabel: "cupsEnd",
+      noChart: true,
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l2-11h4l2 11z"/><path d="M13 20l2-11h4l2 11z"/><path d="M6 6c2-3 10-3 12 0"/><polyline points="16 4 18 6 16 8"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-1";
+        gameActions.innerHTML = `<div class="cups-stage">${[0, 1, 2].map(i => `
+          <button class="cup" type="button" data-cup="${i}" style="--slot:${i}">
+            <span class="cup-ball"></span>
+            <span class="cup-shell">${CUP_SVG}</span>
+          </button>`).join("")}</div>
+          <div class="cups-nums" aria-hidden="true"><span>1</span><span>2</span><span>3</span></div>`;
+        gameActions.querySelectorAll(".cup").forEach(el => {
+          el.addEventListener("click", () => this.pick(Number(el.dataset.cup)));
+        });
+      },
+      newRound() {
+        const c = { ball: randInt(0, 2), slots: [0, 1, 2], phase: "show", chosen: -1 };
+        const session = arena.session;
+        const alive = () => arena.open && session === arena.session && arena.current === c;
+        const wait = (ms) => new Promise(r => setTimeout(r, ms));
+        const swaps = 3 + arena.round;
+        const dur = Math.max(0.2, 0.52 - arena.round * 0.05);
+        gameActions.querySelectorAll(".cup").forEach((el, i) => {
+          el.style.setProperty("--slot", i);
+          el.style.setProperty("--dur", `${dur}s`);
+          el.classList.remove("front", "back");
+          el.querySelector(".cup-ball").innerHTML = i === c.ball ? thumbMascotSvg() : "";
+        });
+        (async () => {
+          await wait(1100);
+          if (!alive()) return;
+          c.phase = "hide";
+          this.draw(false);
+          await wait(500);
+          for (let k = 0; k < swaps; k++) {
+            if (!alive()) return;
+            const a = randInt(0, 2);
+            let b = randInt(0, 1); if (b >= a) b += 1;
+            [c.slots[a], c.slots[b]] = [c.slots[b], c.slots[a]];
+            const cups = gameActions.querySelectorAll(".cup");
+            cups.forEach(el => el.classList.remove("front", "back"));
+            cups[a].classList.add("front");
+            cups[b].classList.add("back");
+            cups[a].style.setProperty("--slot", c.slots[a]);
+            cups[b].style.setProperty("--slot", c.slots[b]);
+            SFX.play("swish");
+            await wait(dur * 1000 + 70);
+          }
+          if (!alive()) return;
+          gameActions.querySelectorAll(".cup").forEach(el => el.classList.remove("front", "back"));
+          c.phase = "pick";
+          this.draw(false);
+        })();
+        return c;
+      },
+      pick(i) {
+        const c = arena.current;
+        if (!canAnswer() || c.phase !== "pick") return;
+        c.phase = "done";
+        c.chosen = i;
+        settle(i === c.ball ? 1 : 0, ui(i === c.ball ? "gameRight" : "cupsWrong"));
+      },
+      draw(reveal) {
+        const c = arena.current;
+        gameActions.querySelectorAll(".cup").forEach((el, i) => {
+          const lift = c.phase === "show" ? i === c.ball : reveal;
+          el.classList.toggle("lift", lift);
+          el.classList.toggle("is-win", reveal && i === c.ball && c.chosen === i);
+          el.classList.toggle("is-lose", reveal && c.chosen === i && i !== c.ball);
+          el.disabled = c.phase !== "pick";
+          const tm = el.querySelector(".tm");
+          if (tm) tm.classList.toggle("is-happy", reveal && c.chosen === c.ball);
+        });
+        if (!reveal) {
+          const fb = $("gameFeedback");
+          fb.textContent = ui(c.phase === "pick" ? "cupsPick" : c.phase === "show" ? "cupsShow" : "cupsWatch");
+          fb.className = "game-feedback";
+        }
+      },
+      onKey(e) {
+        const n = Number(e.key);
+        if (!(n >= 1 && n <= 3)) return false;
+        const c = arena.current;
+        const cup = c ? c.slots.indexOf(n - 1) : -1;
+        if (cup >= 0) this.pick(cup);
+        return true;
+      }
+    };
+
+    /* --------------------------------------------------------------------------
+       GAME 8 — IKUTI MASKOT (ingat urutan)
+       4 tombol warna menyala berurutan; ulangi urutannya. Tiap babak +1 langkah.
+       -------------------------------------------------------------------------- */
+    const SIMON_COLORS = ["#C8232B", "#1F8A55", "#E0A100", "#2F6FD6"];
+    const simonGame = {
+      id: "simon",
+      rounds: 8,
+      name: "simonName",
+      desc: "simonDesc",
+      question: "simonQ",
+      tip: "simonTip",
+      endLabel: "simonEnd",
+      noChart: true,
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2.5"/><rect x="13" y="3" width="8" height="8" rx="2.5" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2.5"/><rect x="13" y="13" width="8" height="8" rx="2.5"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-1";
+        gameActions.innerHTML = `<div class="simon">${SIMON_COLORS.map((col, i) =>
+          `<button class="simon-pad" type="button" data-pad="${i}" style="--c:${col}" aria-label="${i + 1}"></button>`).join("")}
+          <span class="simon-mascot" aria-hidden="true">${thumbMascotSvg()}</span></div>`;
+        gameActions.querySelectorAll(".simon-pad").forEach(el => {
+          el.addEventListener("click", () => this.press(Number(el.dataset.pad)));
+        });
+      },
+      newRound() {
+        const prev = arena.round > 1 && arena.current && arena.current.seq ? arena.current.seq : [randInt(0, 3), randInt(0, 3)];
+        const c = { seq: [...prev, randInt(0, 3)], pos: 0, phase: "watch", wrongAt: -1 };
+        const session = arena.session;
+        const alive = () => arena.open && session === arena.session && arena.current === c;
+        const gap = Math.max(300, 620 - arena.round * 35);
+        c.seq.forEach((p, k) => {
+          setTimeout(() => { if (alive()) this.flash(p, gap * 0.6); }, 700 + k * gap);
+        });
+        setTimeout(() => {
+          if (!alive()) return;
+          c.phase = "input";
+          this.draw(false);
+        }, 700 + c.seq.length * gap);
+        return c;
+      },
+      flash(p, ms) {
+        const el = gameActions.querySelector(`.simon-pad[data-pad="${p}"]`);
+        if (!el) return;
+        SFX.play("pad", p);
+        el.classList.add("lit");
+        setTimeout(() => el.classList.remove("lit"), ms);
+      },
+      press(p) {
+        const c = arena.current;
+        if (!canAnswer() || c.phase !== "input") return;
+        this.flash(p, 180);
+        if (p !== c.seq[c.pos]) {
+          c.phase = "done";
+          c.wrongAt = c.pos;
+          settle(0, ui("simonWrong"));
+          return;
+        }
+        c.pos += 1;
+        if (c.pos === c.seq.length) {
+          c.phase = "done";
+          settle(1, ui("gameRight"));
+        } else this.draw(false);
+      },
+      draw(reveal) {
+        const c = arena.current;
+        const hint = reveal && c.wrongAt >= 0 ? c.seq[c.wrongAt] : -1;
+        gameActions.querySelectorAll(".simon-pad").forEach((el, i) => {
+          el.disabled = reveal || c.phase !== "input";
+          el.classList.toggle("hint", i === hint);
+        });
+        const tm = gameActions.querySelector(".simon-mascot .tm");
+        if (tm) tm.classList.toggle("is-happy", reveal && c.wrongAt < 0);
+        if (!reveal) {
+          const fb = $("gameFeedback");
+          fb.textContent = c.phase === "input" ? ui("simonGo")(c.seq.length - c.pos) : ui("simonWatch")(c.seq.length);
+          fb.className = "game-feedback";
+        }
+      },
+      onKey(e) {
+        const n = Number(e.key);
+        if (!(n >= 1 && n <= 4)) return false;
+        this.press(n - 1);
+        return true;
+      }
+    };
+
+    /* --------------------------------------------------------------------------
+       GAME 9 — TEBAK PERSEN
+       Donat dengan satu potongan merah dan maskot di tengah; tebak persennya.
+       -------------------------------------------------------------------------- */
+    const pieGame = {
+      id: "pie",
+      rounds: 8,
+      name: "pieName",
+      desc: "pieDesc",
+      question: "pieQ",
+      tip: "pieTip",
+      icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3a9 9 0 0 1 8.5 6" stroke-width="4.2"/></svg>`,
+      mount() {
+        gameActions.className = "game-actions cols-4";
+        gameActions.innerHTML = "";
+      },
+      newRound() {
+        const pct = randInt(8, 92);
+        const opts = [pct];
+        let guard = 0;
+        while (opts.length < 4 && guard++ < 200) {
+          const v = pct + (Math.random() < 0.5 ? -1 : 1) * randInt(8, 26);
+          if (v >= 3 && v <= 97 && opts.every(o => Math.abs(o - v) >= 7)) opts.push(v);
+        }
+        while (opts.length < 4) opts.push(Math.min(97, Math.max(3, opts[opts.length - 1] + 9)));
+        const options = opts.sort((a, b) => a - b).map(String);
+        gameActions.innerHTML = options.map(o => `<button class="guess-btn" type="button" data-guess="${o}"><span>${o}%</span></button>`).join("");
+        gameActions.querySelectorAll(".guess-btn").forEach(b => b.addEventListener("click", () => this.answer(b.dataset.guess)));
+        return { pct, options, rot: randInt(0, 359) };
+      },
+      draw(reveal) {
+        const { pct, rot } = arena.current;
+        const cx = G.W / 2, cy = 92, r = 58;
+        const mascot = thumbMascotSvg(reveal ? "is-happy" : "").replace("<svg ", `<svg x="${cx - 26}" y="${cy - 32}" width="52" height="64" `);
+        let svg = `<circle class="g-pie-bg" cx="${cx}" cy="${cy}" r="${r}" />`;
+        svg += `<circle class="g-pie" cx="${cx}" cy="${cy}" r="${r}" pathLength="100" stroke-dasharray="${pct} ${100 - pct}" transform="rotate(${rot} ${cx} ${cy})" />`;
+        svg += mascot;
+        if (reveal) svg += `<text class="g-label" x="${G.W - 14}" y="22" text-anchor="end">${pct}%</text>`;
+        gameChart.innerHTML = svg;
+      },
+      answer(k) {
+        if (!canAnswer()) return;
+        const ans = String(arena.current.pct);
+        markChoices(k, ans);
+        settle(k === ans ? 1 : 0, k === ans ? ui("gameRight") : ui("pieWrong")(ans));
+      },
+      onKey(e) {
+        const o = arena.current && arena.current.options[Number(e.key) - 1];
+        if (!o) return false;
+        this.answer(o);
+        return true;
+      }
+    };
+
+    /* Urutan menu: Tic Tac Toe paling atas, lalu game maskot, lalu game data */
+    const ARENA_GAMES = [tttGame, whackGame, cupsGame, simonGame, pieGame, trendGame, corrGame, outlierGame, distGame];
     arenaReady = true;
 
     /* --------------------------------------------------------------------------
