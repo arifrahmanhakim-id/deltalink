@@ -1651,6 +1651,7 @@
 
     .arena-list {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);   /* URL panjang dipotong "…", tidak melebarkan kartu */
       gap: 10px;
       margin-top: 16px;
     }
@@ -3697,6 +3698,14 @@
                 en: "Detects online gambling promotion content"
               },
               url: "https://judol-detector.streamlit.app/"
+            },
+            {
+              title: { id: "Respons Masyarakat terhadap MBG", en: "Public Response to MBG" },
+              description: {
+                id: "Klasifikasi komentar publik soal Makan Bergizi Gratis (ABSA · deteksi sarkasme)",
+                en: "Classifies public comments on Indonesia's Free Nutritious Meals programme (ABSA · sarcasm detection)"
+              },
+              url: "https://klasifikasi-komentar-mbg-sarkasmeabsa.streamlit.app/"
             },
             {
               title: "Tring! ABSA Dashboard",
