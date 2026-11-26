@@ -1731,6 +1731,57 @@
       white-space: nowrap;
     }
 
+    .ta-author {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--neu-border);
+    }
+
+    .ta-avatar {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--telu-maroon);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .ta-author-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      gap: 1px;
+    }
+
+    .ta-author-label {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .ta-author-name {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .ta-author-line {
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--text-secondary);
+    }
+
     .ta-go {
       flex: none;
       color: var(--text-secondary);
@@ -3037,8 +3088,8 @@
   </div>
 
   <!-- Pemutar musik latar (melayang di kiri bawah, bisa digeser) -->
-  <div class="player" id="player" role="region" aria-label="Musik">
-    <span class="pl-grip" id="plGrip" aria-hidden="true" title="Geser"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+  <div class="player" id="player" role="region" data-i18n-aria="playerAria" aria-label="Pemutar musik">
+    <span class="pl-grip" id="plGrip" aria-hidden="true" data-i18n-title="playerDrag" title="Geser pemutar"><i></i><i></i><i></i><i></i><i></i><i></i></span>
     <span class="pl-eq" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="pl-name" id="plName" aria-live="polite">Ukulele Ceria</span>
     <button class="pl-btn" id="plPrev" type="button" aria-label="Lagu sebelumnya">
@@ -3086,7 +3137,7 @@
           <span class="menu-sep" role="separator"></span>
           <button class="menu-item" id="qrBtn" type="button" role="menuitem" aria-haspopup="dialog">
             <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><line x1="14" y1="14" x2="14" y2="14.01"></line><line x1="21" y1="14" x2="21" y2="21"></line><line x1="14" y1="21" x2="17.5" y2="21"></line><line x1="17.5" y1="17.5" x2="17.5" y2="14"></line></svg></span>
-            <span class="menu-label" data-i18n="qrTitleBtn">Tampilkan QR Code</span>
+            <span class="menu-label" data-i18n="qrTitleBtn">Tampilkan Kode QR</span>
           </button>
           <button class="menu-item" id="shareBtn" type="button" role="menuitem">
             <span class="menu-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></span>
@@ -3298,7 +3349,7 @@
     <footer class="footer">
       <p class="copyright-text">
         &copy; <span id="copyYear">2026</span> <strong>DELTA Lab</strong> — Data Exploration, Learning &amp; Translational Analytics.<br />
-        <span class="footer-uni">Telkom University</span> · All Rights Reserved.
+        <span class="footer-uni">Telkom University</span> · <span data-i18n="rights">Hak cipta dilindungi.</span>
       </p>
     </footer>
   </main>
@@ -3314,7 +3365,7 @@
       </button>
       <h2 class="qr-title" id="qrTitle" data-i18n="qrHeading">Pindai DELTA Link</h2>
       <p class="qr-sub" data-i18n="qrSub">Untuk poster, banner acara, atau slide presentasi</p>
-      <div class="qr-frame"><img id="qrImage" alt="QR code DELTA Link" /></div>
+      <div class="qr-frame"><img id="qrImage" alt="QR DELTA Link" /></div>
       <p class="qr-url" id="qrUrl"></p>
       <button class="qr-download" id="qrDownload" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
@@ -3355,9 +3406,9 @@
         <p class="qr-sub" id="gameQuestion"></p>
         <div class="game-stats">
           <span><span data-i18n="gameScore">Skor</span> <b id="gameScore">0</b></span>
-          <span>Streak <b id="gameStreak">0</b> <span class="fi" data-icon="flame" aria-hidden="true"></span></span>
+          <span><span data-i18n="gameStreak">Beruntun</span> <b id="gameStreak">0</b> <span class="fi" data-icon="flame" aria-hidden="true"></span></span>
         </div>
-        <div class="game-chart"><svg id="gameChart" viewBox="0 0 300 170" role="img" aria-label="Grafik"></svg></div>
+        <div class="game-chart"><svg id="gameChart" viewBox="0 0 300 170" role="img" data-i18n-aria="chartAria" aria-label="Grafik"></svg></div>
         <p class="game-feedback" id="gameFeedback" aria-live="polite"></p>
         <div class="game-actions" id="gameActions"></div>
         <p class="game-tip" id="gameTip"></p>
@@ -3411,7 +3462,7 @@
          url: "https://...",            // isi "#" bila belum rilis
          category: "Platform",          // nama kategori bebas, otomatis jadi tombol filter
          status: "live",                // "live" atau "soon"
-         badgeText: "LIVE • WEB",       // teks label kecil di samping judul
+         badgeText: { id: "AKTIF • WEB", en: "LIVE • WEB" },   // label kecil; semua teks boleh { id, en }
          icon: "logo",                  // logo | globe | chart | cpu | layers
          logoFile: "logo-app.png",      // opsional: gambar logo sendiri (menggantikan icon)
          eta: "Rilis Q1 2027",          // opsional, khusus "soon": perkiraan rilis
@@ -3423,7 +3474,8 @@
          title: "Contoh TA",
          type: "collection",
          items: [                       // tambah tautan baru cukup di sini
-           { title: "Nama", description: { id: "...", en: "..." }, url: "https://..." }
+           { title: "Nama", description: { id: "...", en: "..." }, url: "https://...",
+             author: { name: "...", affiliation: { id: ["..."], en: ["..."] }, location: "..." } }   // author opsional
          ]
        }
        ========================================================================== */
@@ -3436,8 +3488,8 @@
       },
       logoFile: "logo-delta-lab.png",
       banner: {
-        badge: "LIVE PORTAL",
-        title: "DELTA Lab Official Website",
+        badge: { id: "PORTAL AKTIF", en: "LIVE PORTAL" },
+        title: { id: "Website Resmi DELTA Lab", en: "DELTA Lab Official Website" },
         description: {
           id: "Pusat riset eksplorasi data, pembelajaran mesin, dan analitik translasional.",
           en: "A research hub for data exploration, machine learning, and translational analytics."
@@ -3452,7 +3504,7 @@
           url: "https://deltalab.vercel.app/",
           category: "Platform",
           status: "live",
-          badgeText: "LIVE • WEB",
+          badgeText: { id: "AKTIF • WEB", en: "LIVE • WEB" },
           icon: "logo"
         },
         {
@@ -3465,7 +3517,7 @@
           logoFile: "logo-sagelta.png",
           category: { id: "Aplikasi AI & Analitik", en: "AI & Analytics Apps" },
           status: "live",
-          badgeText: "STREAMLIT APP",
+          badgeText: { id: "APLIKASI STREAMLIT", en: "STREAMLIT APP" },
           icon: "chart"
         },
         {
@@ -3478,7 +3530,7 @@
           logoFile: "logo-sigma.png",
           category: { id: "Segera Hadir", en: "Coming Soon" },
           status: "soon",
-          badgeText: "COMING SOON",
+          badgeText: { id: "SEGERA HADIR", en: "COMING SOON" },
           icon: "cpu"
         },
         {
@@ -3491,11 +3543,11 @@
           logoFile: "logo-sipedro.png",
           category: { id: "Segera Hadir", en: "Coming Soon" },
           status: "soon",
-          badgeText: "COMING SOON",
+          badgeText: { id: "SEGERA HADIR", en: "COMING SOON" },
           icon: "layers"
         },
         {
-          title: "Contoh TA",
+          title: { id: "Contoh TA", en: "Thesis Showcase" },
           description: {
             id: "Kumpulan aplikasi hasil Tugas Akhir mahasiswa",
             en: "A showcase of students' final-project apps"
@@ -3511,12 +3563,20 @@
                 id: "Deteksi konten promosi judi online",
                 en: "Detects online gambling promotion content"
               },
-              url: "https://judol-detector.streamlit.app/"
+              url: "https://judol-detector.streamlit.app/",
+              author: {
+                name: "Arif Rahman Hakim",
+                affiliation: {
+                  id: ["Program Studi Sistem Informasi", "CoE Human Centric Engineering, Telkom University"],
+                  en: ["Information System Study Program", "CoE Human Centric Engineering, Telkom University"]
+                },
+                location: "Jakarta, Indonesia"
+              }
             }
           ]
         },
         {
-          title: "Arena Data",
+          title: { id: "Arena Data", en: "Data Arena" },
           description: {
             id: "Mini game: tren, korelasi, outlier, distribusi & tic tac toe",
             en: "Mini games: trends, correlation, outliers, distributions & tic-tac-toe"
@@ -3577,7 +3637,7 @@
         eta: "Perkiraan",
         soonToast: (name, eta) => `${name} sedang dikembangkan DELTA Lab.${eta ? ` Perkiraan ${eta}.` : " Nantikan peluncurannya!"}`,
         themeTitle: "Ganti Tema Terang / Gelap",
-        qrTitleBtn: "Tampilkan QR Code",
+        qrTitleBtn: "Tampilkan Kode QR",
         shareTitle: "Salin Tautan Halaman",
         installTitle: "Pasang Aplikasi",
         menuTitle: "Menu",
@@ -3605,6 +3665,14 @@
         arenaNew: "BARU",
         taSub: "Aplikasi hasil Tugas Akhir mahasiswa DELTA Lab",
         introTap: "Ketuk untuk memulai",
+        taAuthor: "Penulis",
+        badgeLive: "AKTIF",
+        badgeSoon: "SEGERA HADIR",
+        rights: "Hak cipta dilindungi.",
+        gameStreak: "Beruntun",
+        chartAria: "Grafik",
+        playerAria: "Pemutar musik",
+        playerDrag: "Geser pemutar",
         introSkip: "Lewati",
         volume: "Volume",
         musicOn: "Jeda musik latar",
@@ -3625,7 +3693,7 @@
         trendName: "Tebak Tren",
         trendDesc: "Tebak arah grafik berikutnya",
         trendQ: "Ke mana grafik bergerak berikutnya?",
-        trendTip: "Tip: pakai tombol panah ↑ → ↓",
+        trendTips: "Tips: pakai tombol panah ↑ → ↓",
         trendWrong: (dir) => `Meleset — grafiknya ${dir.toLowerCase()}`,
         dirUp: "Naik",
         dirFlat: "Stabil",
@@ -3634,7 +3702,7 @@
         corrName: "Tebak Korelasi",
         corrDesc: "Perkirakan nilai r dari scatter plot",
         corrQ: "Berapa koefisien korelasi (r) data ini?",
-        corrTip: "Tip: ← → untuk menggeser, Enter untuk mengunci",
+        corrTips: "Tips: ← → untuk menggeser, Enter untuk mengunci",
         corrLock: "Kunci tebakan",
         corrSliderAria: "Tebakan nilai r",
         corrResult: (kind, r, g) => kind === "hit"
@@ -3643,13 +3711,13 @@
         outName: "Cari Outlier",
         outDesc: "Temukan titik yang keluar dari pola",
         outQ: "Titik mana yang outlier?",
-        outTip: "Tip: ketuk titiknya atau tekan A–D",
+        outTips: "Tips: ketuk titiknya atau tekan A–D",
         outWrong: (l) => `Meleset — outliernya titik ${l}`,
         ptA: "A", ptB: "B", ptC: "C", ptD: "D",
         distName: "Bentuk Distribusi",
         distDesc: "Kenali bentuk histogram sekilas",
         distQ: "Distribusi apa yang membentuk histogram ini?",
-        distTip: "Tip: tekan 1–4",
+        distTips: "Tips: tekan 1–4",
         distWrong: (name) => `Meleset — ini distribusi ${name.toLowerCase()}`,
         distNormal: "Normal",
         distSkew: "Miring",
@@ -3658,7 +3726,7 @@
         tttName: "Tic Tac Toe",
         tttDesc: "Kalahkan AI DELTA, 3 berjajar menang",
         tttQ: "Buat 3 maskot DELTA berjajar sebelum AI!",
-        tttTip: "Tip: tekan 1–9 · kamu maskot DELTA, AI O",
+        tttTips: "Tips: tekan 1–9 · kamu maskot DELTA, AI O",
         tttYourTurn: "Giliranmu — kamu maskot DELTA",
         tttThinking: "AI sedang berpikir... :robot:",
         tttWin: "Kamu menang! :party:",
@@ -3712,6 +3780,14 @@
         arenaNew: "NEW",
         taSub: "Final-project apps by DELTA Lab students",
         introTap: "Tap to start",
+        taAuthor: "Author",
+        badgeLive: "LIVE",
+        badgeSoon: "COMING SOON",
+        rights: "All Rights Reserved.",
+        gameStreak: "Streak",
+        chartAria: "Chart",
+        playerAria: "Music player",
+        playerDrag: "Drag the player",
         introSkip: "Skip",
         volume: "Volume",
         musicOn: "Pause background music",
@@ -3972,8 +4048,8 @@
              ${isGame || isColl ? 'role="button" aria-haspopup="dialog"' : ""}
              data-soon="${isSoon}"
              data-game="${isGame}"
-             data-collection="${isColl ? esc(item.title) : ""}"
-             data-title="${esc(item.title)}"
+             data-collection="${isColl ? SITE_CONFIG.links.indexOf(item) : ""}"
+             data-title="${esc(tr(item.title))}"
              data-eta="${esc(tr(item.eta))}"
              style="--i:${index}">
             <div class="link-icon-wrap ${item.logoFile || item.icon === "logo" || isGame || isColl ? "has-logo" : ""}">
@@ -3983,9 +4059,9 @@
             </div>
             <div class="link-info">
               <div class="link-header-row">
-                <span class="link-title">${esc(item.title)}</span>
+                <span class="link-title">${esc(tr(item.title))}</span>
                 <span class="status-badge ${isSoon ? "badge-soon" : "badge-live"}">
-                  ${esc(tr(item.badgeText) || (isSoon ? "COMING SOON" : "LIVE"))}
+                  ${esc(tr(item.badgeText) || ui(isSoon ? "badgeSoon" : "badgeLive"))}
                 </span>
               </div>
               <p class="link-desc">${esc(tr(item.description))}</p>
@@ -6411,10 +6487,25 @@
        KARTU KOLEKSI (mis. Contoh TA): pop up berisi daftar tautan
        ========================================================================== */
     const taOverlay = document.getElementById("taOverlay");
-    const taState = { open: false, title: "", lastFocus: null };
+    const taState = { open: false, idx: -1, lastFocus: null };
+
+    function authorHtml(a) {
+      const initials = a.name.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+      const aff = [].concat(tr(a.affiliation) || []);
+      const lines = [...aff, tr(a.location)].filter(Boolean);
+      return `
+        <span class="ta-author">
+          <span class="ta-avatar" aria-hidden="true">${esc(initials)}</span>
+          <span class="ta-author-text">
+            <span class="ta-author-label">${esc(ui("taAuthor"))}</span>
+            <span class="ta-author-name">${esc(a.name)}</span>
+            ${lines.map(l => `<span class="ta-author-line">${esc(l)}</span>`).join("")}
+          </span>
+        </span>`;
+    }
 
     function renderCollection() {
-      const item = SITE_CONFIG.links.find(l => l.type === "collection" && l.title === taState.title);
+      const item = SITE_CONFIG.links[taState.idx];
       if (!item) return;
       document.getElementById("taTitle").textContent = tr(item.title);
       document.getElementById("taSub").textContent = tr(item.subtitle) || ui("taSub");
@@ -6431,14 +6522,15 @@
               <span class="arena-name">${esc(tr(it.title))}</span>
               ${it.description ? `<span class="arena-desc">${esc(tr(it.description))}</span>` : ""}
               <span class="ta-url">${esc(url.replace(/^https?:\/\//i, "").replace(/\/$/, ""))}</span>
+              ${it.author ? authorHtml(it.author) : ""}
             </span>
             <span class="ta-go" aria-hidden="true">${arrow}</span>
           </a>`;
       }).join("");
     }
 
-    function openCollection(title) {
-      taState.title = title;
+    function openCollection(idx) {
+      taState.idx = Number(idx);
       taState.lastFocus = document.activeElement;
       taState.open = true;
       renderCollection();
