@@ -4564,8 +4564,6 @@
             const s = ch.c[idx % ch.c.length] + (j >= 4 ? 12 : 0);
             tone(N(s), { t: t + j * 0.125, dur: 0.16, type: "square", vol: 0.028, lp: 2600, wet: 0.55 });
           });
-          [0, 0.5].forEach(o => { if (bi || o) tone(130, { t: t + o, to: 45, dur: 0.22, vol: 0.28 }); });
-          [0.25, 0.75].forEach(o => noise({ t: t + o, dur: 0.05, vol: 0.035, f: 8000, q: 0.8, type: "highpass" }));
         });
 
         /* Kilau saat huruf "DELTA Lab" muncul, lonceng saat tagline */
@@ -4575,7 +4573,7 @@
 
         /* Penutup: akor Cmaj9 lebar yang berdering lalu memudar */
         const F = 6.2;
-        tone(140, { t: F, to: 40, dur: 0.8, vol: 0.4 });
+        tone(N(-36), { t: F, dur: 1.6, vol: 0.18, atk: 0.03 });
         [-24, -12, -5, 4, 7, 11, 14].forEach((s, k) => {
           tone(N(s), { t: F, dur: 2.4, type: "triangle", vol: k < 2 ? 0.08 : 0.035, atk: 0.08, wet: 0.6, detune: k % 2 ? 6 : -6 });
         });
@@ -4606,81 +4604,95 @@
         busDry = busWet = null;
       }
 
-      /* ---- Musik latar: groove ceria 120 BPM, I–vi–IV–V di C mayor, 8 bar × 2 detik ----
-         toy piano memainkan melodi, marimba mengiringi di ketukan sela (bouncy),
-         bass melompat, kick + tepuk tangan + shaker yang lembut,
-         dan "boing" lucu di akhir tiap putaran. Putaran genap: melodi diganti kilau marimba. */
+      /* ---- Musik latar: gaya "ukulele + siulan" yang ceria, 120 BPM, C–Am–F–G, 8 bar × 2 detik ----
+         Tanpa drum dan tanpa bunyi yang nadanya meluncur (tidak ada "pew"/tembakan):
+         genjrengan ukulele memberi ritme, siulan membawakan melodi, bass lembut,
+         dan glockenspiel kecil sebagai hiasan. Putaran genap: melodi dimainkan glockenspiel. */
       const MUSIC_LEVEL = 0.5;
-      const C_ = [-12, -8, -5], AM = [-15, -12, -8], F_ = [-19, -15, -12], G_ = [-17, -13, -10];
+      const UKE = {
+        C: [-12, -8, -5, 0],
+        Am: [-12, -8, -3, 0],
+        F: [-12, -7, -3, 0],
+        G: [-10, -5, -1, 2]
+      };
+      const ROOT = { C: -24, Am: -27, F: -31, G: -29 };
+      /* melodi: [nada, langkah mulai (per 1/8), panjang (langkah)] */
       const SONG = [
-        { r: [-24], c: C_, m: [0, null, 4, 7, null, 7, 9, 7] },
-        { r: [-27], c: AM, m: [4, null, 0, null, -3, 0, null, null] },
-        { r: [-31], c: F_, m: [5, null, 9, 12, null, 12, 14, 12] },
-        { r: [-29], c: G_, m: [11, null, 7, null, 2, 4, 5, 7], push: true },
-        { r: [-24], c: C_, m: [12, null, 11, 12, null, 7, null, 4] },
-        { r: [-27], c: AM, m: [9, null, 7, 9, null, 4, null, 0] },
-        { r: [-31, -29], c: F_, c2: G_, m: [5, 9, 12, null, 11, 7, 2, 7], push: true },
-        { r: [-24], c: C_, m: [12, null, 7, 4, 0, null, null, null], boing: true }
+        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 3]] },
+        { ch: ["Am"], m: [[9, 0, 2], [7, 2, 1], [4, 3, 1], [0, 4, 3]] },
+        { ch: ["F"], m: [[5, 0, 1], [9, 1, 1], [12, 2, 2], [14, 4, 1], [12, 5, 1], [9, 6, 2]] },
+        { ch: ["G"], m: [[11, 0, 3], [7, 4, 2], [2, 6, 1], [4, 7, 1]] },
+        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 2], [14, 6, 1], [16, 7, 1]] },
+        { ch: ["Am"], m: [[16, 0, 2], [12, 2, 2], [9, 4, 3]] },
+        { ch: ["F", "G"], m: [[9, 0, 1], [12, 1, 1], [14, 2, 2], [14, 4, 1], [11, 5, 1], [7, 6, 2]] },
+        { ch: ["C"], m: [[12, 0, 4]], tail: true }
       ];
+      const STRUM = [[0, "D"], [2, "D"], [3, "U"], [5, "U"], [6, "D"], [7, "U"]];
       let music = null;   // { dry, wet, timer, next, bar }
 
-      const marimba = (f, t, v) => {
-        tone(f, { t, dur: 0.3, vol: v, atk: 0.003 });
-        tone(f * 4, { t, dur: 0.05, vol: v * 0.25, atk: 0.002 });
-      };
-      const toyPiano = (f, t, v) => {
-        tone(f, { t, dur: 0.3, type: "triangle", vol: v, atk: 0.004, wet: 0.35 });
-        tone(f * 2, { t, dur: 0.12, vol: v * 0.35, atk: 0.003 });
-        tone(f * 3.01, { t, dur: 0.05, vol: v * 0.12, atk: 0.002 });
-      };
+      /* Siulan: sinus dengan vibrato halus yang muncul perlahan */
+      function whistle(f, t, dur, v) {
+        const t0 = ctx.currentTime + 0.01 + t;
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = f;
+        const lfo = ctx.createOscillator();
+        lfo.frequency.value = 5.2;
+        const depth = ctx.createGain();
+        depth.gain.setValueAtTime(0, t0);
+        depth.gain.linearRampToValueAtTime(10, t0 + Math.min(dur, 0.35));
+        lfo.connect(depth);
+        depth.connect(osc.detune);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(v, t0 + 0.045);
+        g.gain.setValueAtTime(v, t0 + Math.max(0.06, dur - 0.09));
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        osc.connect(g);
+        out(g, 0.35);
+        osc.start(t0); lfo.start(t0);
+        osc.stop(t0 + dur + 0.05); lfo.stop(t0 + dur + 0.05);
+      }
+
+      /* Satu senar ukulele: segitiga teredam + sedikit kilau di awal */
+      function ukeString(f, t, v) {
+        tone(f, { t, dur: 0.34, type: "triangle", vol: v, atk: 0.003, lp: 2400 });
+        tone(f * 2, { t, dur: 0.05, vol: v * 0.3, atk: 0.002 });
+      }
 
       function musicBar(m, at) {
         const idx = m.bar % SONG.length;
         const loop = Math.floor(m.bar / SONG.length);
         const b = SONG[idx];
         const t = Math.max(0, at - ctx.currentTime);
-        const sparkle = loop % 2 === 1 && idx < 4;
+        const glock = loop % 2 === 1;
+        const chordAt = (step) => b.ch[step >= 4 && b.ch[1] ? 1 : 0];
         busDry = m.dry; busWet = m.wet;
         try {
-          for (let i = 0; i < 8; i++) {
-            const st = t + i * 0.25;
-            const half = i >= 4 ? 1 : 0;
-            const root = b.r[half] ?? b.r[0];
-            const ch = (half && b.c2) || b.c;
+          /* genjrengan ukulele: turun (bawah→atas) & naik (atas→bawah, lebih pelan) */
+          STRUM.forEach(([step, dir]) => {
+            const notes = UKE[chordAt(step)];
+            const order = dir === "D" ? notes : notes.slice(1).reverse();
+            const v = dir === "D" ? 0.026 : 0.017;
+            order.forEach((n, k) => ukeString(N(n), t + step * 0.25 + k * 0.012, v));
+          });
 
-            /* drum ringan */
-            if (i === 0 || i === 4 || (b.push && i === 7)) tone(115, { t: st, to: 48, dur: 0.16, vol: 0.2, atk: 0.003 });
-            if (i === 2 || i === 6) {
-              noise({ t: st, dur: 0.09, vol: 0.055, f: 1600, q: 0.9, peak: 0.08 });
-              noise({ t: st + 0.012, dur: 0.07, vol: 0.035, f: 2300, q: 1, peak: 0.1 });
-            }
-            noise({ t: st, dur: 0.035, vol: 0.008, f: 7500, q: 0.7, type: "highpass" });
-            noise({ t: st + 0.125, dur: 0.035, vol: 0.016, f: 7500, q: 0.7, type: "highpass" });
+          /* bass lembut: akar di ketukan 1 & 3, kuint di ketukan 4 */
+          [[0, 0], [4, 0], [6, 7]].forEach(([step, iv]) => {
+            const root = ROOT[chordAt(step)];
+            tone(N(root + iv), { t: t + step * 0.25, dur: 0.42, vol: 0.09, atk: 0.02 });
+            tone(N(root + iv), { t: t + step * 0.25, dur: 0.3, type: "triangle", vol: 0.04, atk: 0.02, lp: 700 });
+          });
 
-            /* bass melompat: akar – kuint – oktaf – kuint */
-            const bassStep = { 0: 0, 3: 7, 4: 12, 6: 7 }[i];
-            if (bassStep !== undefined) tone(N(root + bassStep), { t: st, dur: 0.2, type: "triangle", vol: 0.12, atk: 0.005, lp: 900 });
+          /* melodi: siulan, atau glockenspiel di putaran genap */
+          b.m.forEach(([n, step, len]) => {
+            const st = t + step * 0.25;
+            if (glock) bell(N(n + 12), st, 0.04);
+            else whistle(N(n + 12), st, len * 0.25 - 0.02, 0.05);
+          });
 
-            /* marimba di ketukan sela */
-            if (i % 2 === 1) {
-              marimba(N(ch[1]), st, 0.03);
-              marimba(N(ch[2]), st, 0.026);
-              if (i === 1 || i === 5) marimba(N(ch[0]), st, 0.022);
-            }
-
-            /* melodi toy piano, atau kilau marimba pada putaran genap */
-            if (sparkle) {
-              if (i % 2 === 0) marimba(N(ch[(i / 2) % 3] + 24), st, 0.022);
-            } else if (b.m[i] !== null) {
-              toyPiano(N(b.m[i]), st + Math.random() * 0.01, 0.045);
-            }
-          }
-
-          /* akhir putaran: "boing" + "pop" yang lucu */
-          if (b.boing) {
-            tone(240, { t: t + 1.5, to: 760, dur: 0.22, vol: 0.05, wet: 0.3 });
-            tone(1300, { t: t + 1.78, to: 320, dur: 0.08, vol: 0.035 });
-          }
+          /* akhir putaran: arpeggio glockenspiel kecil yang manis */
+          if (b.tail) [24, 28, 31, 36].forEach((n, k) => bell(N(n), t + 1.1 + k * 0.12, 0.028));
         } finally { busDry = busWet = null; }
         m.bar += 1;
       }
