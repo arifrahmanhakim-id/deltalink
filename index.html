@@ -4606,33 +4606,81 @@
         busDry = busWet = null;
       }
 
-      /* ---- Musik latar: pad lembut + bass + petikan acak, progresi Cmaj9–Am9–Fmaj9–G6, 4 detik per akor ---- */
-      const MUSIC_LEVEL = 0.55;
-      const CHORDS = [
-        { c: [0, 4, 7, 11, 14], b: -24 },
-        { c: [-3, 0, 4, 7, 11], b: -27 },
-        { c: [-7, -3, 0, 4, 7], b: -31 },
-        { c: [-5, -1, 2, 4, 9], b: -29 }
+      /* ---- Musik latar: groove ceria 120 BPM, I–vi–IV–V di C mayor, 8 bar × 2 detik ----
+         toy piano memainkan melodi, marimba mengiringi di ketukan sela (bouncy),
+         bass melompat, kick + tepuk tangan + shaker yang lembut,
+         dan "boing" lucu di akhir tiap putaran. Putaran genap: melodi diganti kilau marimba. */
+      const MUSIC_LEVEL = 0.5;
+      const C_ = [-12, -8, -5], AM = [-15, -12, -8], F_ = [-19, -15, -12], G_ = [-17, -13, -10];
+      const SONG = [
+        { r: [-24], c: C_, m: [0, null, 4, 7, null, 7, 9, 7] },
+        { r: [-27], c: AM, m: [4, null, 0, null, -3, 0, null, null] },
+        { r: [-31], c: F_, m: [5, null, 9, 12, null, 12, 14, 12] },
+        { r: [-29], c: G_, m: [11, null, 7, null, 2, 4, 5, 7], push: true },
+        { r: [-24], c: C_, m: [12, null, 11, 12, null, 7, null, 4] },
+        { r: [-27], c: AM, m: [9, null, 7, 9, null, 4, null, 0] },
+        { r: [-31, -29], c: F_, c2: G_, m: [5, 9, 12, null, 11, 7, 2, 7], push: true },
+        { r: [-24], c: C_, m: [12, null, 7, 4, 0, null, null, null], boing: true }
       ];
       let music = null;   // { dry, wet, timer, next, bar }
 
+      const marimba = (f, t, v) => {
+        tone(f, { t, dur: 0.3, vol: v, atk: 0.003 });
+        tone(f * 4, { t, dur: 0.05, vol: v * 0.25, atk: 0.002 });
+      };
+      const toyPiano = (f, t, v) => {
+        tone(f, { t, dur: 0.3, type: "triangle", vol: v, atk: 0.004, wet: 0.35 });
+        tone(f * 2, { t, dur: 0.12, vol: v * 0.35, atk: 0.003 });
+        tone(f * 3.01, { t, dur: 0.05, vol: v * 0.12, atk: 0.002 });
+      };
+
       function musicBar(m, at) {
-        const ch = CHORDS[m.bar % CHORDS.length];
+        const idx = m.bar % SONG.length;
+        const loop = Math.floor(m.bar / SONG.length);
+        const b = SONG[idx];
         const t = Math.max(0, at - ctx.currentTime);
+        const sparkle = loop % 2 === 1 && idx < 4;
         busDry = m.dry; busWet = m.wet;
         try {
-          ch.c.forEach((s, k) => tone(N(s - 12), { t, dur: 4.6, type: "triangle", vol: 0.022, atk: 1.4, wet: 0.5, lp: 1500, detune: k % 2 ? 7 : -7 }));
-          tone(N(ch.b), { t, dur: 3.8, vol: 0.07, atk: 0.35 });
-          let last = -1;
-          for (let j = 0; j < 8; j++) {
-            if (Math.random() > 0.42) continue;
-            let k = Math.floor(Math.random() * ch.c.length);
-            if (k === last) k = (k + 2) % ch.c.length;
-            last = k;
-            const hi = Math.random() < 0.3 ? 12 : 0;
-            tone(N(ch.c[k] + hi), { t: t + j * 0.5 + Math.random() * 0.04, dur: 1.1, vol: 0.03, atk: 0.01, wet: 0.7 });
+          for (let i = 0; i < 8; i++) {
+            const st = t + i * 0.25;
+            const half = i >= 4 ? 1 : 0;
+            const root = b.r[half] ?? b.r[0];
+            const ch = (half && b.c2) || b.c;
+
+            /* drum ringan */
+            if (i === 0 || i === 4 || (b.push && i === 7)) tone(115, { t: st, to: 48, dur: 0.16, vol: 0.2, atk: 0.003 });
+            if (i === 2 || i === 6) {
+              noise({ t: st, dur: 0.09, vol: 0.055, f: 1600, q: 0.9, peak: 0.08 });
+              noise({ t: st + 0.012, dur: 0.07, vol: 0.035, f: 2300, q: 1, peak: 0.1 });
+            }
+            noise({ t: st, dur: 0.035, vol: 0.008, f: 7500, q: 0.7, type: "highpass" });
+            noise({ t: st + 0.125, dur: 0.035, vol: 0.016, f: 7500, q: 0.7, type: "highpass" });
+
+            /* bass melompat: akar – kuint – oktaf – kuint */
+            const bassStep = { 0: 0, 3: 7, 4: 12, 6: 7 }[i];
+            if (bassStep !== undefined) tone(N(root + bassStep), { t: st, dur: 0.2, type: "triangle", vol: 0.12, atk: 0.005, lp: 900 });
+
+            /* marimba di ketukan sela */
+            if (i % 2 === 1) {
+              marimba(N(ch[1]), st, 0.03);
+              marimba(N(ch[2]), st, 0.026);
+              if (i === 1 || i === 5) marimba(N(ch[0]), st, 0.022);
+            }
+
+            /* melodi toy piano, atau kilau marimba pada putaran genap */
+            if (sparkle) {
+              if (i % 2 === 0) marimba(N(ch[(i / 2) % 3] + 24), st, 0.022);
+            } else if (b.m[i] !== null) {
+              toyPiano(N(b.m[i]), st + Math.random() * 0.01, 0.045);
+            }
           }
-          if (m.bar % 2 === 1) bell(N(ch.c[ch.c.length - 1] + 12), t + 3, 0.025);
+
+          /* akhir putaran: "boing" + "pop" yang lucu */
+          if (b.boing) {
+            tone(240, { t: t + 1.5, to: 760, dur: 0.22, vol: 0.05, wet: 0.3 });
+            tone(1300, { t: t + 1.78, to: 320, dur: 0.08, vol: 0.035 });
+          }
         } finally { busDry = busWet = null; }
         m.bar += 1;
       }
@@ -4649,7 +4697,7 @@
         wet.connect(echoIn);
         const m = { dry, wet, bar: 0, next: now + 0.1, timer: 0 };
         const pump = () => {
-          while (m.next < ctx.currentTime + 1.5) { musicBar(m, m.next); m.next += 4; }
+          while (m.next < ctx.currentTime + 1.2) { musicBar(m, m.next); m.next += 2; }
         };
         pump();
         m.timer = setInterval(pump, 400);
