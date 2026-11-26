@@ -2788,184 +2788,203 @@
     }
 
     /* ==========================================================================
-       KONTROL VOLUME MELAYANG: tombol bulat → panel (musik latar + slider volume)
+       PEMUTAR MUSIK MELAYANG: pegangan geser · equalizer · judul · ⏮ ⏯ ⏭ · suara · volume
        ========================================================================== */
-    .vol {
-      --vol-bg: rgba(255, 255, 255, 0.78);
-      --vol-fg: var(--telu-grey-dark);
-      --vol-line: rgba(0, 0, 0, 0.08);
-      --vol-track: rgba(0, 0, 0, 0.12);
+    .player {
+      --pl-bg: rgba(255, 255, 255, 0.92);
+      --pl-fg: #222428;
+      --pl-muted: #6D6E71;
+      --pl-line: rgba(0, 0, 0, 0.1);
+      --pl-track: rgba(0, 0, 0, 0.14);
       position: fixed;
       left: 16px;
       bottom: max(16px, env(safe-area-inset-bottom));
       z-index: 10001;
       display: flex;
       align-items: center;
-      height: 44px;
-      border: 1px solid var(--vol-line);
+      gap: 4px;
+      max-width: calc(100vw - 32px);
+      height: 46px;
+      padding: 0 14px 0 8px;
+      border: 1px solid var(--pl-line);
       border-radius: 999px;
-      background: var(--vol-bg);
-      color: var(--vol-fg);
-      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16);
-      -webkit-backdrop-filter: blur(12px) saturate(1.4);
-              backdrop-filter: blur(12px) saturate(1.4);
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      background: var(--pl-bg);
+      color: var(--pl-fg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.06);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4);
+              backdrop-filter: blur(14px) saturate(1.4);
+      touch-action: none;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
     }
 
-    [data-theme="dark"] .vol {
-      --vol-bg: rgba(40, 42, 46, 0.82);
-      --vol-fg: #F3F4F6;
-      --vol-line: rgba(255, 255, 255, 0.12);
-      --vol-track: rgba(255, 255, 255, 0.2);
+    [data-theme="dark"] .player {
+      --pl-bg: rgba(38, 40, 44, 0.9);
+      --pl-fg: #F3F4F6;
+      --pl-muted: #B4B6BB;
+      --pl-line: rgba(255, 255, 255, 0.12);
+      --pl-track: rgba(255, 255, 255, 0.22);
     }
 
-    /* Selama intro: kaca gelap menyatu dengan latar intro */
-    html.has-intro .vol {
-      --vol-bg: rgba(255, 255, 255, 0.07);
-      --vol-fg: rgba(255, 255, 255, 0.9);
-      --vol-line: rgba(255, 255, 255, 0.18);
-      --vol-track: rgba(255, 255, 255, 0.22);
+    html.has-intro .player {
+      --pl-bg: rgba(255, 255, 255, 0.08);
+      --pl-fg: #FFFFFF;
+      --pl-muted: rgba(255, 255, 255, 0.65);
+      --pl-line: rgba(255, 255, 255, 0.18);
+      --pl-track: rgba(255, 255, 255, 0.25);
       box-shadow: none;
     }
 
-    .vol-btn {
-      position: relative;
+    .player.dragging { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28); transition: none; }
+
+    .pl-grip {
+      display: grid;
+      grid-template-columns: repeat(2, 3px);
+      gap: 2.5px;
+      padding: 8px 5px;
+      cursor: grab;
+      opacity: 0.45;
+    }
+
+    .player.dragging .pl-grip { cursor: grabbing; }
+    .pl-grip i { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+
+    .pl-eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 13px;
+      margin: 0 4px 0 2px;
+    }
+
+    .pl-eq i {
+      width: 3px;
+      height: 100%;
+      border-radius: 1.5px;
+      background: #C8232B;
+      transform-origin: bottom;
+      transform: scaleY(0.3);
+    }
+
+    .player.is-playing .pl-eq i { animation: isEq 0.9s ease-in-out infinite; }
+    .player.is-playing .pl-eq i:nth-child(2) { animation-delay: -0.35s; animation-duration: 0.7s; }
+    .player.is-playing .pl-eq i:nth-child(3) { animation-delay: -0.6s; animation-duration: 1.1s; }
+
+    .pl-name {
+      max-width: 104px;
+      margin-right: 6px;
+      overflow: hidden;
+      font-size: 12.5px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .pl-name.swap { animation: plSwap 0.35s ease; }
+
+    @keyframes plSwap {
+      0% { opacity: 0; transform: translateY(6px); }
+      100% { opacity: 1; transform: none; }
+    }
+
+    .pl-btn, .pl-play {
       display: grid;
       place-items: center;
-      width: 42px;
-      height: 42px;
       flex: none;
       padding: 0;
       border: none;
-      border-radius: 50%;
-      background: none;
       color: inherit;
       cursor: pointer;
+      font-family: inherit;
     }
 
-    .vol-btn:focus-visible, .vol-music:focus-visible { outline: 2px solid #C8232B; outline-offset: 2px; }
-
-    /* equalizer kecil di pojok tombol saat musik berjalan */
-    .vol-eq {
-      position: absolute;
-      right: 6px;
-      bottom: 8px;
-      display: flex;
-      align-items: flex-end;
-      gap: 1.5px;
-      height: 8px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .vol-eq i {
-      width: 2px;
-      height: 100%;
-      border-radius: 1px;
-      background: #E0424A;
-      transform-origin: bottom;
-      animation: isEq 0.9s ease-in-out infinite;
-    }
-
-    .vol-eq i:nth-child(2) { animation-delay: -0.35s; animation-duration: 0.7s; }
-    .vol-eq i:nth-child(3) { animation-delay: -0.6s; animation-duration: 1.1s; }
-    .vol.is-playing .vol-eq { opacity: 1; }
-    .vol-ico { transition: transform 0.3s ease; }
-    .vol.is-playing .vol-ico { transform: translateX(-3px); }
-
-    .vol-panel {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      max-width: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-width 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.25s ease, padding 0.4s ease;
-    }
-
-    .vol.open .vol-panel {
-      max-width: 240px;
-      padding-right: 14px;
-      opacity: 1;
-    }
-
-    .vol-music {
-      display: grid;
-      place-items: center;
+    .pl-btn {
       width: 30px;
       height: 30px;
-      flex: none;
-      padding: 0;
-      border: 1px solid var(--vol-line);
       border-radius: 50%;
       background: none;
-      color: inherit;
-      opacity: 0.55;
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+      color: var(--pl-fg);
+      opacity: 0.8;
+      transition: opacity 0.2s ease, background 0.2s ease;
     }
 
-    .vol-music[aria-pressed="true"] {
-      opacity: 1;
-      border-color: transparent;
-      background: #8C151B;
+    .pl-btn:hover { opacity: 1; background: var(--pl-line); }
+
+    .pl-play {
+      width: 32px;
+      height: 32px;
+      margin: 0 2px;
+      border-radius: 50%;
+      background: #A8141B;
       color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(168, 20, 27, 0.4);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    .vol-range {
+    .pl-play:hover { transform: scale(1.08); background: #C8232B; }
+    .pl-play:active { transform: scale(0.94); }
+
+    .pl-btn:focus-visible, .pl-play:focus-visible { outline: 2px solid #C8232B; outline-offset: 2px; }
+
+    #plMute { margin-left: 4px; }
+
+    .pl-range {
       --p: 80%;
-      width: 118px;
+      width: 76px;
       height: 20px;
-      margin: 0;
+      margin: 0 0 0 2px;
       background: none;
       cursor: pointer;
       -webkit-appearance: none;
               appearance: none;
     }
 
-    .vol-range::-webkit-slider-runnable-track {
+    .pl-range::-webkit-slider-runnable-track {
       height: 4px;
       border-radius: 4px;
-      background: linear-gradient(90deg, #8C151B, #E0424A var(--p), var(--vol-track) var(--p));
+      background: linear-gradient(90deg, #A8141B, #E0424A var(--p), var(--pl-track) var(--p));
     }
 
-    .vol-range::-moz-range-track {
+    .pl-range::-moz-range-track {
       height: 4px;
       border-radius: 4px;
-      background: linear-gradient(90deg, #8C151B, #E0424A var(--p), var(--vol-track) var(--p));
+      background: linear-gradient(90deg, #A8141B, #E0424A var(--p), var(--pl-track) var(--p));
     }
 
-    .vol-range::-webkit-slider-thumb {
+    .pl-range::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      margin-top: -6px;
+      width: 14px;
+      height: 14px;
+      margin-top: -5px;
       border: 2px solid #FFFFFF;
       border-radius: 50%;
       background: #C8232B;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
     }
 
-    .vol-range::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+    .pl-range::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
       border: 2px solid #FFFFFF;
       border-radius: 50%;
       background: #C8232B;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
     }
 
-    .vol-range:focus-visible { outline: none; }
-    .vol-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(200, 35, 43, 0.35); }
+    .pl-range:focus-visible { outline: none; }
+    .pl-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(200, 35, 43, 0.35); }
 
-    .vol-val {
-      min-width: 24px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 11px;
-      font-weight: 600;
-      text-align: right;
-      opacity: 0.8;
+    @media (max-width: 420px) {
+      .player { gap: 1px; padding: 0 12px 0 6px; }
+      .pl-btn { width: 28px; }
+      #plMute { margin-left: 0; }
+      .pl-range { width: 60px; }
     }
+
+    @media (max-width: 350px) {
+      .pl-name { max-width: 70px; }
+      .pl-range { width: 48px; }
+    }
+
   </style>
 </head>
 <body>
@@ -3017,19 +3036,24 @@
     <div class="intro-bar" aria-hidden="true"><span></span></div>
   </div>
 
-  <!-- Kontrol volume & musik latar (melayang di kiri bawah) -->
-  <div class="vol" id="vol">
-    <button class="vol-btn" id="volBtn" type="button" aria-expanded="false" aria-controls="volPanel" aria-label="Volume">
-      <svg class="vol-ico" id="volIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
-      <span class="vol-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <!-- Pemutar musik latar (melayang di kiri bawah, bisa digeser) -->
+  <div class="player" id="player" role="region" aria-label="Musik">
+    <span class="pl-grip" id="plGrip" aria-hidden="true" title="Geser"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    <span class="pl-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="pl-name" id="plName" aria-live="polite">Ukulele Ceria</span>
+    <button class="pl-btn" id="plPrev" type="button" aria-label="Lagu sebelumnya">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="2.6" height="14" rx="1.1"/><path d="M19 6.2v11.6c0 .9-1 1.4-1.7.9l-8.4-5.8a1.1 1.1 0 0 1 0-1.8l8.4-5.8c.7-.5 1.7 0 1.7.9z"/></svg>
     </button>
-    <div class="vol-panel" id="volPanel">
-      <button class="vol-music" id="volMusic" type="button" aria-pressed="true">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-      </button>
-      <input class="vol-range" id="volRange" type="range" min="0" max="100" step="1" value="80" aria-label="Volume" />
-      <span class="vol-val" id="volVal">80</span>
-    </div>
+    <button class="pl-play" id="plPlay" type="button" aria-pressed="true">
+      <svg id="plPlayIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"></svg>
+    </button>
+    <button class="pl-btn" id="plNext" type="button" aria-label="Lagu berikutnya">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="16.4" y="5" width="2.6" height="14" rx="1.1"/><path d="M5 6.2v11.6c0 .9 1 1.4 1.7.9l8.4-5.8a1.1 1.1 0 0 0 0-1.8L6.7 5.3C6 4.8 5 5.3 5 6.2z"/></svg>
+    </button>
+    <button class="pl-btn" id="plMute" type="button" aria-pressed="false">
+      <svg id="plMuteIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+    </button>
+    <input class="pl-range" id="plRange" type="range" min="0" max="100" step="1" value="80" aria-label="Volume" />
   </div>
 
   <main class="container">
@@ -3583,8 +3607,10 @@
         introTap: "Ketuk untuk memulai",
         introSkip: "Lewati",
         volume: "Volume",
-        musicOn: "Matikan musik latar",
-        musicOff: "Nyalakan musik latar",
+        musicOn: "Jeda musik latar",
+        musicOff: "Putar musik latar",
+        trackPrev: "Lagu sebelumnya",
+        trackNext: "Lagu berikutnya",
         taCount: (n) => `${n} contoh TA · ketuk untuk melihat`,
         gameBackAria: "Kembali ke daftar game",
         gameScore: "Skor",
@@ -3688,8 +3714,10 @@
         introTap: "Tap to start",
         introSkip: "Skip",
         volume: "Volume",
-        musicOn: "Turn background music off",
-        musicOff: "Turn background music on",
+        musicOn: "Pause background music",
+        musicOff: "Play background music",
+        trackPrev: "Previous song",
+        trackNext: "Next song",
         taCount: (n) => `${n} thesis project${n === 1 ? "" : "s"} · tap to browse`,
         gameBackAria: "Back to game list",
         gameScore: "Score",
@@ -4517,6 +4545,13 @@
       function greet() {
         if (greeted || !on) return;
         if (init() && ctx.state === "running") { greeted = true; sounds.startup(); setTimeout(startMusic, 1200); return; }
+        /* Bila browser sebenarnya mengizinkan suara, mulai tanpa menunggu sentuhan */
+        if (ctx) ctx.resume().then(() => {
+          if (greeted || !on || ctx.state !== "running") return;
+          greeted = true;
+          sounds.startup();
+          setTimeout(startMusic, 1200);
+        }).catch(() => {});
         const first = () => {
           ["pointerdown", "keydown", "touchstart"].forEach(t => window.removeEventListener(t, first, true));
           if (greeted || !on || !init()) return;
@@ -4604,33 +4639,14 @@
         busDry = busWet = null;
       }
 
-      /* ---- Musik latar: gaya "ukulele + siulan" yang ceria, 120 BPM, C–Am–F–G, 8 bar × 2 detik ----
-         Tanpa drum dan tanpa bunyi yang nadanya meluncur (tidak ada "pew"/tembakan):
-         genjrengan ukulele memberi ritme, siulan membawakan melodi, bass lembut,
-         dan glockenspiel kecil sebagai hiasan. Putaran genap: melodi dimainkan glockenspiel. */
+      /* ==== MUSIK LATAR: beberapa lagu ceria (tanpa drum & tanpa bunyi "pew"), bisa diganti next/prev ==== */
       const MUSIC_LEVEL = 0.5;
-      const UKE = {
-        C: [-12, -8, -5, 0],
-        Am: [-12, -8, -3, 0],
-        F: [-12, -7, -3, 0],
-        G: [-10, -5, -1, 2]
-      };
-      const ROOT = { C: -24, Am: -27, F: -31, G: -29 };
-      /* melodi: [nada, langkah mulai (per 1/8), panjang (langkah)] */
-      const SONG = [
-        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 3]] },
-        { ch: ["Am"], m: [[9, 0, 2], [7, 2, 1], [4, 3, 1], [0, 4, 3]] },
-        { ch: ["F"], m: [[5, 0, 1], [9, 1, 1], [12, 2, 2], [14, 4, 1], [12, 5, 1], [9, 6, 2]] },
-        { ch: ["G"], m: [[11, 0, 3], [7, 4, 2], [2, 6, 1], [4, 7, 1]] },
-        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 2], [14, 6, 1], [16, 7, 1]] },
-        { ch: ["Am"], m: [[16, 0, 2], [12, 2, 2], [9, 4, 3]] },
-        { ch: ["F", "G"], m: [[9, 0, 1], [12, 1, 1], [14, 2, 2], [14, 4, 1], [11, 5, 1], [7, 6, 2]] },
-        { ch: ["C"], m: [[12, 0, 4]], tail: true }
-      ];
-      const STRUM = [[0, "D"], [2, "D"], [3, "U"], [5, "U"], [6, "D"], [7, "U"]];
-      let music = null;   // { dry, wet, timer, next, bar }
+      const TRACK_KEY = "deltalink-track";
+      let trackIdx = 0;
+      try { trackIdx = Math.max(0, parseInt(localStorage.getItem(TRACK_KEY), 10) || 0); } catch {}
+      let music = null;   // { dry, wet, timer, next, bar, track }
 
-      /* Siulan: sinus dengan vibrato halus yang muncul perlahan */
+      /* --- instrumen --- */
       function whistle(f, t, dur, v) {
         const t0 = ctx.currentTime + 0.01 + t;
         const osc = ctx.createOscillator();
@@ -4653,63 +4669,154 @@
         osc.start(t0); lfo.start(t0);
         osc.stop(t0 + dur + 0.05); lfo.stop(t0 + dur + 0.05);
       }
-
-      /* Satu senar ukulele: segitiga teredam + sedikit kilau di awal */
-      function ukeString(f, t, v) {
+      const ukeString = (f, t, v) => {
         tone(f, { t, dur: 0.34, type: "triangle", vol: v, atk: 0.003, lp: 2400 });
         tone(f * 2, { t, dur: 0.05, vol: v * 0.3, atk: 0.002 });
-      }
+      };
+      const kalimba = (f, t, v) => {
+        tone(f, { t, dur: 0.8, vol: v, atk: 0.002, wet: 0.4 });
+        tone(f * 5.95, { t, dur: 0.07, vol: v * 0.18, atk: 0.001 });
+      };
+      const chip = (f, t, dur, v) => tone(f, { t, dur, type: "square", vol: v, atk: 0.004, lp: 3200 });
+      const piano = (f, t, v, dur = 0.9) => {
+        tone(f, { t, dur, type: "triangle", vol: v, atk: 0.004, lp: 3200, wet: 0.3 });
+        tone(f * 2, { t, dur: dur * 0.3, vol: v * 0.22, atk: 0.003 });
+      };
+      const softBass = (f, t, dur, v = 0.09) => {
+        tone(f, { t, dur, vol: v, atk: 0.02 });
+        tone(f, { t, dur: dur * 0.75, type: "triangle", vol: v * 0.45, atk: 0.02, lp: 700 });
+      };
 
-      function musicBar(m, at) {
-        const idx = m.bar % SONG.length;
-        const loop = Math.floor(m.bar / SONG.length);
-        const b = SONG[idx];
-        const t = Math.max(0, at - ctx.currentTime);
-        const glock = loop % 2 === 1;
+      /* --- 1. Ukulele Ceria: genjreng ukulele + siulan, 120 BPM, C–Am–F–G --- */
+      const UKE = { C: [-12, -8, -5, 0], Am: [-12, -8, -3, 0], F: [-12, -7, -3, 0], G: [-10, -5, -1, 2] };
+      const UKE_ROOT = { C: -24, Am: -27, F: -31, G: -29 };
+      const UKE_SONG = [
+        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 3]] },
+        { ch: ["Am"], m: [[9, 0, 2], [7, 2, 1], [4, 3, 1], [0, 4, 3]] },
+        { ch: ["F"], m: [[5, 0, 1], [9, 1, 1], [12, 2, 2], [14, 4, 1], [12, 5, 1], [9, 6, 2]] },
+        { ch: ["G"], m: [[11, 0, 3], [7, 4, 2], [2, 6, 1], [4, 7, 1]] },
+        { ch: ["C"], m: [[7, 0, 2], [4, 2, 1], [7, 3, 1], [12, 4, 2], [14, 6, 1], [16, 7, 1]] },
+        { ch: ["Am"], m: [[16, 0, 2], [12, 2, 2], [9, 4, 3]] },
+        { ch: ["F", "G"], m: [[9, 0, 1], [12, 1, 1], [14, 2, 2], [14, 4, 1], [11, 5, 1], [7, 6, 2]] },
+        { ch: ["C"], m: [[12, 0, 4]], tail: true }
+      ];
+      const STRUM = [[0, "D"], [2, "D"], [3, "U"], [5, "U"], [6, "D"], [7, "U"]];
+      function ukuleleBar(m, t) {
+        const b = UKE_SONG[m.bar % 8];
+        const glock = Math.floor(m.bar / 8) % 2 === 1;
         const chordAt = (step) => b.ch[step >= 4 && b.ch[1] ? 1 : 0];
-        busDry = m.dry; busWet = m.wet;
-        try {
-          /* genjrengan ukulele: turun (bawah→atas) & naik (atas→bawah, lebih pelan) */
-          STRUM.forEach(([step, dir]) => {
-            const notes = UKE[chordAt(step)];
-            const order = dir === "D" ? notes : notes.slice(1).reverse();
-            const v = dir === "D" ? 0.026 : 0.017;
-            order.forEach((n, k) => ukeString(N(n), t + step * 0.25 + k * 0.012, v));
-          });
-
-          /* bass lembut: akar di ketukan 1 & 3, kuint di ketukan 4 */
-          [[0, 0], [4, 0], [6, 7]].forEach(([step, iv]) => {
-            const root = ROOT[chordAt(step)];
-            tone(N(root + iv), { t: t + step * 0.25, dur: 0.42, vol: 0.09, atk: 0.02 });
-            tone(N(root + iv), { t: t + step * 0.25, dur: 0.3, type: "triangle", vol: 0.04, atk: 0.02, lp: 700 });
-          });
-
-          /* melodi: siulan, atau glockenspiel di putaran genap */
-          b.m.forEach(([n, step, len]) => {
-            const st = t + step * 0.25;
-            if (glock) bell(N(n + 12), st, 0.04);
-            else whistle(N(n + 12), st, len * 0.25 - 0.02, 0.05);
-          });
-
-          /* akhir putaran: arpeggio glockenspiel kecil yang manis */
-          if (b.tail) [24, 28, 31, 36].forEach((n, k) => bell(N(n), t + 1.1 + k * 0.12, 0.028));
-        } finally { busDry = busWet = null; }
-        m.bar += 1;
+        STRUM.forEach(([step, dir]) => {
+          const notes = UKE[chordAt(step)];
+          const order = dir === "D" ? notes : notes.slice(1).reverse();
+          const v = dir === "D" ? 0.026 : 0.017;
+          order.forEach((n, k) => ukeString(N(n), t + step * 0.25 + k * 0.012, v));
+        });
+        [[0, 0], [4, 0], [6, 7]].forEach(([step, iv]) => softBass(N(UKE_ROOT[chordAt(step)] + iv), t + step * 0.25, 0.42));
+        b.m.forEach(([n, step, len]) => {
+          const st = t + step * 0.25;
+          if (glock) bell(N(n + 12), st, 0.04);
+          else whistle(N(n + 12), st, len * 0.25 - 0.02, 0.05);
+        });
+        if (b.tail) [24, 28, 31, 36].forEach((n, k) => bell(N(n), t + 1.1 + k * 0.12, 0.028));
       }
 
-      function startMusic() {
+      /* --- 2. Kalimba Pop: arpeggio kalimba yang memantul, 108 BPM, F–C–Dm–Bb --- */
+      const KAL_CH = [[-7, -3, 0], [-12, -8, -5], [-10, -7, -3], [-14, -10, -7]];
+      const KAL_ROOT = [-31, -36, -34, -38];
+      const KAL_MEL = [
+        [[12, 0], [9, 2], [12, 3], [17, 4], [16, 6]],
+        [[14, 0], [12, 2], [7, 4], [9, 5], [12, 6]],
+        [[9, 0], [14, 2], [12, 3], [9, 4], [5, 6]],
+        [[7, 0], [5, 2], [7, 3], [9, 4], [10, 5], [12, 6]],
+        [[17, 0], [16, 1], [17, 2], [12, 4], [9, 6]],
+        [[16, 0], [14, 2], [12, 4], [16, 6]],
+        [[14, 0], [17, 2], [14, 4], [12, 6]],
+        [[10, 0], [9, 2], [7, 4], [5, 6], [12, 7]]
+      ];
+      const KAL_STEP = 60 / 108 / 2;
+      function kalimbaBar(m, t) {
+        const i = m.bar % 8, c = KAL_CH[i % 4];
+        const arp = [c[0], c[1], c[2], c[0] + 12, c[2], c[1], c[2], c[0] + 12];
+        arp.forEach((n, k) => kalimba(N(n), t + k * KAL_STEP, 0.028));
+        softBass(N(KAL_ROOT[i % 4] + 12), t, 0.9, 0.085);
+        softBass(N(KAL_ROOT[i % 4] + 19), t + 4 * KAL_STEP, 0.6, 0.07);
+        [1, 3, 5, 7].forEach(k => tone(1750, { t: t + k * KAL_STEP, dur: 0.035, vol: 0.012, atk: 0.001 }));
+        KAL_MEL[i].forEach(([n, k]) => kalimba(N(n + 12), t + k * KAL_STEP + Math.random() * 0.008, 0.05));
+        if (i === 7) [12, 16, 19, 24].forEach((n, k) => bell(N(n + 12), t + 1.4 + k * 0.1, 0.022));
+      }
+
+      /* --- 3. Chiptune Lucu: gaya game 8-bit, 132 BPM, G–Em–C–D --- */
+      const CHIP_CH = [[-5, -1, 2], [-8, -5, -1], [-12, -8, -5], [-10, -6, -3]];
+      const CHIP_ROOT = [-29, -32, -24, -22];
+      const CHIP_MEL = [
+        [[7, 0, 1], [7, 1, 1], [14, 2, 1], [11, 3, 1], [7, 4, 2], [9, 6, 1], [11, 7, 1]],
+        [[12, 0, 2], [11, 2, 1], [7, 3, 1], [4, 4, 3], [7, 7, 1]],
+        [[4, 0, 1], [7, 1, 1], [12, 2, 2], [11, 4, 1], [12, 5, 1], [14, 6, 2]],
+        [[14, 0, 1], [12, 1, 1], [11, 2, 1], [9, 3, 1], [6, 4, 2], [2, 6, 2]]
+      ];
+      const CHIP_STEP = 60 / 132 / 2;
+      function chipBar(m, t) {
+        const i = m.bar % 4, c = CHIP_CH[i];
+        const second = Math.floor(m.bar / 4) % 2 === 1;
+        for (let k = 0; k < 8; k++) {
+          const st = t + k * CHIP_STEP;
+          tone(N(CHIP_ROOT[i] + (k % 2 ? 12 : 0)), { t: st, dur: CHIP_STEP * 0.9, type: "triangle", vol: 0.07, atk: 0.003 });
+          chip(N(c[k % 3] + 12), st, CHIP_STEP * 0.45, 0.009);
+          chip(N(c[(k + 1) % 3] + 12), st + CHIP_STEP / 2, CHIP_STEP * 0.45, 0.008);
+        }
+        CHIP_MEL[i].forEach(([n, k, len]) => {
+          chip(N(n), t + k * CHIP_STEP, len * CHIP_STEP * 0.85, 0.028);
+          if (second) chip(N(n + 12), t + (k + 1) * CHIP_STEP, len * CHIP_STEP * 0.6, 0.01);
+        });
+      }
+
+      /* --- 4. Swing Santai: piano jazzy berayun + walking bass, 120 BPM, Dm7–G7–Cmaj7–A7 --- */
+      const SW_CH = [[-10, -7, -3, 0], [-13, -10, -7, -5], [-12, -8, -5, -1], [-11, -8, -5, -3]];
+      const SW_WALK = [[-22, -19, -15, -17], [-29, -25, -22, -25], [-24, -20, -17, -26], [-27, -23, -20, -23]];
+      const SW_MEL = [
+        [[9, 1], [12, 2], [14, 3], [12, 5]],
+        [[11, 0], [7, 2], [5, 3], [2, 5], [5, 6]],
+        [[4, 0], [7, 1], [11, 2], [12, 4]],
+        [[13, 1], [12, 2], [9, 3], [7, 5], [4, 6]]
+      ];
+      const swing = (k) => Math.floor(k / 2) * 0.5 + (k % 2 ? 0.333 : 0);
+      function swingBar(m, t) {
+        const i = m.bar % 4;
+        const rest = Math.floor(m.bar / 4) % 2 === 1 && (i === 1 || i === 3);
+        SW_WALK[i].forEach((n, q) => softBass(N(n), t + q * 0.5, 0.45, 0.1));
+        [[2, 0.024], [5, 0.02]].forEach(([k, v]) => SW_CH[i].forEach(n => piano(N(n), t + swing(k), v, 0.5)));
+        if (!rest) SW_MEL[i].forEach(([n, k]) => piano(N(n + 12), t + swing(k), 0.05, 0.45));
+        else [24, 21, 19].forEach((n, k) => bell(N(n), t + 0.5 + k * 0.33, 0.02));
+      }
+
+      const TRACKS = [
+        { name: { id: "Ukulele Ceria", en: "Happy Ukulele" }, barLen: 2, bar: ukuleleBar },
+        { name: { id: "Kalimba Pop", en: "Kalimba Pop" }, barLen: KAL_STEP * 8, bar: kalimbaBar },
+        { name: { id: "Chiptune Lucu", en: "Funny Chiptune" }, barLen: CHIP_STEP * 8, bar: chipBar },
+        { name: { id: "Swing Santai", en: "Easy Swing" }, barLen: 2, bar: swingBar }
+      ];
+      trackIdx %= TRACKS.length;
+
+      function startMusic(fade = 3) {
         if (music || !on || !musicOn || !ctx || ctx.state !== "running") return;
         const dry = ctx.createGain(), wet = ctx.createGain();
         const now = ctx.currentTime;
         [dry, wet].forEach(g => {
           g.gain.setValueAtTime(0.0001, now);
-          g.gain.exponentialRampToValueAtTime(MUSIC_LEVEL, now + 3);
+          g.gain.exponentialRampToValueAtTime(MUSIC_LEVEL, now + fade);
         });
         dry.connect(master);
         wet.connect(echoIn);
+        const track = TRACKS[trackIdx];
         const m = { dry, wet, bar: 0, next: now + 0.1, timer: 0 };
         const pump = () => {
-          while (m.next < ctx.currentTime + 1.2) { musicBar(m, m.next); m.next += 2; }
+          while (m.next < ctx.currentTime + 1.2) {
+            const t = Math.max(0, m.next - ctx.currentTime);
+            busDry = m.dry; busWet = m.wet;
+            try { track.bar(m, t); } catch {} finally { busDry = busWet = null; }
+            m.bar += 1;
+            m.next += track.barLen;
+          }
         };
         pump();
         m.timer = setInterval(pump, 400);
@@ -4722,7 +4829,7 @@
         const m = music;
         music = null;
         clearInterval(m.timer);
-        [m.dry, m.wet].forEach(g => g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.25));
+        [m.dry, m.wet].forEach(g => g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.2));
         setTimeout(() => { try { m.dry.disconnect(); m.wet.disconnect(); } catch {} }, 2000);
         notify();
       }
@@ -4730,7 +4837,17 @@
       function setMusic(v) {
         musicOn = v;
         try { localStorage.setItem(MUSIC_KEY, v ? "on" : "off"); } catch {}
-        if (v) unlock().then(startMusic); else stopMusic();
+        if (v) unlock().then(() => startMusic(1.2)); else stopMusic();
+        notify();
+      }
+
+      /* Ganti lagu: +1 = berikutnya, -1 = sebelumnya. Menyalakan musik bila sedang mati. */
+      function skipTrack(dir) {
+        trackIdx = (trackIdx + dir + TRACKS.length) % TRACKS.length;
+        try { localStorage.setItem(TRACK_KEY, String(trackIdx)); } catch {}
+        stopMusic();
+        if (!musicOn) { musicOn = true; try { localStorage.setItem(MUSIC_KEY, "on"); } catch {} }
+        unlock().then(() => startMusic(0.5));
         notify();
       }
 
@@ -4756,12 +4873,15 @@
 
       return {
         play, greet, setOn, intro, stopIntro, canAutoplay, unlock,
-        startMusic, setMusic, setVolume,
+        startMusic, setMusic, setVolume, skipTrack,
         onChange: (fn) => listeners.push(fn),
         get on() { return on; },
         get volume() { return vol; },
         get musicOn() { return musicOn; },
-        get musicPlaying() { return !!music; }
+        get musicPlaying() { return !!music; },
+        get trackIndex() { return trackIdx; },
+        get trackCount() { return TRACKS.length; },
+        get trackName() { return TRACKS[trackIdx].name; }
       };
     })();
 
@@ -4783,53 +4903,108 @@
     });
     renderSoundBtn();
 
-    /* Kontrol volume melayang */
-    (function initVolume() {
-      const box = document.getElementById("vol");
-      const btn = document.getElementById("volBtn");
-      const range = document.getElementById("volRange");
-      const val = document.getElementById("volVal");
-      const musicBtn = document.getElementById("volMusic");
+    /* Pemutar musik melayang */
+    (function initPlayer() {
+      const box = document.getElementById("player");
+      const name = document.getElementById("plName");
+      const range = document.getElementById("plRange");
+      const playBtn = document.getElementById("plPlay");
+      const muteBtn = document.getElementById("plMute");
+      const PLAY = '<path d="M8 5.6v12.8c0 .9 1 1.5 1.8 1l10-6.4c.7-.5.7-1.5 0-2l-10-6.4C9 4.1 8 4.7 8 5.6z"/>';
+      const PAUSE = '<rect x="6" y="5" width="4" height="14" rx="1.3"/><rect x="14" y="5" width="4" height="14" rx="1.3"/>';
+      let lastTrack = -1;
 
       function render() {
         const pct = Math.round(SFX.volume * 100);
         const audible = SFX.on && pct > 0;
-        document.getElementById("volIcon").innerHTML = audible ? SOUND_ON_ICON : SOUND_OFF_ICON;
-        range.value = SFX.on ? pct : 0;
-        range.style.setProperty("--p", `${range.value}%`);
-        val.textContent = range.value;
-        musicBtn.setAttribute("aria-pressed", String(SFX.musicOn && SFX.on));
-        musicBtn.title = ui(SFX.musicOn ? "musicOn" : "musicOff");
-        musicBtn.setAttribute("aria-label", musicBtn.title);
-        btn.title = `${ui("volume")} ${range.value}%`;
+        const playing = SFX.on && SFX.musicOn;
+        document.getElementById("plMuteIcon").innerHTML = audible ? SOUND_ON_ICON : SOUND_OFF_ICON;
+        muteBtn.setAttribute("aria-pressed", String(!SFX.on));
+        muteBtn.setAttribute("aria-label", ui(SFX.on ? "soundOn" : "soundOff"));
+        muteBtn.title = muteBtn.getAttribute("aria-label");
+        range.value = pct;
+        range.style.setProperty("--p", `${pct}%`);
+        range.title = `${ui("volume")} ${pct}%`;
+        document.getElementById("plPlayIcon").innerHTML = playing ? PAUSE : PLAY;
+        playBtn.setAttribute("aria-pressed", String(playing));
+        playBtn.setAttribute("aria-label", ui(playing ? "musicOn" : "musicOff"));
+        playBtn.title = playBtn.getAttribute("aria-label");
+        document.getElementById("plPrev").setAttribute("aria-label", ui("trackPrev"));
+        document.getElementById("plNext").setAttribute("aria-label", ui("trackNext"));
+        document.getElementById("plPrev").title = ui("trackPrev");
+        document.getElementById("plNext").title = ui("trackNext");
+        name.textContent = tr(SFX.trackName);
+        name.title = `${tr(SFX.trackName)} · ${SFX.trackIndex + 1}/${SFX.trackCount}`;
+        if (lastTrack !== -1 && lastTrack !== SFX.trackIndex) {
+          name.classList.remove("swap"); void name.offsetWidth; name.classList.add("swap");
+        }
+        lastTrack = SFX.trackIndex;
         box.classList.toggle("is-playing", SFX.musicPlaying && audible);
       }
 
-      function setOpen(v) {
-        box.classList.toggle("open", v);
-        btn.setAttribute("aria-expanded", String(v));
-      }
-
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        setOpen(!box.classList.contains("open"));
+      document.getElementById("plPrev").addEventListener("click", () => {
+        if (!SFX.on) { SFX.setOn(true); renderSoundBtn(); }
+        SFX.skipTrack(-1);
+      });
+      document.getElementById("plNext").addEventListener("click", () => {
+        if (!SFX.on) { SFX.setOn(true); renderSoundBtn(); }
+        SFX.skipTrack(1);
+      });
+      playBtn.addEventListener("click", () => {
+        if (!SFX.on) { SFX.setOn(true); renderSoundBtn(); if (!SFX.musicOn) SFX.setMusic(true); return; }
+        if (SFX.volume === 0) SFX.setVolume(0.6);
+        SFX.setMusic(!SFX.musicOn);
+      });
+      muteBtn.addEventListener("click", () => {
+        SFX.setOn(!SFX.on);
+        renderSoundBtn();
       });
       range.addEventListener("input", () => {
         const v = Number(range.value);
         SFX.setVolume(v / 100);
         if (v > 0 && !SFX.on) { SFX.setOn(true); renderSoundBtn(); }
-        else if (v > 0) SFX.unlock().then(SFX.startMusic);
+        else if (v > 0) SFX.unlock().then(() => SFX.startMusic(1));
         render();
       });
-      musicBtn.addEventListener("click", () => {
-        if (!SFX.on) { SFX.setOn(true); renderSoundBtn(); }
-        if (SFX.volume === 0) SFX.setVolume(0.6);
-        SFX.setMusic(!SFX.musicOn);
-        render();
+
+      /* Geser pemutar lewat pegangan titik-titik; posisi diingat */
+      const POS_KEY = "deltalink-player-pos";
+      function place(x, y) {
+        const r = box.getBoundingClientRect();
+        x = Math.max(8, Math.min(window.innerWidth - r.width - 8, x));
+        y = Math.max(8, Math.min(window.innerHeight - r.height - 8, y));
+        box.style.left = `${x}px`;
+        box.style.top = `${y}px`;
+        box.style.bottom = "auto";
+        return [x, y];
+      }
+      try {
+        const saved = JSON.parse(localStorage.getItem(POS_KEY) || "null");
+        if (saved) place(saved[0] * window.innerWidth, saved[1] * window.innerHeight);
+      } catch {}
+      window.addEventListener("resize", () => {
+        if (box.style.top) place(parseFloat(box.style.left), parseFloat(box.style.top));
       });
-      box.addEventListener("click", (e) => e.stopPropagation());
-      document.addEventListener("click", () => setOpen(false));
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+      const grip = document.getElementById("plGrip");
+      grip.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        const r = box.getBoundingClientRect();
+        const dx = e.clientX - r.left, dy = e.clientY - r.top;
+        box.classList.add("dragging");
+        grip.setPointerCapture(e.pointerId);
+        const move = (ev) => place(ev.clientX - dx, ev.clientY - dy);
+        const up = () => {
+          box.classList.remove("dragging");
+          grip.removeEventListener("pointermove", move);
+          grip.removeEventListener("pointerup", up);
+          grip.removeEventListener("pointercancel", up);
+          const nr = box.getBoundingClientRect();
+          try { localStorage.setItem(POS_KEY, JSON.stringify([nr.left / window.innerWidth, nr.top / window.innerHeight])); } catch {}
+        };
+        grip.addEventListener("pointermove", move);
+        grip.addEventListener("pointerup", up);
+        grip.addEventListener("pointercancel", up);
+      });
 
       SFX.onChange(render);
       window.refreshVolText = render;
